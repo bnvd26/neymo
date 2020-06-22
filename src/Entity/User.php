@@ -34,6 +34,17 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\OneToOne(targetEntity=GovernanceUserInformation::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $governanceUserInformation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Governance::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $governance;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -108,5 +119,34 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getGovernanceUserInformation(): ?GovernanceUserInformation
+    {
+        return $this->governanceUserInformation;
+    }
+
+    public function setGovernanceUserInformation(GovernanceUserInformation $governanceUserInformation): self
+    {
+        $this->governanceUserInformation = $governanceUserInformation;
+
+        // set the owning side of the relation if necessary
+        if ($governanceUserInformation->getUser() !== $this) {
+            $governanceUserInformation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function getGovernance(): ?Governance
+    {
+        return $this->governance;
+    }
+
+    public function setGovernance(?Governance $governance): self
+    {
+        $this->governance = $governance;
+
+        return $this;
     }
 }
