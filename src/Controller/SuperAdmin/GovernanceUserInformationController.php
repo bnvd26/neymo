@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/superadmin/governance/user")
- * 
+ *
  * @IsGranted("ROLE_SUPER_ADMIN")
  */
 class GovernanceUserInformationController extends AbstractController
@@ -25,29 +25,6 @@ class GovernanceUserInformationController extends AbstractController
     {
         return $this->render('superAdmin/governanceUserInformation/index.html.twig', [
             'governance_user_informations' => $governanceUserInformationRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="governance_user_information_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $governanceUserInformation = new GovernanceUserInformation();
-        $form = $this->createForm(GovernanceUserInformationType::class, $governanceUserInformation);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($governanceUserInformation);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('governance_user_information_index');
-        }
-
-        return $this->render('superAdmin/governanceUserInformation/new.html.twig', [
-            'governance_user_information' => $governanceUserInformation,
-            'form' => $form->createView(),
         ]);
     }
 
