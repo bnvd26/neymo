@@ -2,9 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\GovernanceUserInformation;
 use App\Entity\User;
-use App\Repository\GovernanceRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -21,6 +19,8 @@ class UserAdminFixtures extends Fixture
         $user->setRoles(['ROLE_ADMIN']);
         $user->setGovernance($this->getReference(GovernanceFixtures::GOVERNANCE));
         $manager->persist($user);
+
+        $manager->flush();
 
         $this->addReference(self::USER_ADMIN, $user);
     }
