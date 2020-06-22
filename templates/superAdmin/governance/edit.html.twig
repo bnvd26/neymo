@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Governance{% endblock %}
+
+{% block content %}
+    <h1>Edit Governance</h1>
+
+    {{ include('superAdmin/governance/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('governance_index') }}">back to list</a>
+
+    {{ include('superAdmin/governance/_delete_form.html.twig') }}
+{% endblock %}
