@@ -14,11 +14,13 @@ class GovernanceController extends AbstractController
 {
     /**
      * @Route("/admin/governance", name="admin_governance")
-     * 
+     *
      * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function index(GovernanceRepository $repository)
     {
-        return $this->render('admin/dashboard.html.twig');
+        $governances = $repository->findAll();
+
+        return $this->render('admin/governance/list.html.twig', compact('governances'));
     }
 }
