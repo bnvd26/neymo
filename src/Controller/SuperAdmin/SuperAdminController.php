@@ -18,6 +18,6 @@ class SuperAdminController extends AbstractController
      */
     public function home()
     {
-        return $this->render('superAdmin/dashboard.html.twig');
+        return $this->render('superAdmin/home.html.twig');
     }
 }
