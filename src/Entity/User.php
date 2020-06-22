@@ -41,7 +41,7 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Governance::class, inversedBy="users")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $governance;
 
