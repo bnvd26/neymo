@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block navbar %}
+
+    <div class="sidebar-container">
+        <div class="sidebar-logo" style="background:linear-gradient(100deg, #ff6ec4, #7873f5)">
+            Neymo
+        </div>
+        <ul class="sidebar-navigation">
+            <li class="header">Navigation</li>
+            <li>
+                <a href="{{ path('governance_index') }}">
+                    <i class="fa fa-home" aria-hidden="true"></i> Gouvernances
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('governance_user_information_index') }}">
+                    <i class="fa fa-tachometer" aria-hidden="true"></i> Utilisateurs
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_logout') }}">
+                    <i class="fas fa-power-off"></i> Se déconnecter
+                </a>
+            </li>
+        </ul>
+    </div>
+
+{% endblock %}

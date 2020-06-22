@@ -1,9 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}GovernanceUserInformation index{% endblock %}
+{% block title %}Neymo - liste des utilisateurs{% endblock %}
 
 {% block content %}
-    <h1>GovernanceUserInformation index</h1>
+<div class="content-container text-center">
+    <div class="container-fluid" style="padding-right:60px;padding-left:60px">
+        <!-- Main component for a primary marketing message or call to action -->
+        <div class="jumbotron">
+            <a href="{{ path('superadmin_user_create') }}">Create new</a>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" style="background-color:white">
+                    <li class="breadcrumb-item"><a href="{{ path('superadmin_home') }}">Accueil</a></li>
+                    <li class="breadcrumb-item">Utilisateurs</li>
+                </ol>
+            </nav>
+    <h1>Liste des utilisateurs</h1>
 
     <table class="table">
         <thead>
@@ -25,8 +36,8 @@
                 <td>{{ governance_user_information.role }}</td>
                 <td>{{ governance_user_information.user.governance.name }}</td>
                 <td>
-                    <a href="{{ path('governance_user_information_show', {'id': governance_user_information.id}) }}">show</a>
-                    <a href="{{ path('governance_user_information_edit', {'id': governance_user_information.id}) }}">edit</a>
+                    <a href="{{ path('governance_user_information_show', {'id': governance_user_information.id}) }}"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détail"></i></a>
+                    <a href="{{ path('governance_user_information_edit', {'id': governance_user_information.id}) }}"><i class="far fa-edit"></i></a>
                 </td>
             </tr>
         {% else %}
@@ -36,6 +47,6 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('superadmin_user_create') }}">Create new</a>
+</div>
+    </div>
 {% endblock %}

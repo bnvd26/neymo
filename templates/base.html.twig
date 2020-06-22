@@ -3,15 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
     </head>
     <body>
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.username }}, <a href="{{ path('admin_logout') }}">Logout</a>
-            </div>
-        {% endif %}
+        {% block navbar %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                {% include 'elements/navbar.html.twig' %}
+            {% endif %}
+        {% endblock %}
         {% block content %}{% endblock %}
-        {% block javascripts %}{% endblock %}
     </body>
 </html>

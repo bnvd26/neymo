@@ -3,8 +3,18 @@
 {% block title %}Governance index{% endblock %}
 
 {% block content %}
-    <h1>Governance index</h1>
-
+<div class="content-container text-center">
+    <div class="container-fluid" style="padding-right:60px;padding-left:60px">
+        <!-- Main component for a primary marketing message or call to action -->
+        <div class="jumbotron">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" style="background-color:white">
+                    <li class="breadcrumb-item"><a href="{{ path('superadmin_home') }}">Accueil</a></li>
+                    <li class="breadcrumb-item">Liste des gouvernances</li>
+                </ol>
+            </nav>
+            <h1>Liste des gouvernances</h1>
+            <a href="{{ path('governance_new') }}" class="btn btn-success">Céer une gouvernance</a>
     <table class="table">
         <thead>
             <tr>
@@ -21,8 +31,10 @@
                 <td>{{ governance.name }}</td>
                 <td>{{ governance.moneyName }}</td>
                 <td>
-                    <a href="{{ path('governance_show', {'id': governance.id}) }}">show</a>
-                    <a href="{{ path('governance_edit', {'id': governance.id}) }}">edit</a>
+                <a href="{{ path('governance_show', {'id': governance.id}) }}">
+                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détail"></i>
+                 </a>   
+                    <a href="{{ path('governance_edit', {'id': governance.id}) }}"><i class="far fa-edit"></i></a>
                 </td>
             </tr>
         {% else %}
@@ -32,6 +44,6 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('governance_new') }}">Create new</a>
+    </div>
+    </div>
 {% endblock %}
