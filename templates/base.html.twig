@@ -14,7 +14,7 @@
     <body>
         {% block navbar %}
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                {% include 'elements/navbar.html.twig' %}
+                {% include 'superAdmin/elements/navbar.html.twig' %}
             {% endif %}
         {% endblock %}
         {% block content %}{% endblock %}
