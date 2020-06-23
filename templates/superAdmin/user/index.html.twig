@@ -5,9 +5,7 @@
 {% block content %}
 <div class="content-container text-center">
     <div class="container-fluid" style="padding-right:60px;padding-left:60px">
-        <!-- Main component for a primary marketing message or call to action -->
         <div class="jumbotron">
-            <a href="{{ path('superadmin_user_create') }}">Create new</a>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb" style="background-color:white">
                     <li class="breadcrumb-item"><a href="{{ path('superadmin_home') }}">Accueil</a></li>
@@ -15,7 +13,7 @@
                 </ol>
             </nav>
     <h1>Liste des utilisateurs</h1>
-
+    <a href="{{ path('superadmin_user_create') }}" class="btn btn-success">Créer un utilisateur</a>
     <table class="table">
         <thead>
             <tr>
@@ -36,7 +34,7 @@
                 <td>{{ governance_user_information.role }}</td>
                 <td>{{ governance_user_information.user.governance.name }}</td>
                 <td>
-                    <a href="{{ path('governance_user_information_show', {'id': governance_user_information.id}) }}"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détail"></i></a>
+                    <a href="{{ path('user_show', {'id': governance_user_information.id}) }}"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détail"></i></a>
                     <a href="{{ path('governance_user_information_edit', {'id': governance_user_information.id}) }}"><i class="far fa-edit"></i></a>
                 </td>
             </tr>

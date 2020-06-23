@@ -4,6 +4,7 @@
 
 {% block content %}
     <h1>Edit GovernanceUserInformation</h1>
+    {{user.first_name}}
 
     {{ include('superAdmin/governanceUserInformation/_form.html.twig', {'button_label': 'Update'}) }}
 
