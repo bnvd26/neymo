@@ -19,7 +19,10 @@ class UserController extends AbstractController
     public function getCurrentUser()
     {
         $user = $this->getUser();
-
+        $user = [
+            'id' => $user->getId(),
+            'first_name' => $user->getGovernanceUserInformation()->getFirstName()
+        ];
         $json = $this->serialize($user);
 
         $response = new Response($json, 200);
