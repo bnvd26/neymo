@@ -3,8 +3,11 @@
 namespace App\Controller\SuperAdmin;
 
 use App\Entity\Governance;
+use App\Entity\User;
 use App\Form\GovernanceType;
 use App\Repository\GovernanceRepository;
+use App\Repository\GovernanceUserInformationRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,17 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class GovernanceController extends AbstractController
 {
     /**
-     * @Route("/index", name="governance_index", methods={"GET"})
-     */
-    public function index(GovernanceRepository $governanceRepository): Response
-    {
-        return $this->render('superAdmin/governance/index.html.twig', [
-            'governances' => $governanceRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="governance_new", methods={"GET","POST"})
+     * @Route("/create", name="governance_create", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -41,10 +34,10 @@ class GovernanceController extends AbstractController
             $entityManager->persist($governance);
             $entityManager->flush();
 
-            return $this->redirectToRoute('superAdmin/governance_index');
+            return $this->redirectToRoute('superadmin_home');
         }
 
-        return $this->render('superAdmin/governance/new.html.twig', [
+        return $this->render('superAdmin/governance/create.html.twig', [
             'governance' => $governance,
             'form' => $form->createView(),
         ]);
@@ -53,10 +46,15 @@ class GovernanceController extends AbstractController
     /**
      * @Route("/{id}", name="governance_show", methods={"GET"})
      */
-    public function show(Governance $governance): Response
-    {
+    public function show(Governance $governance, UserRepository $userRepository, GovernanceUserInformationRepository $govUserInfoRepository): Response
+    {       
+        $governanceId = $governance->getId();
+
+        $users = $userRepository->findByGovernanceId($governanceId);
+
         return $this->render('superAdmin/governance/show.html.twig', [
             'governance' => $governance,
+            'users' => $users
         ]);
     }
 
@@ -71,26 +69,12 @@ class GovernanceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('governance_index');
+            return $this->redirectToRoute('governance_show', ['id' => $governance->getId()]);
         }
 
         return $this->render('superAdmin/governance/edit.html.twig', [
             'governance' => $governance,
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @Route("/{id}", name="governance_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Governance $governance): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$governance->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($governance);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('superAdmin/governance_index');
     }
 }
