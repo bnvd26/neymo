@@ -2,6 +2,7 @@
 
 namespace App\Controller\SuperAdmin;
 
+use App\Entity\GovernanceUserInformation;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\GovernanceRepository;
@@ -19,37 +20,36 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route("/superadmin/user")
+ * @Route("/superadmin/governance")
  *
  * @IsGranted("ROLE_SUPER_ADMIN")
 */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/create", name="superadmin_user_create")
+     * @Route("/{id}/create/", name="superadmin_user_create")
      */
-    public function create(Request $request, GovernanceRepository $govRepository)
+    public function create(Request $request, GovernanceRepository $govRepository, $id)
     {
+        $entityManager = $this->getDoctrine()->getManager();
         $user = new User();
         $user->setRoles(['ROLE_ADMIN']);
         $form = $this->createFormBuilder($user)
             ->add('email', TextType::class)
             ->add('password', TextType::class)
-            ->add('governance', ChoiceType::class, [
-                'choices' => [
-                    'Gouvernances' => $govRepository->findAll(),
-                 ]])
             ->add('save', SubmitType::class, ['label' => 'Create user'])
             ->getForm();
 
         $form->handleRequest($request);
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $entityManager = $this->getDoctrine()->getManager();
+            $user->setGovernance($govRepository->find($id));
             $entityManager->persist($user);
+            $this->createUserInformation($request, $user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('superadmin_user_index');
+            return $this->redirectToRoute('governance_show', ['id' => $id]);
         }
 
         return $this->render('superAdmin/user/create.html.twig', [
@@ -57,13 +57,14 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/index", name="superadmin_user_index", methods={"GET"})
-     */
-    public function index(GovernanceUserInformationRepository $governanceUserInformationRepository): Response
+    public function createUserInformation($request, $user)
     {
-        return $this->render('superAdmin/governanceUserInformation/index.html.twig', [
-            'governance_user_informations' => $governanceUserInformationRepository->findAll(),
-        ]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $govUserInformation = new GovernanceUserInformation();
+        $govUserInformation->setFirstName($request->request->get('firstName'));
+        $govUserInformation->setLastName($request->request->get('lastName'));
+        $govUserInformation->setRole($request->request->get('role'));
+        $govUserInformation->setUser($user);
+        $entityManager->persist($govUserInformation);
     }
 }
