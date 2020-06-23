@@ -3,8 +3,12 @@
 {% block title %}Governance{% endblock %}
 
 {% block content %}
-    <h1>Governance</h1>
-
+<div class="content-container">
+        <div class="container-fluid">
+            <div class="jumbotron">
+            <a href="{{ path('superadmin_home') }}" class="btn btn-primary">Dashboard</a>
+    <h1>Information sur la gouvernance de {{ governance.name }}</h1>
+    <a href="{{ path('governance_edit', {'id': governance.id}) }}" class="btn btn-warning">Modifier les informations</a>
     <table class="table">
         <tbody>
             <tr>
@@ -21,10 +25,38 @@
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('governance_index') }}">back to list</a>
-
-    <a href="{{ path('governance_edit', {'id': governance.id}) }}">edit</a>
-
-    {{ include('superAdmin/governance/_delete_form.html.twig') }}
+        <h2>Utilisateurs associés à cette gouvernance</h2>
+                <a href="{{ path('superadmin_user_create', {'id': governance.id}) }}" class="btn btn-success">Créer un utilisateur pour cette gouvernance</a>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Email</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Role</th>
+                
+                
+                </tr>
+            </thead>
+            <tbody>
+        {% for user in users %}
+         <tr>
+                      
+         <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                
+        {% if user.governanceUserInformation %}
+                <td>{{ user.governanceUserInformation.firstName }}</td>
+                <td>{{ user.governanceUserInformation.lastName }}</td>
+                  <td>{{ user.governanceUserInformation.role }}</td>
+        {% endif %}
+           
+        {% endfor %}        
+              </tr>
+            </tbody>
+    </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

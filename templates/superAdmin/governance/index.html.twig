@@ -1,49 +1,30 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Governance index{% endblock %}
-
-{% block content %}
-<div class="content-container text-center">
-    <div class="container-fluid" style="padding-right:60px;padding-left:60px">
-        <!-- Main component for a primary marketing message or call to action -->
-        <div class="jumbotron">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb" style="background-color:white">
-                    <li class="breadcrumb-item"><a href="{{ path('superadmin_home') }}">Accueil</a></li>
-                    <li class="breadcrumb-item">Liste des gouvernances</li>
-                </ol>
-            </nav>
-            <h1>Liste des gouvernances</h1>
-            <a href="{{ path('governance_new') }}" class="btn btn-success">Céer une gouvernance</a>
+<h1>Liste des gouvernances</h1>
+    <a href="{{ path('governance_create') }}" class="btn btn-success">Créer une gouvernance</a>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Money_name</th>
-                <th>actions</th>
+                <th>ID</th>
+                <th>Nom de la gouvernance</th>
+                <th>Nom de la monnaie</th>
+                <th>Informations</th>
             </tr>
         </thead>
         <tbody>
-        {% for governance in governances %}
-            <tr>
-                <td>{{ governance.id }}</td>
-                <td>{{ governance.name }}</td>
-                <td>{{ governance.moneyName }}</td>
-                <td>
-                <a href="{{ path('governance_show', {'id': governance.id}) }}">
-                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détail"></i>
-                 </a>   
-                    <a href="{{ path('governance_edit', {'id': governance.id}) }}"><i class="far fa-edit"></i></a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for governance in governances %}
+                <tr>
+                    <td>{{ governance.id }}</td>
+                    <td>{{ governance.name }}</td>
+                    <td>{{ governance.moneyName }}</td>
+                    <td>
+                    <a href="{{ path('governance_show', {'id': governance.id}) }}">
+                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détail"></i>
+                    </a>   
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-    </div>
-    </div>
-{% endblock %}

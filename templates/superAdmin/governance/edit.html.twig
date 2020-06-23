@@ -1,13 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Governance{% endblock %}
+{% block title %}Modification de la gouvernance{% endblock %}
 
 {% block content %}
-    <h1>Edit Governance</h1>
+     <div class="content-container text-center">
+        <div class="container-fluid" style="padding-right:60px;padding-left:60px">
+            <div class="jumbotron">
+                <a href="{{ path('governance_show', {'id': governance.id}) }}">Revenir à la gouvernance</a>
 
-    {{ include('superAdmin/governance/_form.html.twig', {'button_label': 'Update'}) }}
+    <h1>Modifier la gouvernance {{ governance.name }}</h1>
 
-    <a href="{{ path('governance_index') }}">back to list</a>
+    {{ include('superAdmin/governance/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    {{ include('superAdmin/governance/_delete_form.html.twig') }}
+    </div>
+    </div>
 {% endblock %}

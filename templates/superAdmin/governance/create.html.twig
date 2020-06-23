@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Governance{% endblock %}
+
+{% block content %}
+<div class="content-container text-center">
+    <div class="container-fluid" style="padding-right:60px;padding-left:60px">
+        <div class="jumbotron">
+            <a href="{{ path('governance_index') }}">Dashboard</a>
+    <h1>Créer une gouvernance</h1>
+
+    {{ include('superAdmin/governance/_form.html.twig') }}
+    </div>
+    </div>
+    </div>
+
+{% endblock %}
