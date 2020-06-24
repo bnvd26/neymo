@@ -75,4 +75,17 @@ class GovernanceController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * Display list of Governances.
+     *
+     * @param [type] $governanceRepository
+     * @return void
+     */
+    public function index($governanceRepository)
+    {
+        return $this->render('superAdmin/home.html.twig', [
+            'governances' => $governanceRepository->findAll()
+        ]);
+    }
 }
