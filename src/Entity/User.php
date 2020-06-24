@@ -137,6 +137,11 @@ class User implements UserInterface
         return $this->governanceUserInformation;
     }
 
+    public function getGovernanceId() 
+    {
+        return $this->getGovernanceUserInformation()->getGovernance()->getId();
+    }
+
     public function setGovernanceUserInformation(GovernanceUserInformation $governanceUserInformation): self
     {
         $this->governanceUserInformation = $governanceUserInformation;

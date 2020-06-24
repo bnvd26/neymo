@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-<p>Page admin de la gouvernance</p>
+<p>Bonjour, {{ user.firstName }}</p>
+<br>
+<p>{{ user.governance.name }}</p>
 {% endblock %}
 
