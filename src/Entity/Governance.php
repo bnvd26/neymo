@@ -30,13 +30,14 @@ class Governance
     private $money_name;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="governance")
+     * @ORM\OneToMany(targetEntity=GovernanceUserInformation::class, mappedBy="governance")
      */
-    private $users;
+    private $governanceUserInformation;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->governanceUserInformation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,30 +70,30 @@ class Governance
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection|GovernanceUserInformation[]
      */
-    public function getUsers(): Collection
+    public function getGovernanceUserInformation(): Collection
     {
-        return $this->users;
+        return $this->governanceUserInformation;
     }
 
-    public function addUser(User $user): self
+    public function addGovernanceUserInformation(GovernanceUserInformation $governanceUserInformation): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setGovernance($this);
+        if (!$this->governanceUserInformation->contains($governanceUserInformation)) {
+            $this->governanceUserInformation[] = $governanceUserInformation;
+            $governanceUserInformation->setGovernance($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeGovernanceUserInformation(GovernanceUserInformation $governanceUserInformation): self
     {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
+        if ($this->governanceUserInformation->contains($governanceUserInformation)) {
+            $this->governanceUserInformation->removeElement($governanceUserInformation);
             // set the owning side to null (unless already changed)
-            if ($user->getGovernance() === $this) {
-                $user->setGovernance(null);
+            if ($governanceUserInformation->getGovernance() === $this) {
+                $governanceUserInformation->setGovernance(null);
             }
         }
 

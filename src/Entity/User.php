@@ -39,12 +39,6 @@ class User implements UserInterface
      */
     private $governanceUserInformation;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Governance::class, inversedBy="users")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $governance;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -134,18 +128,6 @@ class User implements UserInterface
         if ($governanceUserInformation->getUser() !== $this) {
             $governanceUserInformation->setUser($this);
         }
-
-        return $this;
-    }
-
-    public function getGovernance(): ?Governance
-    {
-        return $this->governance;
-    }
-
-    public function setGovernance(?Governance $governance): self
-    {
-        $this->governance = $governance;
 
         return $this;
     }

@@ -38,6 +38,11 @@ class GovernanceUserInformation
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Governance::class, inversedBy="governanceUserInformation")
+     */
+    private $governance;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class GovernanceUserInformation
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getGovernance(): ?Governance
+    {
+        return $this->governance;
+    }
+
+    public function setGovernance(?Governance $governance): self
+    {
+        $this->governance = $governance;
 
         return $this;
     }
