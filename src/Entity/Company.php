@@ -46,6 +46,7 @@ class Company
 
     /**
      * @ORM\OneToOne(targetEntity=Account::class, inversedBy="company", cascade={"persist", "remove"})
+     * @ORM\Column(nullable=true)
      */
     private $account;
 
