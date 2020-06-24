@@ -39,11 +39,17 @@ class Governance
      */
     private $companies;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Particular::class, mappedBy="governance")
+     */
+    private $particulars;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->governanceUserInformation = new ArrayCollection();
         $this->companies = new ArrayCollection();
+        $this->particulars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,6 +137,37 @@ class Governance
             // set the owning side to null (unless already changed)
             if ($company->getGovernance() === $this) {
                 $company->setGovernance(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Particular[]
+     */
+    public function getParticulars(): Collection
+    {
+        return $this->particulars;
+    }
+
+    public function addParticular(Particular $particular): self
+    {
+        if (!$this->particulars->contains($particular)) {
+            $this->particulars[] = $particular;
+            $particular->setGovernance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticular(Particular $particular): self
+    {
+        if ($this->particulars->contains($particular)) {
+            $this->particulars->removeElement($particular);
+            // set the owning side to null (unless already changed)
+            if ($particular->getGovernance() === $this) {
+                $particular->setGovernance(null);
             }
         }
 

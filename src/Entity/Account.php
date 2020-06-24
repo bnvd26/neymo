@@ -32,6 +32,11 @@ class Account
      */
     private $company;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Particular::class, mappedBy="account", cascade={"persist", "remove"})
+     */
+    private $particular;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +79,24 @@ class Account
         $newAccount = null === $company ? null : $this;
         if ($company->getAccount() !== $newAccount) {
             $company->setAccount($newAccount);
+        }
+
+        return $this;
+    }
+
+    public function getParticular(): ?Particular
+    {
+        return $this->particular;
+    }
+
+    public function setParticular(?Particular $particular): self
+    {
+        $this->particular = $particular;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newAccount = null === $particular ? null : $this;
+        if ($particular->getAccount() !== $newAccount) {
+            $particular->setAccount($newAccount);
         }
 
         return $this;

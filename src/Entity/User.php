@@ -46,6 +46,11 @@ class User implements UserInterface
      */
     private $companies;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Particular::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $particular;
+
     public function __construct()
     {
         $this->companies = new ArrayCollection();
@@ -167,6 +172,24 @@ class User implements UserInterface
         if ($this->companies->contains($company)) {
             $this->companies->removeElement($company);
             $company->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    public function getParticular(): ?Particular
+    {
+        return $this->particular;
+    }
+
+    public function setParticular(?Particular $particular): self
+    {
+        $this->particular = $particular;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = null === $particular ? null : $this;
+        if ($particular->getUser() !== $newUser) {
+            $particular->setUser($newUser);
         }
 
         return $this;
