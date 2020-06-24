@@ -15,9 +15,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/superadmin/governance")
@@ -29,14 +31,14 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/create/", name="superadmin_user_create")
      */
-    public function create(Request $request, GovernanceRepository $govRepository, $id)
+    public function create(Request $request, GovernanceRepository $govRepository, $id, UserPasswordEncoderInterface $passwordEncoder)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = new User();
         $user->setRoles(['ROLE_ADMIN']);
         $form = $this->createFormBuilder($user)
             ->add('email', TextType::class)
-            ->add('password', TextType::class)
+            ->add('password', PasswordType::class)
             ->add('save', SubmitType::class, ['label' => 'Create user'])
             ->getForm();
 
@@ -44,9 +46,10 @@ class UserController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $user->setGovernance($govRepository->find($id));
+            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
             $entityManager->persist($user);
-            $this->createUserInformation($request, $user);
+            $this->createUserInformation($request, $user, $govRepository->find($id));
             $entityManager->flush();
 
             return $this->redirectToRoute('governance_show', ['id' => $id]);
@@ -57,7 +60,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function createUserInformation($request, $user)
+    public function createUserInformation($request, $user, $governance)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $govUserInformation = new GovernanceUserInformation();
@@ -65,6 +68,7 @@ class UserController extends AbstractController
         $govUserInformation->setLastName($request->request->get('lastName'));
         $govUserInformation->setRole($request->request->get('role'));
         $govUserInformation->setUser($user);
+        $govUserInformation->setGovernance($governance);
         $entityManager->persist($govUserInformation);
     }
 }

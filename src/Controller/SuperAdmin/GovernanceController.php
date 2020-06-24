@@ -46,15 +46,13 @@ class GovernanceController extends AbstractController
     /**
      * @Route("/{id}", name="governance_show", methods={"GET"})
      */
-    public function show(Governance $governance, UserRepository $userRepository, GovernanceUserInformationRepository $govUserInfoRepository): Response
-    {       
-        $governanceId = $governance->getId();
-
-        $users = $userRepository->findByGovernanceId($governanceId);
+    public function show(Governance $governance, GovernanceUserInformationRepository $govUserInfoRepository): Response
+    {
+        $govUsersInformation = $govUserInfoRepository->findUserInformationByGovernanceId($governance->getId());
 
         return $this->render('superAdmin/governance/show.html.twig', [
-            'governance' => $governance,
-            'users' => $users
+            'govUsersInformation' => $govUsersInformation,
+            'governance' => $governance
         ]);
     }
 

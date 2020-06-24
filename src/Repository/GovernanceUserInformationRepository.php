@@ -19,13 +19,11 @@ class GovernanceUserInformationRepository extends ServiceEntityRepository
         parent::__construct($registry, GovernanceUserInformation::class);
     }
 
-
     public function findUserInformationByGovernanceId($value)
     {
         return $this->createQueryBuilder('g')
-            ->andWhere('g.user = :val')
+            ->andWhere('g.governance = :val')
             ->setParameter('val', $value)
-            ->setMaxResults(100)
             ->getQuery()
             ->getResult()
         ;
