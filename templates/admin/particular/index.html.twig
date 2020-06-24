@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<div class="container">
+{% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+{% endfor %}
+
+<h2>Particulier de la gouvernance</h2>
+<a href="{{ path('admin_users_create') }}" class="btn btn-success">Créer un Particulier</a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Nom </th>
+      <th scope="col">Prénom </th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for particular in particulars %}
+        <tr>
+        <td>{{ particular.id }}</td>
+        <td>{{ particular.firstName }}</td>
+        <td>{{ particular.lastName }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
