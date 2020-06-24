@@ -64,9 +64,20 @@ class Company
      */
     private $first_name;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="companies")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Governance::class, inversedBy="companies")
+     */
+    private $governance;
+
     public function __construct()
     {
         $this->companyUsers = new ArrayCollection();
+        $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +189,44 @@ class Company
     public function setFirstName(string $first_name): self
     {
         $this->first_name = $first_name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUser(): Collection
+    {
+        return $this->user;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->user->contains($user)) {
+            $this->user[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->user->contains($user)) {
+            $this->user->removeElement($user);
+        }
+
+        return $this;
+    }
+
+    public function getGovernance(): ?Governance
+    {
+        return $this->governance;
+    }
+
+    public function setGovernance(?Governance $governance): self
+    {
+        $this->governance = $governance;
 
         return $this;
     }

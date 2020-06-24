@@ -34,10 +34,16 @@ class Governance
      */
     private $governanceUserInformation;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Company::class, mappedBy="governance")
+     */
+    private $companies;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->governanceUserInformation = new ArrayCollection();
+        $this->companies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +100,37 @@ class Governance
             // set the owning side to null (unless already changed)
             if ($governanceUserInformation->getGovernance() === $this) {
                 $governanceUserInformation->setGovernance(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Company[]
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    public function addCompany(Company $company): self
+    {
+        if (!$this->companies->contains($company)) {
+            $this->companies[] = $company;
+            $company->setGovernance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompany(Company $company): self
+    {
+        if ($this->companies->contains($company)) {
+            $this->companies->removeElement($company);
+            // set the owning side to null (unless already changed)
+            if ($company->getGovernance() === $this) {
+                $company->setGovernance(null);
             }
         }
 
