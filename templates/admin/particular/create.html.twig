@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<div class="container">
+<h2>Créer un utilisateur particulier</h2>
+{{ form_start(form) }}
+    <label for="email">Email </label>
+    <input type="email" name="email" required>
+     <label for="password">Mot de passe </label>
+    <input type="password" name="password" required>
+    {{ form_widget(form) }}
+{{ form_end(form) }}
+</div>
+{% endblock %}
