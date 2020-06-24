@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<div class="container">
+{% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+{% endfor %}
+
+<h2>Commerçants de la gouvernance</h2>
+<a href="{{ path('admin_users_create') }}" class="btn btn-success">Créer un Commerçant</a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Nom de la société</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for company in companies %}
+        <tr>
+        <td>{{ company.id }}</td>
+        <td>{{ company.name }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
