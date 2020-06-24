@@ -3,25 +3,23 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\DataFixtures\BaseFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class UserAdminFixtures extends Fixture
+class UserAdminFixtures extends BaseFixture
 {
-    public const USER_ADMIN = 'admin';
-
-    public function load(ObjectManager $manager)
+    public function loadData(ObjectManager $manager)
     {
-        // User of governance
-        $user = new User();
-        $user->setEmail('admin@neymo.com');
-        $user->setPassword('$2y$10$34ChwRD3d7zBRP2BlMV2tuPfYuOu3wngBBjtIE.BWk4HZY0yq9Niq');
-        $user->setRoles(['ROLE_ADMIN']);
-        $user->setGovernance($this->getReference(GovernanceFixtures::GOVERNANCE));
-        $manager->persist($user);
+
+        $this->createMany(10, function ($num) {
+            $user = (new User())
+            ->setEmail($this->faker->email())
+            ->setRoles(['ROLE_ADMIN'])
+            ->setPassword('$2y$10$34ChwRD3d7zBRP2BlMV2tuPfYuOu3wngBBjtIE.BWk4HZY0yq9Niq');
+            $this->addReference('admin-' . $num, $user);
+            return $user;
+        });
 
         $manager->flush();
-
-        $this->addReference(self::USER_ADMIN, $user);
     }
 }

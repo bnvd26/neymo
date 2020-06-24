@@ -14,7 +14,6 @@ class UserSuperAdminFixtures extends Fixture
         $user->setEmail('superadmin@neymo.com');
         $user->setPassword('$2y$10$34ChwRD3d7zBRP2BlMV2tuPfYuOu3wngBBjtIE.BWk4HZY0yq9Niq');
         $user->setRoles(['ROLE_SUPER_ADMIN']);
-        $user->setGovernance(null);
         $manager->persist($user);
 
         $manager->flush();

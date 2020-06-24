@@ -4,20 +4,23 @@ namespace App\DataFixtures;
 
 use App\Entity\GovernanceUserInformation;
 use App\Entity\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\DataFixtures\BaseFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class GovernanceUserInformationFixtures extends Fixture implements DependentFixtureInterface
+class GovernanceUserInformationFixtures extends BaseFixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function loadData(ObjectManager $manager)
     {
-        $user = new GovernanceUserInformation();
-        $user->setFirstName('John');
-        $user->setLastName('Doe');
-        $user->setRole('Manager');
-        $user->setUser($this->getReference(UserAdminFixtures::USER_ADMIN));
-        $manager->persist($user);
+        $this->createMany(10, function ($num) {
+            $govUserInfo = (new GovernanceUserInformation())
+            ->setFirstName($this->faker->firstName())
+            ->setLastName($this->faker->lastName())
+            ->setRole('Manager')
+            ->setUser($this->getReference('admin-' . $num))
+            ->setGovernance($this->getReference('governance-' . rand(1, 2)));
+            return $govUserInfo;
+        });
 
         $manager->flush();
     }

@@ -8,16 +8,20 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class GovernanceFixtures extends Fixture
 {
-    public const GOVERNANCE = 'governance';
-
     public function load(ObjectManager $manager)
     {
         $governance = new Governance();
         $governance->setName('Paris');
         $governance->setMoneyName('monnaie locale de paris');
         $manager->persist($governance);
-
         $manager->flush();
-        $this->addReference(self::GOVERNANCE, $governance);
+        $this->addReference('governance-1', $governance);
+
+        $governance = new Governance();
+        $governance->setName('Lyon');
+        $governance->setMoneyName('monnaie locale de lyon');
+        $manager->persist($governance);
+        $manager->flush();
+        $this->addReference('governance-2', $governance);
     }
 }
