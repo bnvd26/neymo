@@ -8,15 +8,18 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('admin_users') }}">Administrateur</a>
+                <a class="nav-link" href="{{ path('admin_users') }}">Administrateurs</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">About</a>
+                <a class="nav-link" href="{{ path('admin_company') }}">Commerçants</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('admin_particular') }}">Particuliers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('admin_logout') }}">Déconnexion</a>
             </li>
-            <li class="nav-item dropdown">
+            {# <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item">Action</a>
@@ -26,7 +29,7 @@
                     <a class="dropdown-item">Separated link</a>
                     <a class="dropdown-item">One more separated link</a>
                 </div>
-            </li>
+            </li> #}
         </ul>
     </div>
 </nav>
