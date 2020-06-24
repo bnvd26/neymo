@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<div class="container">
+{% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+{% endfor %}
+
+<h2>Utilisateurs de la gouvernance</h2>
+<a href="{{ path('admin_users_create') }}" class="btn btn-success">Créer un utilisateur</a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Prénom</th>
+      <th scope="col">Nom</th>
+      <th scope="col">Rôle</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for userAdmin in governanceUserInformation %}
+        <tr>
+        <td>{{ userAdmin.id }}</td>
+        <td>{{ userAdmin.firstName }}</td>
+        <td>{{ userAdmin.lastName }}</td>
+        <td>{{ userAdmin.role }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
