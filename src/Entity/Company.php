@@ -45,12 +45,6 @@ class Company
     private $phone_number;
 
     /**
-     * @ORM\OneToOne(targetEntity=Account::class, inversedBy="company", cascade={"persist", "remove"})
-     * @ORM\Column(nullable=true)
-     */
-    private $account;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $siret;
@@ -74,6 +68,16 @@ class Company
      * @ORM\ManyToOne(targetEntity=Governance::class, inversedBy="companies")
      */
     private $governance;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Account::class, inversedBy="company", cascade={"persist", "remove"})
+     */
+    private $account;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $validated;
 
     public function __construct()
     {
@@ -142,18 +146,6 @@ class Company
     public function setPhoneNumber(string $phone_number): self
     {
         $this->phone_number = $phone_number;
-
-        return $this;
-    }
-
-    public function getAccount(): ?Account
-    {
-        return $this->account;
-    }
-
-    public function setAccount(?Account $account): self
-    {
-        $this->account = $account;
 
         return $this;
     }
@@ -228,6 +220,30 @@ class Company
     public function setGovernance(?Governance $governance): self
     {
         $this->governance = $governance;
+
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): self
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    public function getValidated(): ?bool
+    {
+        return $this->validated;
+    }
+
+    public function setValidated(bool $validated): self
+    {
+        $this->validated = $validated;
 
         return $this;
     }
