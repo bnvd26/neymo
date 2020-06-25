@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Company;
 use App\Entity\User;
 use App\Form\CompanyType;
+use App\Repository\CompanyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,16 +15,25 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class CompanyController extends AbstractController
-{
-    /**
-     * @Route("/admin/company", name="admin_company")
+/**
+     * @Route("/admin/company")
      *
      * @IsGranted("ROLE_ADMIN")
      */
-    public function index()
+class CompanyController extends AbstractController
+{
+    /**
+     * @Route("/", name="admin_company")
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function index(CompanyRepository $companyRepository)
     {
-        $companies = $this->getGovernanceCurrentUser()->getGovernance()->getCompanies();
+        $currentGovernance = $this->getGovernanceCurrentUser()->getGovernance();
+
+        // $companyRepository->findCompanyValidatedByGovernance(1, $currentGovernance);
+        
+        $companies = $currentGovernance->getCompanies();
 
         return $this->render('admin/company/index.html.twig', compact('companies'));
     }
@@ -34,7 +44,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/admin/company/create", name="admin_company_create")
+     * @Route("/create", name="admin_company_create")
      *
      * @IsGranted("ROLE_ADMIN")
      */
@@ -67,6 +77,18 @@ class CompanyController extends AbstractController
 
         return $this->render('admin/company/create.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="admin_company_show")
+     */
+    public function show($id, CompanyRepository $companyRepo)
+    {
+        $company = $companyRepo->find($id);
+        
+        return $this->render('admin/company/show.html.twig', [
+            'company' => $company,
         ]);
     }
 }
