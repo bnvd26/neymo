@@ -14,7 +14,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/me", name="api_me")
+     * @Route("/api/me", name="api_me", methods="GET")
      */
     public function getCurrentUser()
     {
