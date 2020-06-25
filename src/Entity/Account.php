@@ -28,14 +28,14 @@ class Account
     private $available_cash;
 
     /**
-     * @ORM\OneToOne(targetEntity=Company::class, mappedBy="account", cascade={"persist", "remove"})
-     */
-    private $company;
-
-    /**
      * @ORM\OneToOne(targetEntity=Particular::class, mappedBy="account", cascade={"persist", "remove"})
      */
     private $particular;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Company::class, mappedBy="account", cascade={"persist", "remove"})
+     */
+    private $company;
 
     public function getId(): ?int
     {
@@ -66,24 +66,6 @@ class Account
         return $this;
     }
 
-    public function getCompany(): ?Company
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?Company $company): self
-    {
-        $this->company = $company;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newAccount = null === $company ? null : $this;
-        if ($company->getAccount() !== $newAccount) {
-            $company->setAccount($newAccount);
-        }
-
-        return $this;
-    }
-
     public function getParticular(): ?Particular
     {
         return $this->particular;
@@ -97,6 +79,24 @@ class Account
         $newAccount = null === $particular ? null : $this;
         if ($particular->getAccount() !== $newAccount) {
             $particular->setAccount($newAccount);
+        }
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newAccount = null === $company ? null : $this;
+        if ($company->getAccount() !== $newAccount) {
+            $company->setAccount($newAccount);
         }
 
         return $this;
