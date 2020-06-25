@@ -62,6 +62,11 @@ class Particular
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $validated;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -171,6 +176,18 @@ class Particular
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getValidated(): ?bool
+    {
+        return $this->validated;
+    }
+
+    public function setValidated(bool $validated): self
+    {
+        $this->validated = $validated;
 
         return $this;
     }
