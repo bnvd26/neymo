@@ -46,6 +46,7 @@ class Company
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $siret;
 
