@@ -7,12 +7,23 @@ use App\Repository\CompanyRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class CompanyController extends AbstractController 
+class CompanyController extends AbstractController
 {
+    private function serialize($data)
+    {
+        return $this->container->get('serializer')->serialize($data, 'json');
+    }
+
+    private function deserialize($data, $entity)
+    {
+        return $this->container->get('serializer')->deserialize($data, $entity, 'json');
+    }
+    
     /**
      * @Route("/api/company/update", name="api_company_update", methods="PUT")
      */
@@ -31,7 +42,7 @@ class CompanyController extends AbstractController
 
         $entityManager->persist($user);
 
-        foreach($user->getCompanies() as $user) {
+        foreach ($user->getCompanies() as $user) {
             $user->setSiret('Je suis modifié');
         }
 
@@ -49,7 +60,54 @@ class CompanyController extends AbstractController
         $response->headers->set('Content-Type', 'application/json');
         
         return $response;
+    }
 
-        return $user;
+    /**
+     * @Route("/api/company/account", name="api_company_account", methods="GET")
+     */
+    public function accountState()
+    {
+        $companyArray = [];
+
+        foreach ($this->getUser()->getCompanies() as $company) {
+            $companyArray[] = [
+                'account_id' => $company->getAccount()->getId(),
+                'available_cash' => $company->getAccount()->getAvailableCash(),
+            ];
+        }
+
+        if (!$this->verifyCompanyAccountExist($companyArray)) {
+            $response = new Response();
+
+            $response->setStatusCode(Response::HTTP_OK);
+
+            $response->setContent(json_encode([
+            'Information' => "Il n y a pas de compte professionel pour cet utilisateur",
+            ]));
+
+            $response->headers->set('Content-Type', 'application/json');
+        
+            return $response;
+        }
+
+        $response = new JsonResponse($companyArray);
+
+        $response->setStatusCode(Response::HTTP_OK);
+    
+        $response->headers->set('Content-Type', 'application/json');
+            
+        return $response;
+    }
+
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $companyArray
+     * @return bool
+     */
+    public function verifyCompanyAccountExist($companyArray)
+    {
+        return !empty($companyArray);
     }
 }

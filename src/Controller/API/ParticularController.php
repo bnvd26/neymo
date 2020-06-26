@@ -42,7 +42,7 @@ class ParticularController extends AbstractController
 
         $entityManager->persist($user);
 
-        foreach($user->getParticular() as $user) {
+        foreach ($user->getParticular() as $user) {
             $user->setFirstName('Gérome');
         }
 
@@ -60,7 +60,51 @@ class ParticularController extends AbstractController
         $response->headers->set('Content-Type', 'application/json');
         
         return $response;
+    }
 
-        return $user;
+    /**
+     * @Route("/api/particular/account", name="api_particular_account", methods="GET")
+     */
+    public function accountState()
+    {
+        if($this->verifyCurrentUserIsParticular())
+        {
+            $response = new Response();
+
+            $response->setStatusCode(Response::HTTP_OK);
+
+            $response->setContent(json_encode([
+            'Information' => "Il n y a pas de compte particulier pour cet utilisateur",
+            ]));
+            
+            $response->headers->set('Content-Type', 'application/json');
+        
+            return $response;
+        };
+
+        $response = new Response();
+
+        $response->setStatusCode(Response::HTTP_OK);
+
+        $response->setContent(json_encode([
+            'account_id' => $this->getUser()->getParticular()->getAccount()->getId(),
+            'available_ cash' => $this->getUser()->getParticular()->getAccount()->getAvailableCash()
+            ]));
+    
+        $response->headers->set('Content-Type', 'application/json');
+            
+        return $response;
+    }
+
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $companyArray
+     * @return bool
+     */
+    public function verifyCurrentUserIsParticular()
+    {
+        return is_null($this->getUser()->getParticular());
     }
 }
