@@ -50,6 +50,7 @@ class ParticularController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $particular = $form->getData();
+            $particular>setValidated(true);
             $particular->setGovernance($this->getGovernanceCurrentUser()->getGovernance());
             $user = new User();
             $user->setEmail($request->request->get('email'));
@@ -60,7 +61,7 @@ class ParticularController extends AbstractController
             $entityManager->persist($particular);
             $entityManager->persist($user);
             $entityManager->flush();
-            $this->addFlash('success', 'Le particulier a bien été créer');
+            $this->addFlash('success', 'Le particulier a bien été créé');
             return $this->redirectToRoute('admin_particular');
         }
 

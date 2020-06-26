@@ -60,6 +60,7 @@ class CompanyController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $company = $form->getData();
+            $company->setValidated(true);
             $company->setGovernance($this->getGovernanceCurrentUser()->getGovernance());
             $user = new User();
             $user->setEmail($request->request->get('email'));
