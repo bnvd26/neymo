@@ -25,7 +25,8 @@ class CompanyFixtures extends BaseFixture implements DependentFixtureInterface
             ->setLastName($this->faker->lastName())
             ->setAccount($this->getReference('account-' . $num))
             ->setGovernance($this->getReference('governance-1'))
-            ->setValidated(false);
+            ->setValidated(false)
+            ->addUser($this->getReference('user-' . $num));
             return $company;
         });
 
@@ -36,6 +37,7 @@ class CompanyFixtures extends BaseFixture implements DependentFixtureInterface
     {
         return array(
             GovernanceFixtures::class,
+            UserFixtures::class,
         );
     }
 }
