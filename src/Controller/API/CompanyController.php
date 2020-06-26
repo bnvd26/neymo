@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\API\CompanyController;
+namespace App\Controller\API;
 
 use App\Entity\User;
 use App\Repository\CompanyRepository;
