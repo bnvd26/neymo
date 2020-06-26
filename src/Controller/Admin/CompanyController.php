@@ -72,7 +72,7 @@ class CompanyController extends AbstractController
             $user->addCompany($company);
             $entityManager->persist($company);
             $entityManager->flush();
-            $this->addFlash('success', 'Le commerçant a bien été créer');
+            $this->addFlash('success', 'Le commerçant a bien été créé');
             return $this->redirectToRoute('admin_company');
         }
 
@@ -82,7 +82,31 @@ class CompanyController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/edit", name="admin_company_edit", methods={"GET","POST"})
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder, Company $company): Response
+    {
+        $form = $this->createForm(CompanyType::class, $company);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('admin_company');
+        }
+
+        return $this->render('admin/company/edit.html.twig', [
+            'company' => $company,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="admin_company_show")
+     *
+     * @IsGranted("ROLE_ADMIN")
      */
     public function show($id, CompanyRepository $companyRepo)
     {

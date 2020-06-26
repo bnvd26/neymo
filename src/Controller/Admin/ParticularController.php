@@ -50,7 +50,7 @@ class ParticularController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $particular = $form->getData();
-            $particular>setValidated(true);
+            $particular->setValidated(true);
             $particular->setGovernance($this->getGovernanceCurrentUser()->getGovernance());
             $user = new User();
             $user->setEmail($request->request->get('email'));

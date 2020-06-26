@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h2>Modifier un Commerçant pour la gouvernance</h2>
+        {{ form_start(form) }}
+        <label for="email">Email </label>
+        <input type="email" name="email">
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

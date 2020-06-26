@@ -24,7 +24,10 @@
            
         <td>{{ company.id }}</td>
         <td>{{ company.name }}</td>
-     <td> <a href="{{ path('admin_company_show', {'id' : company.id}) }}">Détail</a></td>
+     <td>
+         <a href="{{ path('admin_company_show', {'id' : company.id}) }}">Détails</a><br>
+         <a href="{{ path('admin_company_edit', {'id' : company.id}) }}">Modifier</a>
+     </td>
         </tr>
     {% endfor %}
   </tbody>
