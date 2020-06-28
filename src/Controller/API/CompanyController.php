@@ -4,6 +4,7 @@ namespace App\Controller\API;
 
 use App\Entity\User;
 use App\Repository\CompanyRepository;
+use App\Repository\GovernanceRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -109,5 +110,41 @@ class CompanyController extends AbstractController
     public function verifyCompanyAccountExist($companyArray)
     {
         return !empty($companyArray);
+    }
+
+    /**
+     * @Route("/api/companies", name="api_company_account", methods="GET")
+     */
+    public function getListCompanies(CompanyRepository $companyRepository)
+    {
+        $currentUser = $this->getUser();
+
+        if ($currentUser->isParticular()) {
+            $governanceId = $currentUser->getParticular()->getGovernance()->getId();
+        } elseif ($currentUser->isCompany()) {
+            foreach ($currentUser->getCompanies() as $company) {
+                $governanceId = $company->getGovernance()->getId();
+            }
+        }
+
+        $companies = $companyRepository->findCompanyValidatedByGovernance($governanceId);
+
+        $companyArray = [];
+
+        foreach ($companies as $company) {
+            $companyArray[] = [
+                'id' => $company->getId(),
+                'company_name' => $company->getName(),
+                'first_name' => $company->getFirstName()
+            ];
+        }
+
+        $json = $this->serialize($companyArray);
+
+        $response = new Response($json, 200);
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 }
