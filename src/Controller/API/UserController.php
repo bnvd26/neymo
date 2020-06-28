@@ -35,6 +35,8 @@ class UserController extends AbstractController
 
             $response = new Response($json, 200);
 
+            $response->headers->set('Content-Type', 'application/json');
+
             return $response;
         }
 
