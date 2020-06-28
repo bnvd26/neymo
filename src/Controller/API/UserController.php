@@ -23,7 +23,7 @@ class UserController extends AbstractController
         foreach ($this->getUser()->getCompanies() as $company) {
             $companyArray[] = [
                 'id' => $company->getId(),
-                // 'company_name' => $company->getName(),
+                'type' => 'company',
                 'first_name' => $company->getFirstName()
             ];
         }
@@ -44,6 +44,7 @@ class UserController extends AbstractController
 
         $user = [
             'id' => $user->getId(),
+            'type' => 'particular',
             'first_name' => $user->getParticular()->getFirstName()
         ];
         $json = $this->serialize($user);
