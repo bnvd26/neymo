@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Company;
 use App\Entity\Particular;
 use App\Entity\User;
 use App\Form\ParticularAdminType;
@@ -91,5 +92,21 @@ class ParticularController extends AbstractController
             'company' => $particular,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="admin_particular_delete", methods={"DELETE"})
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Request $request, Particular $particular): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$particular->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($particular);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('admin_particular');
     }
 }

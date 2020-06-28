@@ -105,16 +105,32 @@ class CompanyController extends AbstractController
 
 
     /**
-     * @Route("/{id}", name="admin_company_show")
+     * @Route("/{id}", name="admin_company_show", methods={"GET"})
      *
      * @IsGranted("ROLE_ADMIN")
      */
     public function show($id, CompanyRepository $companyRepo)
     {
         $company = $companyRepo->find($id);
-        
+
         return $this->render('admin/company/show.html.twig', [
             'company' => $company,
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="admin_company_delete", methods={"DELETE"})
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Request $request, Company $company): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$company->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($company);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('admin_company');
     }
 }

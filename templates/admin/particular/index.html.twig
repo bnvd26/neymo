@@ -25,7 +25,10 @@
         <td>{{ particular.id }}</td>
         <td>{{ particular.firstName }}</td>
         <td>{{ particular.lastName }}</td>
-        <td><a href="{{ path('admin_particular_edit', {'id' : particular.id}) }}">Modifier</a><br></td>
+        <td>
+            <a href="{{ path('admin_particular_edit', {'id' : particular.id}) }}">Modifier</a><br>
+            {{ include('admin/particular/_delete_form.html.twig') }}
+        </td>
         </tr>
     {% endfor %}
   </tbody>
