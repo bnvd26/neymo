@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h2>Modifier un Particulier pour la gouvernance</h2>
+        {{ form_start(form) }}
+        <label for="email">Email </label>
+        <input type="email" name="email">
+{#        {{ form_label(form.firstname, 'Your Name', {'label_attr': {'class': 'firstname'}}) }}
+        {{ form.task.vars.id }}
+        {{ form_widget(form) }}#}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

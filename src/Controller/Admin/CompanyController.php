@@ -86,7 +86,7 @@ class CompanyController extends AbstractController
      *
      * @IsGranted("ROLE_ADMIN")
      */
-    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder, Company $company): Response
+    public function edit(Request $request, Company $company): Response
     {
         $form = $this->createForm(CompanyType::class, $company);
         $form->handleRequest($request);
@@ -102,6 +102,7 @@ class CompanyController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 
     /**
      * @Route("/{id}", name="admin_company_show")

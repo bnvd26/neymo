@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Particular;
 use App\Entity\User;
+use App\Form\ParticularAdminType;
 use App\Form\ParticularType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -66,6 +67,28 @@ class ParticularController extends AbstractController
         }
 
         return $this->render('admin/particular/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="admin_particular_edit", methods={"GET","POST"})
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function edit(Request $request, Particular $particular): Response
+    {
+        $form = $this->createForm(ParticularAdminType::class, $particular);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('admin_particular');
+        }
+
+        return $this->render('admin/particular/edit.html.twig', [
+            'company' => $particular,
             'form' => $form->createView(),
         ]);
     }
