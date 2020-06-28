@@ -68,12 +68,29 @@ class GovernanceUserController extends AbstractController
             $govUserInformation->setGovernance($this->getGovernanceCurrentUser()->getGovernance());
             $entityManager->persist($govUserInformation);
             $entityManager->flush();
-            $this->addFlash('success', 'L\'utilisateur a bien été créer');
+            $this->addFlash('success', 'L\'utilisateur a bien été créé');
             return $this->redirectToRoute('admin_users');
         }
 
         return $this->render('admin/governanceUsers/create.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+
+    /**
+     * @Route("/admin/users/{id}", name="admin_users_delete", methods={"DELETE"})
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Request $request, GovernanceUserInformation $GovernanceUserInformation): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$GovernanceUserInformation->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($GovernanceUserInformation);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('admin_users');
     }
 }

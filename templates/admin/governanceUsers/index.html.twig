@@ -26,6 +26,7 @@
         <td>{{ userAdmin.firstName }}</td>
         <td>{{ userAdmin.lastName }}</td>
         <td>{{ userAdmin.role }}</td>
+        <td>{{ include('admin/governanceUsers/_delete_form.html.twig') }}</td>
         </tr>
     {% endfor %}
   </tbody>
