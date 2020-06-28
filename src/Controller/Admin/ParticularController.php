@@ -80,9 +80,11 @@ class ParticularController extends AbstractController
     public function edit(Request $request, Particular $particular): Response
     {
         $form = $this->createForm(ParticularAdminType::class, $particular);
+        $form->get('email')->setData($particular->getUser()->getEmail());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $particular->getUser()->setEmail($form->get("email")->getData());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('admin_particular');
