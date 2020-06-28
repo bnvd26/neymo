@@ -73,8 +73,7 @@ class RegisterController extends AbstractController
         $company = new Company();
         $company->setGovernance($governanceRepository->find($dataDecoded->governanceId));
         $company->setFirstName($dataDecoded->firstName);
-        $company->setFirstName($dataDecoded->firstName);
-        $company->setName($dataDecoded->firstName);
+        $company->setName($dataDecoded->name);
         $company->setLastName($dataDecoded->lastName);
         $company->setZipCode($dataDecoded->zipCode);
         $company->setCity($dataDecoded->city);
