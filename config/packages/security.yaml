@@ -20,6 +20,9 @@ security:
     register:
       pattern: ^/api/register
       security: false
+    governances:
+      pattern: ^/api/governances
+      security: false
     login:
       pattern: ^/api/login
       stateless: true
