@@ -23,7 +23,7 @@ class UserController extends AbstractController
         foreach ($this->getUser()->getCompanies() as $company) {
             $companyArray[] = [
                 'id' => $company->getId(),
-                'company_name' => $company->getName(),
+                // 'company_name' => $company->getName(),
                 'first_name' => $company->getFirstName()
             ];
         }
