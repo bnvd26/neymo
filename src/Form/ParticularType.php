@@ -2,10 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\Company;
 use App\Entity\Particular;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,12 +18,16 @@ class ParticularType extends AbstractType
         $builder
             ->add('firstName', TextType::class)
             ->add('lastName', TextType::class)
+            ->add('address', TextType::class)
             ->add('city', TextType::class)
             ->add('zipCode', TextType::class)
             ->add('phoneNumber', TelType::class)
-            ->add('address', TextType::class)
-            ->add('lastName', TextType::class)
-            ->add('firstName', TextType::class)
+            ->add('birthdate', DateType::class, [
+                    'widget' => 'choice',
+                    'years' => range(date('Y')-100, date('Y')-17),
+                    'months' => range(date('m'), 12),
+                    'days' => range(date('d'), 31),
+            ])
             ->add('save', SubmitType::class)
         ;
     }
