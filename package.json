@@ -8,5 +8,8 @@
     "popper.js": "^1.16.1",
     "sass-loader": "^8.0.0",
     "webpack-notifier": "^1.6.0"
+  },
+  "dependencies": {
+    "-": "^0.0.1"
   }
 }

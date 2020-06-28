@@ -60,6 +60,7 @@ class CompanyController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $company = $form->getData();
+            $company->setValidated(true);
             $company->setGovernance($this->getGovernanceCurrentUser()->getGovernance());
             $user = new User();
             $user->setEmail($request->request->get('email'));
@@ -71,7 +72,7 @@ class CompanyController extends AbstractController
             $user->addCompany($company);
             $entityManager->persist($company);
             $entityManager->flush();
-            $this->addFlash('success', 'Le commerçant a bien été créer');
+            $this->addFlash('success', 'Le commerçant a bien été créé');
             return $this->redirectToRoute('admin_company');
         }
 
@@ -81,14 +82,55 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_company_show")
+     * @Route("/{id}/edit", name="admin_company_edit", methods={"GET","POST"})
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function edit(Request $request, Company $company): Response
+    {
+        $form = $this->createForm(CompanyType::class, $company);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('admin_company');
+        }
+
+        return $this->render('admin/company/edit.html.twig', [
+            'company' => $company,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/{id}", name="admin_company_show", methods={"GET"})
+     *
+     * @IsGranted("ROLE_ADMIN")
      */
     public function show($id, CompanyRepository $companyRepo)
     {
         $company = $companyRepo->find($id);
-        
+
         return $this->render('admin/company/show.html.twig', [
             'company' => $company,
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="admin_company_delete", methods={"DELETE"})
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Request $request, Company $company): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$company->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($company);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('admin_company');
     }
 }

@@ -67,6 +67,11 @@ class Particular
      */
     private $validated;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $birthdate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -188,6 +193,18 @@ class Particular
     public function setValidated(bool $validated): self
     {
         $this->validated = $validated;
+
+        return $this;
+    }
+
+    public function getBirthdate(): ?\DateTimeInterface
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(\DateTimeInterface $birthdate): self
+    {
+        $this->birthdate = $birthdate;
 
         return $this;
     }
