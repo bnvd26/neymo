@@ -3,11 +3,9 @@
 namespace App\Controller\SuperAdmin;
 
 use App\Entity\Governance;
-use App\Entity\User;
 use App\Form\GovernanceType;
 use App\Repository\GovernanceRepository;
 use App\Repository\GovernanceUserInformationRepository;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
- * @Route("/superadmin/governance")
+ * @Route("/superadmin/governance", name="superadmin_governance_")
+ *
  * @IsGranted("ROLE_SUPER_ADMIN")
  */
 class GovernanceController extends AbstractController
 {
     /**
-     * @Route("/create", name="governance_create", methods={"GET","POST"})
+     * @Route("/create", name="create", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -44,7 +43,7 @@ class GovernanceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="governance_show", methods={"GET"})
+     * @Route("/{id}", name="show", methods={"GET"})
      */
     public function show(Governance $governance, GovernanceUserInformationRepository $govUserInfoRepository): Response
     {
@@ -57,7 +56,7 @@ class GovernanceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="governance_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Governance $governance): Response
     {
@@ -79,10 +78,13 @@ class GovernanceController extends AbstractController
     /**
      * Display list of Governances.
      *
+     * @Route("/", name="index")
+     *
      * @param [type] $governanceRepository
-     * @return void
+     *
+     * @return Response
      */
-    public function index($governanceRepository)
+    public function index(GovernanceRepository $governanceRepository)
     {
         return $this->render('superAdmin/home.html.twig', [
             'governances' => $governanceRepository->findAll()

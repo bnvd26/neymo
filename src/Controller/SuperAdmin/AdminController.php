@@ -22,14 +22,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/superadmin/governance")
+ * @Route("/superadmin/admin", name="superadmin_admin_")
  *
  * @IsGranted("ROLE_SUPER_ADMIN")
 */
-class UserController extends AbstractController
+class AdminController extends AbstractController
 {
     /**
-     * @Route("/{id}/create/", name="superadmin_user_create")
+     * @Route("/", name="index")
+     */
+    public function list(GovernanceUserInformationRepository $governanceUserInformationRepository)
+    {
+        return $this->render('superAdmin/admin/index.html.twig', [
+            'admins' => $governanceUserInformationRepository->findAll()
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/create/", name="create")
      */
     public function create(Request $request, GovernanceRepository $govRepository, $id, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -39,7 +49,7 @@ class UserController extends AbstractController
         $form = $this->createFormBuilder($user)
             ->add('email', TextType::class)
             ->add('password', PasswordType::class)
-            ->add('save', SubmitType::class, ['label' => 'Create user'])
+            ->add('save', SubmitType::class, ['label' => 'Create admin'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -52,12 +62,20 @@ class UserController extends AbstractController
             $this->createUserInformation($request, $user, $govRepository->find($id));
             $entityManager->flush();
 
-            return $this->redirectToRoute('governance_show', ['id' => $id]);
+            return $this->redirectToRoute('superadmin_governance_show', ['id' => $id]);
         }
 
         return $this->render('superAdmin/user/create.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/show", name="show")
+     */
+    public function index()
+    {
+        return new Response('lol');
     }
 
     public function createUserInformation($request, $user, $governance)
