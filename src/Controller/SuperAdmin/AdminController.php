@@ -4,17 +4,13 @@ namespace App\Controller\SuperAdmin;
 
 use App\Entity\GovernanceUserInformation;
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\AdminSuperAdminType;
 use App\Repository\GovernanceRepository;
 use App\Repository\GovernanceUserInformationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -69,13 +65,29 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
     /**
-     * @Route("/show", name="show")
+     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
-    public function index()
+    public function edit(Request $request, int $id): Response
     {
-        return new Response('lol');
+        $repo = $this->getDoctrine()->getManager()->getRepository(GovernanceUserInformation::class);
+        /* @var GovernanceUserInformation $user */
+        $user = $repo->find($id);
+        $form = $this->createForm(AdminSuperAdminType::class, $user);
+        $form->get('email')->setData($user->getUser()->getEmail());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->getUser()->setEmail($form->get("email")->getData());
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('superadmin_governance_show', ['id' => $user->getGovernance()->getId()]);
+        }
+
+        return $this->render('superAdmin/admin/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 
     public function createUserInformation($request, $user, $governance)

@@ -24,7 +24,7 @@
                 <td>{{ admin.user.governanceUserInformation.governance.name }}</td>
                 <td>{{ admin.role }}</td>
                 <td>
-                    <a href="{{ path('superadmin_governance_create') }}" class="btn btn-success">Modifier</a> </br>
+                    <a href="{{ path('superadmin_admin_edit', { 'id' : admin.id }) }}" class="btn btn-success">Modifier</a>
                     <a href="{{ path('superadmin_governance_create') }}" class="btn btn-success">Supprimer</a>
                 </td>
                 {% endfor %}
