@@ -7,6 +7,7 @@ use App\Entity\Particular;
 use App\Entity\User;
 use App\Repository\GovernanceRepository;
 use App\Repository\UserRepository;
+use DateTime;
 use Exception;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -77,7 +78,7 @@ class RegisterController extends AbstractController
         $particular->setAddress($dataDecoded->address);
         $particular->setPhoneNumber($dataDecoded->phoneNumber);
         $particular->setUser($user);
-        $particular->setBirthdate($dataDecoded->birthdate);
+        $particular->setBirthdate(new \DateTime($dataDecoded->birthdate));
         $particular->setValidated(false);
         $entityManager->persist($particular);
         $entityManager->flush();
