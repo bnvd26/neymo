@@ -31,6 +31,7 @@ class ParticularUserFixtures extends BaseFixture implements DependentFixtureInte
             ->setPhoneNumber($this->faker->phoneNumber())
             ->setFirstName($this->faker->firstName())
             ->setLastName($this->faker->lastName())
+            ->setBirthdate($this->faker->dateTime($max = 'now', $timezone = null))
             ->setAccount($account)
             ->setGovernance($this->getReference('governance-1'))
             ->setValidated(false)
