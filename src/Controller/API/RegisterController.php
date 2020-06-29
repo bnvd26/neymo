@@ -77,6 +77,7 @@ class RegisterController extends AbstractController
         $particular->setAddress($dataDecoded->address);
         $particular->setPhoneNumber($dataDecoded->phoneNumber);
         $particular->setUser($user);
+        $particular->setBirthdate($dataDecoded->birthdate);
         $particular->setValidated(false);
         $entityManager->persist($particular);
         $entityManager->flush();
