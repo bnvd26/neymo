@@ -6,10 +6,13 @@ use App\Entity\Company;
 use App\Entity\Particular;
 use App\Entity\User;
 use App\Repository\GovernanceRepository;
+use App\Repository\UserRepository;
+use Exception;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegisterController extends AbstractController
@@ -27,10 +30,23 @@ class RegisterController extends AbstractController
     /**
      * @Route("/api/register", name="api_register", methods="POST")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GovernanceRepository $governanceRepository)
+    public function register(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, GovernanceRepository $governanceRepository)
     {
         $entityManager = $this->getDoctrine()->getManager();
+
         $user = $this->deserialize($request->getContent(), User::class);
+
+        if ($this->emailExist($userRepository, $user->getEmail())) {
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setContent(json_encode([
+            'Error' => "Un utilisateur existe déjà avec cette adresse mail",
+            ]));
+            $response->headers->set('Content-Type', 'application/json');
+        
+            return $response;
+        }
+        
         $password = $passwordEncoder->encodePassword($user, $user->getPassword());
         $user->setPassword($password);
         $user->setRoles(["ROLE_USER"]);
@@ -73,8 +89,7 @@ class RegisterController extends AbstractController
         $company = new Company();
         $company->setGovernance($governanceRepository->find($dataDecoded->governanceId));
         $company->setFirstName($dataDecoded->firstName);
-        $company->setFirstName($dataDecoded->firstName);
-        $company->setName($dataDecoded->firstName);
+        $company->setName($dataDecoded->name);
         $company->setLastName($dataDecoded->lastName);
         $company->setZipCode($dataDecoded->zipCode);
         $company->setCity($dataDecoded->city);
@@ -85,5 +100,10 @@ class RegisterController extends AbstractController
         $company->setSiret($dataDecoded->siret);
         $entityManager->persist($company);
         $entityManager->flush();
+    }
+
+    public function emailExist($userRepository, $email)
+    {
+        return $userRepository->findBy(['email' => $email]);
     }
 }

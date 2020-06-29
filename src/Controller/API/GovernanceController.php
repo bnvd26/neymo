@@ -34,7 +34,11 @@ class GovernanceController extends AbstractController
            
         }
 
-        $response = new Response($json, 200);
+        $response = new Response($json);
+
+        $response->setStatusCode(Response::HTTP_CREATED);
+
+        $response->headers->set('Content-Type', 'application/json');
 
         return $response;
     }
