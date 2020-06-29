@@ -3,6 +3,7 @@
 namespace App\Controller\SuperAdmin;
 
 use App\Entity\GovernanceUserInformation;
+use App\Entity\Particular;
 use App\Entity\User;
 use App\Form\AdminSuperAdminType;
 use App\Repository\GovernanceRepository;
@@ -88,6 +89,23 @@ class AdminController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, int $id): Response
+    {
+        $repo = $this->getDoctrine()->getManager()->getRepository(GovernanceUserInformation::class);
+        /* @var GovernanceUserInformation $user */
+        $user = $repo->find($id);
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('superadmin_governance_show', ['id' => $user->getGovernance()->getId()]);
     }
 
     public function createUserInformation($request, $user, $governance)

@@ -35,16 +35,22 @@
                     <th scope="col">Prénom</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Role</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
         {% for user in govUsersInformation %}
+        {% set admin = user %}
                 <tr>
                     <td>{{ user.user.id }}</td>
                     <td>{{ user.user.email }}</td>
                     <td>{{ user.firstName }}</td>
                     <td>{{ user.lastName }}</td>
                     <td>{{ user.role }}</td>
+                    <td>
+                        <a href="{{ path('superadmin_admin_edit', { 'id' : user.id }) }}" class="btn btn-success">Modifier</a>
+                        {{ include('superadmin/admin/_delete_form.html.twig') }}
+                    </td>
             {% endfor %}
                 </tr>
             </tbody>

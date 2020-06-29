@@ -25,7 +25,7 @@
                 <td>{{ admin.role }}</td>
                 <td>
                     <a href="{{ path('superadmin_admin_edit', { 'id' : admin.id }) }}" class="btn btn-success">Modifier</a>
-                    <a href="{{ path('superadmin_governance_create') }}" class="btn btn-success">Supprimer</a>
+                    {{ include('superadmin/admin/_delete_form.html.twig') }}
                 </td>
                 {% endfor %}
             </tr>
