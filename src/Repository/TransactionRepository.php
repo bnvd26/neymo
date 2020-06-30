@@ -19,22 +19,34 @@ class TransactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Transaction::class);
     }
 
-    // /**
-    //  * @return Transaction[] Returns an array of Transaction objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Transaction[] Returns an array of Transaction objects
+     */
+    public function findAllTransactions($value)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+            ->where('t.beneficiary = :val')
+            ->orWhere('t.emiter = :val')
             ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            ->orderBy('t.date', 'DESC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+    public function findTransactionsByDate($date, $value)
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.beneficiary = :value')
+            ->orWhere('t.emiter = :value')
+            ->andWhere('t.date = :date')
+            ->setParameter('value', $value)
+            ->setParameter('date', $date)
+            ->orderBy('t.date', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     /*
     public function findOneBySomeField($value): ?Transaction
