@@ -66,7 +66,7 @@ class GovernanceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('governance_show', ['id' => $governance->getId()]);
+            return $this->redirectToRoute('superadmin_governance_show', ['id' => $governance->getId()]);
         }
 
         return $this->render('superAdmin/governance/edit.html.twig', [
