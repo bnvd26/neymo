@@ -71,7 +71,7 @@ class TransactionController extends AbstractController
         $entityManager->flush();
         $response = new Response();
 
-        $response->setStatusCode(Response::HTTP_OK);
+        $response->setStatusCode(Response::HTTP_CREATED);
 
         $response->setContent(json_encode([
             'Success' => "Argent bien envoyé",
