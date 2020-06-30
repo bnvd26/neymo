@@ -15,13 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
- * @Route("/superadmin/governance")
+ * @Route("/superadmin/governance", name="superadmin_governance_")
+ *
  * @IsGranted("ROLE_SUPER_ADMIN")
  */
 class GovernanceController extends AbstractController
 {
     /**
-     * @Route("/create", name="governance_create", methods={"GET","POST"})
+     * @Route("/create", name="create", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -33,6 +34,7 @@ class GovernanceController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($governance);
             $entityManager->flush();
+            $this->addFlash('success', 'La gouvernance a bien été créée');
 
             return $this->redirectToRoute('superadmin_home');
         }
@@ -44,7 +46,7 @@ class GovernanceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="governance_show", methods={"GET"})
+     * @Route("/{id}", name="show", methods={"GET"})
      */
     public function show(Governance $governance, GovernanceUserInformationRepository $govUserInfoRepository): Response
     {
@@ -79,10 +81,13 @@ class GovernanceController extends AbstractController
     /**
      * Display list of Governances.
      *
-     * @param [type] $governanceRepository
-     * @return void
+     * @Route("/", name="index")
+     *
+     * @param GovernanceRepository $governanceRepository
+     *
+     * @return Response
      */
-    public function index($governanceRepository)
+    public function index(GovernanceRepository $governanceRepository)
     {
         return $this->render('superAdmin/home.html.twig', [
             'governances' => $governanceRepository->findAll()
