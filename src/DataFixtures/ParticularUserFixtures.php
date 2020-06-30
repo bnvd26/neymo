@@ -34,7 +34,7 @@ class ParticularUserFixtures extends BaseFixture implements DependentFixtureInte
             ->setBirthdate($this->faker->dateTime($max = 'now', $timezone = null))
             ->setAccount($account)
             ->setGovernance($this->getReference('governance-1'))
-            ->setValidated(false)
+            ->setValidated(true)
             ->setUser($user);
         $manager->persist($particular);
 
@@ -60,7 +60,7 @@ class ParticularUserFixtures extends BaseFixture implements DependentFixtureInte
             ->setAccount($account)
             ->setBirthdate($this->faker->dateTime($max = 'now', $timezone = null))
             ->setGovernance($this->getReference('governance-1'))
-            ->setValidated(false)
+            ->setValidated(true)
             ->setUser($user);
             return $particular;
         });
