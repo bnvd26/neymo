@@ -135,7 +135,8 @@ class CompanyController extends AbstractController
             $companyArray[] = [
                 'id' => $company->getId(),
                 'company_name' => $company->getName(),
-                'first_name' => $company->getFirstName()
+                'first_name' => $company->getFirstName(),
+                'category' => $company->getCategory()->getName()
             ];
         }
 
