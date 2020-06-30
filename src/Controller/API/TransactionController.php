@@ -45,17 +45,16 @@ class TransactionController extends AbstractController
     public function transferMoney(Request $request, AccountRepository $accountRepository)
     {
         $data = json_decode($request->getContent());
-
-        if ((int) $accountRepository->find($data->emiterAccountId)->getAvailableCash() < (int) $data->transferedMoney) {
+    
+        if ((int) $accountRepository->find($data->emiterAccountId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
             $response = new Response();
             $response->setStatusCode(Response::HTTP_OK);
-
             $response->setContent(json_encode([
                 'Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent",
             ]));
             
             $response->headers->set('Content-Type', 'application/json');
-        
+            
             return $response;
         }
 
@@ -72,17 +71,16 @@ class TransactionController extends AbstractController
         $entityManager->flush();
         $response = new Response();
 
-        $response->setStatusCode(Response::HTTP_OK);
+        $response->setStatusCode(Response::HTTP_CREATED);
 
-        $content = json_encode([
+        $response->setContent(json_encode([
             'Success' => "Argent bien envoyé",
-            ]);
+            ]));
             
         $response->headers->set('Content-Type', 'application/json');
         
         return $response;
 
-        return $this->responseOk($content);
     }
 
     public function getTransactionsForParticular($transactionRepository)
