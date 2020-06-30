@@ -7,25 +7,21 @@ use App\Entity\User;
 use App\Form\CompanyType;
 use App\Repository\CompanyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
-     * @Route("/admin/company")
+     * @Route("/admin/company", name="admin_company_")
      *
      * @IsGranted("ROLE_ADMIN")
      */
 class CompanyController extends AbstractController
 {
     /**
-     * @Route("/", name="admin_company")
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/", name="index")
      */
     public function index(CompanyRepository $companyRepository)
     {
@@ -44,9 +40,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="admin_company_create")
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/create", name="create")
      */
     public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -73,7 +67,7 @@ class CompanyController extends AbstractController
             $entityManager->persist($company);
             $entityManager->flush();
             $this->addFlash('success', 'Le commerçant a bien été créé');
-            return $this->redirectToRoute('admin_company');
+            return $this->redirectToRoute('admin_company_index');
         }
 
         return $this->render('admin/company/create.html.twig', [
@@ -82,9 +76,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_company_edit", methods={"GET","POST"})
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Company $company): Response
     {
@@ -94,7 +86,7 @@ class CompanyController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('admin_company');
+            return $this->redirectToRoute('admin_company_index');
         }
 
         return $this->render('admin/company/edit.html.twig', [
@@ -105,9 +97,7 @@ class CompanyController extends AbstractController
 
 
     /**
-     * @Route("/{id}", name="admin_company_show", methods={"GET"})
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/{id}", name="show", methods={"GET"})
      */
     public function show($id, CompanyRepository $companyRepo)
     {
@@ -119,9 +109,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_company_delete", methods={"DELETE"})
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/{id}", name="delete", methods={"DELETE"})
      */
     public function delete(Request $request, Company $company): Response
     {
@@ -131,6 +119,6 @@ class CompanyController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_company');
+        return $this->redirectToRoute('admin_company_index');
     }
 }

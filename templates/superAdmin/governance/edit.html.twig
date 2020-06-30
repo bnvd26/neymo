@@ -6,12 +6,12 @@
      <div class="content-container text-center">
         <div class="container-fluid" style="padding-right:60px;padding-left:60px">
             <div class="jumbotron">
-                <a href="{{ path('governance_show', {'id': governance.id}) }}">Revenir à la gouvernance</a>
+                <a href="{{ path('superadmin_governance_show', {'id': governance.id}) }}">Revenir à la gouvernance</a>
 
     <h1>Modifier la gouvernance {{ governance.name }}</h1>
 
     {{ include('superAdmin/governance/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    </div>
+        </div>
     </div>
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block title %}Administrateurs{% endblock %}
+{% block content %}
+    <div class="content-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Email</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Gouvernance</th>
+                <th scope="col">Role</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for admin in admins %}
+            <tr>
+                <td>{{ admin.user.id }}</td>
+                <td>{{ admin.user.email }}</td>
+                <td>{{ admin.firstName }}</td>
+                <td>{{ admin.lastName }}</td>
+                <td>{{ admin.user.governanceUserInformation.governance.name }}</td>
+                <td>{{ admin.role }}</td>
+                <td>
+                    <a href="{{ path('superadmin_admin_edit', { 'id' : admin.id }) }}" class="btn btn-success">Modifier</a>
+                    {{ include('superadmin/admin/_delete_form.html.twig') }}
+                </td>
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

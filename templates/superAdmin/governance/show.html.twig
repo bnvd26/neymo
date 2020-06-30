@@ -6,9 +6,9 @@
 <div class="content-container">
         <div class="container-fluid">
             <div class="jumbotron">
-            <a href="{{ path('superadmin_home') }}" class="btn btn-primary">Dashboard</a>
+            <a href="{{ path('superadmin_home') }}">Gouvernances</a>
     <h1>Information sur la gouvernance de {{ governance.name }}</h1>
-    <a href="{{ path('governance_edit', {'id': governance.id}) }}" class="btn btn-warning">Modifier les informations</a>
+    <a href="{{ path('superadmin_governance_edit', {'id': governance.id}) }}" class="btn btn-warning">Modifier les informations</a>
     <table class="table">
         <tbody>
             <tr>
@@ -26,37 +26,35 @@
         </tbody>
     </table>
         <h2>Utilisateurs associés à cette gouvernance</h2>
-                <a href="{{ path('superadmin_user_create', {'id': governance.id}) }}" class="btn btn-success">Créer un utilisateur pour cette gouvernance</a>
+                <a href="{{ path('superadmin_admin_create', {'id': governance.id}) }}" class="btn btn-success">Créer un utilisateur pour cette gouvernance</a>
         <table class="table">
             <thead>
                 <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Email</th>
-                <th scope="col">Prénom</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Role</th>
-                
-                
+                    <th scope="col">ID</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-           
         {% for user in govUsersInformation %}
-         <tr>
-                      
-         <td>{{ user.user.id }}</td>
+        {% set admin = user %}
+                <tr>
+                    <td>{{ user.user.id }}</td>
                     <td>{{ user.user.email }}</td>
-                
-      
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.lastName }}</td>
-                  <td>{{ user.role }}</td>
- 
-           
-        {% endfor %}        
-              </tr>
+                    <td>{{ user.firstName }}</td>
+                    <td>{{ user.lastName }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>
+                        <a href="{{ path('superadmin_admin_edit', { 'id' : user.id }) }}" class="btn btn-warning">Modifier</a>
+                        {{ include('superadmin/admin/_delete_form.html.twig') }}
+                    </td>
+            {% endfor %}
+                </tr>
             </tbody>
-    </table>
+        </table>
         </div>
     </div>
 </div>

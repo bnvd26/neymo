@@ -1,5 +1,5 @@
 <h1>Liste des gouvernances</h1>
-    <a href="{{ path('governance_create') }}" class="btn btn-success">Créer une gouvernance</a>
+    <a href="{{ path('superadmin_governance_create') }}" class="btn btn-success">Créer une gouvernance</a>
     <table class="table">
         <thead>
             <tr>
@@ -16,7 +16,7 @@
                     <td>{{ governance.name }}</td>
                     <td>{{ governance.moneyName }}</td>
                     <td>
-                    <a href="{{ path('governance_show', {'id': governance.id}) }}">
+                    <a href="{{ path('superadmin_governance_show', {'id': governance.id}) }}">
                     <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détail"></i>
                     </a>   
                     </td>
