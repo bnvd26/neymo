@@ -80,6 +80,11 @@ class Company
      */
     private $validated;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="companies")
+     */
+    private $category;
+
     public function __construct()
     {
         $this->companyUsers = new ArrayCollection();
@@ -245,6 +250,18 @@ class Company
     public function setValidated(bool $validated): self
     {
         $this->validated = $validated;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
