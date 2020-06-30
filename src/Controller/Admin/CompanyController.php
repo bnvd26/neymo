@@ -81,20 +81,22 @@ class CompanyController extends AbstractController
      */
     public function edit(Request $request, Company $company): Response
     {
-        $users = $company->getUser();
+/*        $users = $company->getUser();
         if ([] === $users) {
             // @todo erreur, user is not found
         }
         $user = current($users);
         if (!$user instanceof User) {
             // @todo erreur, user is not a user
-        }
+        }*/
         $form = $this->createForm(CompanyType::class, $company);
-        $form->get('email')->setData($user->getEmail());
+       // $form->get('email')->setData($user->getEmail());
+        $form->get('email')->setData($company->getUser()[0]->getEmail());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setEmail($form->get("email")->getData());
+            //$user->setEmail($form->get("email")->getData());
+            $company->getUser()[0]->setEmail($form->get("email")->getData());
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le commerçant a bien été modifié');
 
