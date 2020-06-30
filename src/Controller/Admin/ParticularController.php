@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Company;
 use App\Entity\Particular;
 use App\Entity\User;
 use App\Form\ParticularAdminType;
@@ -13,12 +12,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * @Route("/admin/particular", name="admin_particular_")
+ *
+ * @IsGranted("ROLE_ADMIN")
+ */
 class ParticularController extends AbstractController
 {
     /**
-     * @Route("/admin/particular", name="admin_particular")
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/", name="index")
      */
     public function index()
     {
@@ -33,9 +35,7 @@ class ParticularController extends AbstractController
     }
 
     /**
-     * @Route("/admin/particular/create", name="admin_particular_create")
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/create", name="create")
      */
     public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -61,7 +61,7 @@ class ParticularController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Le particulier a bien été créé');
-            return $this->redirectToRoute('admin_particular');
+            return $this->redirectToRoute('admin_particular_index');
         }
 
         return $this->render('admin/particular/create.html.twig', [
@@ -70,9 +70,7 @@ class ParticularController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_particular_edit", methods={"GET","POST"})
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Particular $particular): Response
     {
@@ -84,7 +82,7 @@ class ParticularController extends AbstractController
             $particular->getUser()->setEmail($form->get("email")->getData());
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('admin_particular');
+            return $this->redirectToRoute('admin_particular_index');
         }
 
         return $this->render('admin/particular/edit.html.twig', [
@@ -94,9 +92,7 @@ class ParticularController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_particular_delete", methods={"DELETE"})
-     *
-     * @IsGranted("ROLE_ADMIN")
+     * @Route("/{id}", name="delete", methods={"DELETE"})
      */
     public function delete(Request $request, Particular $particular): Response
     {
@@ -106,6 +102,6 @@ class ParticularController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_particular');
+        return $this->redirectToRoute('admin_particular_index');
     }
 }

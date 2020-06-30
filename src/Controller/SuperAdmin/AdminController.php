@@ -3,7 +3,6 @@
 namespace App\Controller\SuperAdmin;
 
 use App\Entity\GovernanceUserInformation;
-use App\Entity\Particular;
 use App\Entity\User;
 use App\Form\AdminSuperAdminType;
 use App\Repository\GovernanceRepository;
