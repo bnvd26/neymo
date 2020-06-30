@@ -33,7 +33,7 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setFirstName($this->faker->firstName())
             ->setLastName($this->faker->lastName())
             ->setAccount($account)
-            ->setCategory($this->getReference('category-' . rand(1,7)))
+            ->setCategory($this->getReference('category-' . rand(0,7)))
             ->setGovernance($this->getReference('governance-1'))
             ->setValidated(true)
             ->addUser($user);
@@ -48,7 +48,7 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setPhoneNumber($this->faker->phoneNumber())
             ->setSiret($this->faker->siret())
             ->setFirstName($this->faker->firstName())
-            ->setCategory($this->getReference('category-' . rand(1,6)))
+            ->setCategory($this->getReference('category-' . rand(0,6)))
             ->setLastName($this->faker->lastName())
             ->setAccount($this->getReference('account-' . $num))
             ->setGovernance($this->getReference('governance-1'))

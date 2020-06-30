@@ -36,7 +36,7 @@ class CompanyParticularUserFixtures extends BaseFixture implements DependentFixt
             ->setFirstName($this->faker->firstName())
             ->setLastName($this->faker->lastName())
             ->setAccount($account)
-            ->setCategory($this->getReference('category-' . rand(1,7)))
+            ->setCategory($this->getReference('category-' . rand(0,6)))
             ->setGovernance($this->getReference('governance-1'))
             ->setValidated(true)
             ->addUser($user);
