@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Particular;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,7 +29,7 @@ class ParticularType extends AbstractType
                     'months' => range(date('m'), 12),
                     'days' => range(date('d'), 31),
             ])
-            ->add('save', SubmitType::class)
+            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
         ;
     }
 

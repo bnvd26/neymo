@@ -26,7 +26,7 @@ class CompanyType extends AbstractType
             ->add('siret', TextType::class)
             ->add('lastName', TextType::class)
             ->add('firstName', TextType::class)
-            ->add('save', SubmitType::class)
+            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
         ;
     }
 
