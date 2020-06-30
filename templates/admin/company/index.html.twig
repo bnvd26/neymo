@@ -25,8 +25,8 @@
         <td>{{ company.id }}</td>
         <td>{{ company.name }}</td>
      <td>
-        <a href="{{ path('admin_company_show', {'id' : company.id}) }}">Détails</a><br>
-        <a href="{{ path('admin_company_edit', {'id' : company.id}) }}">Modifier</a><br>
+        <a href="{{ path('admin_company_show', {'id' : company.id}) }}" class="btn btn-primary">Détails</a><br>
+        <a href="{{ path('admin_company_edit', {'id' : company.id}) }}" class="btn btn-warning">Modifier</a><br>
          {{ include('admin/company/_delete_form.html.twig') }}
      </td>
         </tr>
