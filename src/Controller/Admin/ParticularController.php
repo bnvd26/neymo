@@ -7,7 +7,10 @@ use App\Entity\User;
 use App\Form\ParticularAdminType;
 use App\Form\ParticularType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+<<<<<<< HEAD
+=======
 use Symfony\Component\HttpFoundation\Response;
+>>>>>>> fix/admin-Email-Edition
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
