@@ -12,6 +12,15 @@ class GovernanceUserInformationFixtures extends BaseFixture implements Dependent
 {
     public function loadData(ObjectManager $manager)
     {
+        $this->createMany(1, function ($num) {
+            $govUserInfo = (new GovernanceUserInformation())
+            ->setFirstName($this->faker->firstName())
+            ->setLastName($this->faker->lastName())
+            ->setRole('Manager')
+            ->setUser($this->getReference('admin-11'))
+            ->setGovernance($this->getReference('governance-' . rand(1, 2)));
+            return $govUserInfo;
+        });
         $this->createMany(10, function ($num) {
             $govUserInfo = (new GovernanceUserInformation())
             ->setFirstName($this->faker->firstName())

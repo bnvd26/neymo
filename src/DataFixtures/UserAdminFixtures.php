@@ -15,6 +15,7 @@ class UserAdminFixtures extends BaseFixture
         ->setEmail('admin@neymo.com')
         ->setPassword('$2y$10$34ChwRD3d7zBRP2BlMV2tuPfYuOu3wngBBjtIE.BWk4HZY0yq9Niq')
         ->setRoles(['ROLE_ADMIN']);
+        $this->addReference('admin-11', $user);
 
         $manager->persist($user);
 
