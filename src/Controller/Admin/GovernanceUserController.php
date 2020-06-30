@@ -26,7 +26,6 @@ class GovernanceUserController extends AbstractController
     public function index(GovernanceUserInformationRepository $governanceUserInformationRepository)
     {
         $governanceId = $this->getGovernanceCurrentUser()->getGovernance()->getId();
-
         $governanceUserInformation = $governanceUserInformationRepository->findUserInformationByGovernanceId($governanceId);
 
         return $this->render('admin/governanceUsers/index.html.twig', compact('governanceUserInformation'));
@@ -66,6 +65,7 @@ class GovernanceUserController extends AbstractController
             $entityManager->persist($govUserInformation);
             $entityManager->flush();
             $this->addFlash('success', 'L\'utilisateur a bien été créé');
+
             return $this->redirectToRoute('admin_users_index');
         }
 
@@ -84,6 +84,7 @@ class GovernanceUserController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($GovernanceUserInformation);
             $entityManager->flush();
+            $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
         }
 
         return $this->redirectToRoute('admin_users_index');

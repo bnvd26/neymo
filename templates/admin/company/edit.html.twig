@@ -4,9 +4,19 @@
     <div class="container">
         <h2>Modifier un Commerçant pour la gouvernance</h2>
         {{ form_start(form) }}
-        <label for="email">Email </label>
-        <input type="email" name="email">
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+<h4>Information de la société</h4>
+{{ form_row(form.name, { 'label': 'Nom de la société' }) }}
+{{ form_row(form.address, { 'label': 'Adresse' }) }}
+{{ form_row(form.city, { 'label': 'Ville' }) }}
+{{ form_row(form.zipCode, { 'label': 'Code postal' }) }}
+{{ form_row(form.phoneNumber, { 'label': 'Téléphone' }) }}
+{{ form_row(form.siret, { 'label': 'Siret' }) }}
+
+<h4>Information personelle sur l'utilisateur</h4>
+{{ form_row(form.email, { 'label': 'Email' }) }}
+    {{ form_row(form.lastName, { 'label': 'Nom' }) }}
+    {{ form_row(form.firstName, { 'label': 'Prénom' }) }}
+{{ form_row(form.save, { 'label': 'Modifier l\'utilisateur'}) }}
+{{ form_end(form) }}
     </div>
 {% endblock %}

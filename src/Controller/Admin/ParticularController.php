@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\ParticularAdminType;
 use App\Form\ParticularType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,12 +82,13 @@ class ParticularController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $particular->getUser()->setEmail($form->get("email")->getData());
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Le particulier a bien été modifié');
 
             return $this->redirectToRoute('admin_particular_index');
         }
 
         return $this->render('admin/particular/edit.html.twig', [
-            'company' => $particular,
+            'particular' => $particular,
             'form' => $form->createView(),
         ]);
     }
@@ -100,6 +102,7 @@ class ParticularController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($particular);
             $entityManager->flush();
+            $this->addFlash('success', 'Le particulier a bien été supprimé');
         }
 
         return $this->redirectToRoute('admin_particular_index');

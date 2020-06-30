@@ -3,9 +3,11 @@
 namespace App\Controller\SuperAdmin;
 
 use App\Entity\Governance;
+use App\Entity\User;
 use App\Form\GovernanceType;
 use App\Repository\GovernanceRepository;
 use App\Repository\GovernanceUserInformationRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +34,7 @@ class GovernanceController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($governance);
             $entityManager->flush();
+            $this->addFlash('success', 'La gouvernance a bien été créée');
 
             return $this->redirectToRoute('superadmin_home');
         }
@@ -56,7 +59,7 @@ class GovernanceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="governance_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Governance $governance): Response
     {
@@ -66,7 +69,7 @@ class GovernanceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('superadmin_governance_show', ['id' => $governance->getId()]);
+            return $this->redirectToRoute('governance_show', ['id' => $governance->getId()]);
         }
 
         return $this->render('superAdmin/governance/edit.html.twig', [
@@ -80,7 +83,7 @@ class GovernanceController extends AbstractController
      *
      * @Route("/", name="index")
      *
-     * @param [type] $governanceRepository
+     * @param GovernanceRepository $governanceRepository
      *
      * @return Response
      */
