@@ -2,18 +2,19 @@
 
 namespace App\Controller\API;
 
+use App\Entity\Account;
 use App\Entity\Company;
 use App\Entity\Particular;
 use App\Entity\User;
 use App\Repository\GovernanceRepository;
 use App\Repository\UserRepository;
-use DateTime;
-use Exception;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegisterController extends AbstractController
@@ -31,7 +32,7 @@ class RegisterController extends AbstractController
     /**
      * @Route("/api/register", name="api_register", methods="POST")
      */
-    public function register(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, GovernanceRepository $governanceRepository)
+    public function register(MailerInterface $mailer, Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, GovernanceRepository $governanceRepository)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -55,6 +56,8 @@ class RegisterController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         $dataDecoded->type == "particular" ? $this->createParticular($request, $user, $governanceRepository) : $this->createCompany($request, $user, $governanceRepository);
+        $this->sendReceiveInscriptionEmail($mailer, $user->getEmail());
+        $this->preventEmailInscriptionGovernance($mailer);
         $response = new Response();
         $response->setStatusCode(Response::HTTP_CREATED);
         $response->setContent(json_encode([
@@ -80,6 +83,7 @@ class RegisterController extends AbstractController
         $particular->setUser($user);
         $particular->setBirthdate(new \DateTime($dataDecoded->birthdate));
         $particular->setValidated(false);
+        
         $entityManager->persist($particular);
         $entityManager->flush();
     }
@@ -107,5 +111,27 @@ class RegisterController extends AbstractController
     public function emailExist($userRepository, $email)
     {
         return $userRepository->findBy(['email' => $email]);
+    }
+
+    public function sendReceiveInscriptionEmail($mailer, $userEmail)
+    {
+        $email = (new Email())
+            ->from('hello@example.com')
+            ->to($userEmail)
+            ->subject('Votre inscription est en attente de validation')
+            ->html('<p>Bonjour, votre inscription est en attente de validation, un mail vous sera transmis concerant la validation de votre compte !</p>');
+
+        $mailer->send($email);
+    }
+
+    public function preventEmailInscriptionGovernance($mailer)
+    {
+        $email = (new Email())
+            ->from('hello@example.com')
+            ->to('admin@gouvernance.com')
+            ->subject('Vous avez une nouvelle inscription en attente de validation')
+            ->html('<p>Bonjour, votre inscription est en attente de validation !</p> <a href="http://localhost/admin/validation-inscription/company">ICI</a>');
+
+        $mailer->send($email);
     }
 }
