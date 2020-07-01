@@ -69,18 +69,21 @@ class PostController extends AbstractController
     /**
      * @Route("/api/posts", name="api_posts_index", methods="GET")
      */
-    public function index(CompanyRepository $companyRepository)
+    public function index(CompanyRepository $companyRepository, LikeRepository $likeRepository)
     {
         $posts = [];
 
         if ($this->getUser()->isParticular()) {
             $companies = $companyRepository->findCompanyValidatedByGovernance($this->getUser()->getParticular()->getGovernance()->getId());
+
             foreach ($companies as $company) {
                 foreach ($company->getPosts() as $post) {
                     
                     $posts[] = [
                         'title' => $post->getTitle(),
-                        'content' => $post->getContent()
+                        'content' => $post->getContent(),
+                        'liked' => empty($likeRepository->findBy(['account' => $this->getUser()->getParticular()->getAccount()->getId(), 'post' => $post])) ? false : true,
+                        'likes' => count($post->getLikes())
                     ];
                 }
             }
@@ -95,7 +98,9 @@ class PostController extends AbstractController
                     
                     $posts[] = [
                         'title' => $post->getTitle(),
-                        'content' => $post->getContent()
+                        'content' => $post->getContent(),
+                        'liked' => empty($likeRepository->findBy(['account' => $company->getAccount()->getId(), 'post' => $post])) ? true : false,
+                        'likes' => count($post->getLikes())
                     ];
                 }
             }
