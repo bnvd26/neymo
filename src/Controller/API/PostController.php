@@ -7,6 +7,7 @@ use App\Entity\Transaction;
 use App\Entity\User;
 use App\Repository\AccountRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\LikeRepository;
 use App\Repository\TransactionRepository;
 use App\Repository\UserRepository;
 use DateTime;
