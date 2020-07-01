@@ -33,6 +33,21 @@ class CompanyRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    /**
+    * @return Company[] Returns an array of Company objects
+    */
+    public function findCompanyNotValidatedByGovernance($governanceId)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.validated = :val')
+            ->andWhere('c.governance = :gov')
+            ->setParameter('val', false)
+            ->setParameter('gov', $governanceId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     
 
     /*

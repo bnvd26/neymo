@@ -19,22 +19,21 @@ class ParticularRepository extends ServiceEntityRepository
         parent::__construct($registry, Particular::class);
     }
 
-    // /**
-    //  * @return Particular[] Returns an array of Particular objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * @return Particular[] Returns an array of Particular objects
+    */
+    public function findParticularNotValidatedByGovernance($governanceId)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.validated = :val')
+            ->andWhere('c.governance = :gov')
+            ->setParameter('val', false)
+            ->setParameter('gov', $governanceId)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Particular
