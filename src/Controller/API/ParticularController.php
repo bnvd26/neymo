@@ -88,7 +88,7 @@ class ParticularController extends AbstractController
 
         $response->setContent(json_encode([
             'account_id' => $this->getUser()->getParticular()->getAccount()->getId(),
-            'available_ cash' => $this->getUser()->getParticular()->getAccount()->getAvailableCash()
+            'available_cash' => $this->getUser()->getParticular()->getAccount()->getAvailableCash()
             ]));
     
         $response->headers->set('Content-Type', 'application/json');
