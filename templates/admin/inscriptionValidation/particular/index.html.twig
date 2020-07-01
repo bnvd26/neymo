@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<div class="container">
+{% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+{% endfor %}
+
+<h2>Liste des inscriptions à valider</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Prénom</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for particular in particulars %}
+    <tr>
+        <td>{{ particular.id }}</td>
+        <td>{{ particular.firstName }}</td>
+    <td>
+        <a href="{{ path('admin_validation_inscription_particular_show', {'id' : particular.id}) }}" class="btn btn-secondary">Détails</a><br>
+        {# <a href="{{ path('admin_company_edit', {'id' : company.id}) }}" class="btn btn-danger">Refuser</a><br> 
+         {{ include('admin/company/_delete_form.html.twig') }}  #}
+     </td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

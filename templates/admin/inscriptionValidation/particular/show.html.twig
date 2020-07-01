@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<div class="container">
+{% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+{% endfor %}
+
+<h2>Liste des inscriptions à valider</h2>
+
+  {{ particular.id }}
+  {{ particular.firstName }} 
+  <a href="{{ path('admin_validation_inscription_particular_validate', {'id' : particular.id }) }}" class="btn btn-success">Valider</a>
+  <a href="{{ path('admin_validation_inscription_particular_no_validate', {'id' : particular.id }) }}" class="btn btn-danger">Refuser</a>
+</div>
+{% endblock %}
