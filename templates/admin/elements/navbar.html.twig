@@ -16,20 +16,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('admin_particular_index') }}">Particuliers</a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Demandes</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('admin_validation_inscription_particular_index') }}">Particuliers</a>
+                    <a class="dropdown-item" href="{{ path('admin_validation_inscription_company_index') }}">Commerçants</a>
+                </div>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('admin_logout') }}">Déconnexion</a>
             </li>
-            {# <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item">Action</a>
-                    <a class="dropdown-item">Another action</a>
-                    <a class="dropdown-item">Something else here</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item">Separated link</a>
-                    <a class="dropdown-item">One more separated link</a>
-                </div>
-            </li> #}
         </ul>
     </div>
 </nav>
