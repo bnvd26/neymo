@@ -44,6 +44,11 @@ class Account
      */
     private $transactions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="emiter")
+     */
+    private $transactionsTo;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
