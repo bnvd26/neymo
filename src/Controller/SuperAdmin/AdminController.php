@@ -4,7 +4,7 @@ namespace App\Controller\SuperAdmin;
 
 use App\Entity\GovernanceUserInformation;
 use App\Entity\User;
-use App\Form\AdminSuperAdminType;
+use App\Form\AdminType;
 use App\Repository\GovernanceRepository;
 use App\Repository\GovernanceUserInformationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -74,7 +74,7 @@ class AdminController extends AbstractController
         $repo = $this->getDoctrine()->getManager()->getRepository(GovernanceUserInformation::class);
         /* @var GovernanceUserInformation $user */
         $user = $repo->find($id);
-        $form = $this->createForm(AdminSuperAdminType::class, $user);
+        $form = $this->createForm(AdminType::class, $user);
         $form->get('email')->setData($user->getUser()->getEmail());
         $form->handleRequest($request);
 
