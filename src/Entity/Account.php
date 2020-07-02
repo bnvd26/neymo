@@ -49,6 +49,11 @@ class Account
      */
     private $likes;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Directory::class, mappedBy="account", cascade={"persist", "remove"})
+     */
+    private $directory;
+
 
 
     public function __construct()
@@ -189,6 +194,24 @@ class Account
             if ($like->getAccount() === $this) {
                 $like->setAccount(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getDirectory(): ?Directory
+    {
+        return $this->directory;
+    }
+
+    public function setDirectory(?Directory $directory): self
+    {
+        $this->directory = $directory;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newAccount = null === $directory ? null : $this;
+        if ($directory->getAccount() !== $newAccount) {
+            $directory->setAccount($newAccount);
         }
 
         return $this;
