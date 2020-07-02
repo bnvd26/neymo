@@ -29,9 +29,15 @@ class Directory
      */
     private $contacts;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Favorite::class, mappedBy="directory")
+     */
+    private $favorites;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,6 +82,37 @@ class Directory
             // set the owning side to null (unless already changed)
             if ($contact->getDirectory() === $this) {
                 $contact->setDirectory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Favorite[]
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): self
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites[] = $favorite;
+            $favorite->setDirectory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): self
+    {
+        if ($this->favorites->contains($favorite)) {
+            $this->favorites->removeElement($favorite);
+            // set the owning side to null (unless already changed)
+            if ($favorite->getDirectory() === $this) {
+                $favorite->setDirectory(null);
             }
         }
 
