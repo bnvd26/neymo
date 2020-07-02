@@ -19,22 +19,20 @@ class DirectoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Directory::class);
     }
 
-    // /**
-    //  * @return Directory[] Returns an array of Directory objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * @return Directory[] Returns an array of Directory objects
+    */
+    public function findByAccount($value)
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
+            ->andWhere('d.account = :val')
             ->setParameter('val', $value)
             ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Directory

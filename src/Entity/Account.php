@@ -54,12 +54,18 @@ class Account
      */
     private $directory;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Contacts::class, mappedBy="account")
+     */
+    private $contacts;
+
 
 
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -212,6 +218,37 @@ class Account
         $newAccount = null === $directory ? null : $this;
         if ($directory->getAccount() !== $newAccount) {
             $directory->setAccount($newAccount);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contacts[]
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(Contacts $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+            $contact->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(Contacts $contact): self
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+            // set the owning side to null (unless already changed)
+            if ($contact->getAccount() === $this) {
+                $contact->setAccount(null);
+            }
         }
 
         return $this;

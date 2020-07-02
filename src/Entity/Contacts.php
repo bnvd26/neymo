@@ -22,6 +22,11 @@ class Contacts
      */
     private $directory;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="contacts")
+     */
+    private $account;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +40,18 @@ class Contacts
     public function setDirectory(?Directory $directory): self
     {
         $this->directory = $directory;
+
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): self
+    {
+        $this->account = $account;
 
         return $this;
     }
