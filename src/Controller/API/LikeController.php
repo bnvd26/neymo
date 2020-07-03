@@ -40,16 +40,6 @@ class LikeController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $post = $postRepository->find($id);
-
-        // dd($post->getLikes());
-        // $likesCount = null;
-        // foreach($post->getLikes() as $key => $like)
-        // {
-        //     if($like->getLiked() == true)
-        //         $likesCount = $key + 1;
-        // 
-        // dd($likesCount);
-
         
         if ($this->getUser()->isParticular()) {
             $likedPost = $likeRepository->findBy([
