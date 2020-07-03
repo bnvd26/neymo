@@ -2,6 +2,7 @@
 
 namespace App\Controller\API;
 
+use App\Repository\CurrencyRepository;
 use App\Services\CurrencyService;
 use Swagger\Annotations as SWG;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,10 +35,27 @@ class CurrencyConverterController extends AbstractController
      * )
      * @SWG\Tag(name="currency")
      *
-     * @param CurrencyService $currency
+     * @param CurrencyService $currencyService
      */
-    public function convertToEuro(CurrencyService $currency, Request $request): JsonResponse
-    {
+    public function convertToEuro(
+        CurrencyService $currencyService,
+        Request $request,
+        CurrencyRepository $currencyRepository
+    ): JsonResponse {
+        $value = (int) $request->get("value");
+        $currencyId = (int) $request->get('currency');
+        $currency = $currencyRepository->find($currencyId);
+        if (null === $currency) {
+            return new JsonResponse([
+                "status" => "error",
+                "error" => "Currency not found"
+            ]);
+        }
+        $convertedValue = $currencyService->convertToEuro(
+            $currency->getExchangeRate(),
+            $value
+        );
 
+        return new JsonResponse($convertedValue);
     }
 }
