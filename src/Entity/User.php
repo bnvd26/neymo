@@ -203,8 +203,10 @@ class User implements UserInterface
     public function isCompany() 
     {
         foreach($this->getCompanies() as $company) {
-            return !is_null($company) ? true : false;
+            return !is_null($company) ?? true;
         }
+
+        return false;
     }
 
     public function isParticular()

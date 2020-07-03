@@ -44,9 +44,17 @@ class Account
      */
     private $transactions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Like::class, mappedBy="account")
+     */
+    private $likes;
+
+
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,4 +162,37 @@ class Account
     {
         return $this->setAvailableCash((int) $this->getAvailableCash() - (int) $value);
     }
+
+    /**
+     * @return Collection|Like[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            // set the owning side to null (unless already changed)
+            if ($like->getAccount() === $this) {
+                $like->setAccount(null);
+            }
+        }
+
+        return $this;
+    }
+
+ 
 }
