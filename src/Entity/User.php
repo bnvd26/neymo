@@ -137,7 +137,7 @@ class User implements UserInterface
         return $this->governanceUserInformation;
     }
 
-    public function getGovernanceId() 
+    public function getGovernanceId()
     {
         return $this->getGovernanceUserInformation()->getGovernance()->getId();
     }
@@ -200,9 +200,9 @@ class User implements UserInterface
         return $this;
     }
 
-    public function isCompany() 
+    public function isCompany()
     {
-        foreach($this->getCompanies() as $company) {
+        foreach ($this->getCompanies() as $company) {
             return !is_null($company) ?? true;
         }
 
@@ -212,5 +212,32 @@ class User implements UserInterface
     public function isParticular()
     {
         return !is_null($this->getParticular()) ? true : false;
+    }
+
+    public function getCompany()
+    {
+        foreach ($this->getCompanies() as $company) {
+            $entity = $company;
+        }
+
+        return $entity;
+    }
+
+    public function getCompanyId()
+    {
+        foreach ($this->getCompanies() as $company) {
+            $companyId = $company->getId();
+        }
+
+        return $companyId;
+    }
+
+    public function getGovernanceOfCompany()
+    {
+        foreach ($this->getCompanies() as $company) {
+            $companyGovernanceId = $company->getGovernance();
+        }
+
+        return $companyGovernanceId;
     }
 }
