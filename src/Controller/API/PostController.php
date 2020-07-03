@@ -28,6 +28,8 @@ class PostController extends ApiController
     }
 
     /**
+     * List all posts of governance
+     * 
      * @Route("/api/posts", name="api_posts_index", methods="GET")
      */
     public function index(): response
@@ -48,6 +50,8 @@ class PostController extends ApiController
     }
 
     /**
+     * Create posts
+     * 
      * @Route("/api/posts/create", name="api_posts_create", methods="POST")
      */
     public function create(Request $request): response
