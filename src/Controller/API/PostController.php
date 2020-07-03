@@ -102,7 +102,7 @@ class PostController extends AbstractController
                         'post_id' => $post->getId(),
                         'title' => $post->getTitle(),
                         'content' => $post->getContent(),
-                        'liked' => empty($likeRepository->findBy(['account' => $company->getAccount()->getId(), 'post' => $post])) ? true : false,
+                        'liked' => empty($likeRepository->findBy(['account' => $company->getAccount()->getId(), 'post' => $post])) ? false : true,
                         'likes' => count($post->getLikes())
                     ];
                 }
