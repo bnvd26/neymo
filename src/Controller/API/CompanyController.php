@@ -24,10 +24,8 @@ class CompanyController extends ApiController
      */
     public function update(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepo): response
     {
-        $user = $this->getUser()->getId();
-
         // User information
-        $user = $userRepo->find($user);
+        $user = $userRepo->find($this->getUser()->getId());
 
         $password = $passwordEncoder->encodePassword($user, $user->getPassword());
 
