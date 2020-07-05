@@ -235,9 +235,18 @@ class User implements UserInterface
     public function getGovernanceOfCompany()
     {
         foreach ($this->getCompanies() as $company) {
-            $companyGovernanceId = $company->getGovernance();
+            $companyGovernance = $company->getGovernance();
         }
 
-        return $companyGovernanceId;
+        return $companyGovernance;
+    }
+
+    public function getUserGovernanceId()
+    {
+        if($this->isCompany()) {
+            return $this->getGovernanceOfCompany()->getId();
+        } elseif ($this->isParticular()) {
+            return $this->getParticular()->getGovernance()->getId();
+        }
     }
 }
