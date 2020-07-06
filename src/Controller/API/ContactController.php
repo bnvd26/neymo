@@ -75,6 +75,7 @@ class ContactController extends ApiController
                 'account_id' => $contact->getAccount()->getId(),
                 'firstName' => $contact->getAccount()->getParticular()->getFirstName(),
                 'lastName' => $contact->getAccount()->getParticular()->getLastName(),
+                'account_number' => $contact->getAccount()->getAccountNumber(),
                 'type' => 'particular'
                 ];
             } 
@@ -84,6 +85,7 @@ class ContactController extends ApiController
                     $contacts[] = [
                     'account_id' => $contact->getAccount()->getId(),
                     'name' => $contact->getAccount()->getCompany()->getName(),
+                    'account_number' => $contact->getAccount()->getAccountNumber(),
                     'type' => 'company'
                     ];
                 }
