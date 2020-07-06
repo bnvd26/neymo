@@ -123,8 +123,8 @@ class LikeController extends AbstractController
             }
             
             $likedPost = $likeRepository->findBy(['account' => $company->getAccount()->getId(), 'post' => $post]);
-
-            $entityManager->remove($likedPost)[0];
+        
+            $entityManager->remove($likedPost[0]);
             $entityManager->flush();
             $response = new Response();
             $response->setStatusCode(Response::HTTP_OK);
