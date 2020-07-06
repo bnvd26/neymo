@@ -42,21 +42,17 @@ class ContactController extends ApiController
             if($this->emptyContact(($this->getUser()->getParticular()->getAccount()->getDirectory()->getContacts()[0]))) {
                 return $this->responseOk(['Information' => 'Vous n\'avez pas de contact']);
             }          
-
-            foreach ($this->getUser()->getParticular()->getAccount()->getDirectory()->getContacts() as $contact) {
-                $contacts = $this->getContactListDetail($this->getUser()->getParticular()->getAccount()->getDirectory()->getContacts()); 
-            }
-
+                
+            $contacts = $this->getContactListDetail($this->getUser()->getParticular()->getAccount()->getDirectory()->getContacts()); 
+            
         } elseif ($this->getUser()->isCompany()) {
             $company = $this->getUser()->getCompany();
             
             if ($this->emptyContact(($company->getAccount()->getDirectory()->getContacts()[0]))) {
                 return $this->responseOk(['Information' => 'Vous n\'avez pas de contact']);
             }
-            
-            foreach ($company->getAccount()->getDirectory()->getContacts() as $contact) {
-                $contacts = $this->getContactListDetail($company->getAccount()->getDirectory()->getContacts());
-            }
+                
+            $contacts = $this->getContactListDetail($company->getAccount()->getDirectory()->getContacts());
         }
 
         return $this->responseOk($contacts);
