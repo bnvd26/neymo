@@ -5,9 +5,9 @@ namespace App\DataFixtures;
 use App\DataFixtures\BaseFixture;
 use App\Entity\Account;
 use App\Entity\Company;
+use App\Entity\Directory;
 use App\Entity\Particular;
 use App\Entity\User;
-use App\Repository\AccountRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -25,6 +25,10 @@ class CompanyParticularUserFixtures extends BaseFixture implements DependentFixt
             ->setAccountNumber($this->faker->numberBetween($min = 1000, $max = 20000))
             ->setAvailableCash($this->faker->numberBetween($min = 10, $max = 2000));
         $manager->persist($account);
+
+        $directory = (new Directory())
+            ->setAccount($account);
+        $manager->persist($directory);
         
         $company = (new Company())
             ->setName($this->faker->company())
@@ -46,6 +50,10 @@ class CompanyParticularUserFixtures extends BaseFixture implements DependentFixt
             ->setAccountNumber($this->faker->numberBetween($min = 1000, $max = 20000))
             ->setAvailableCash($this->faker->numberBetween($min = 10, $max = 2000));
         $manager->persist($account);
+
+        $directory = (new Directory())
+            ->setAccount($account);
+        $manager->persist($directory);
 
         $particular = (new Particular())
             ->setAddress($this->faker->streetAddress())

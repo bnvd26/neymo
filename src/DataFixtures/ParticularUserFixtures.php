@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\DataFixtures\BaseFixture;
 use App\Entity\Account;
 use App\Entity\Company;
+use App\Entity\Directory;
 use App\Entity\Particular;
 use App\Entity\User;
 use App\Repository\AccountRepository;
@@ -19,11 +20,18 @@ class ParticularUserFixtures extends BaseFixture implements DependentFixtureInte
             ->setRoles(["ROLE_USER"])
             ->setPassword('$2y$10$34ChwRD3d7zBRP2BlMV2tuPfYuOu3wngBBjtIE.BWk4HZY0yq9Niq')
             ->setEmail('particular@neymo.com');
-            $manager->persist($user);
+        $manager->persist($user);
+
         $account = (new Account())
             ->setAccountNumber($this->faker->numberBetween($min = 1000, $max = 20000))
             ->setAvailableCash($this->faker->numberBetween($min = 1000, $max = 2000));
-            $manager->persist($account);
+        $manager->persist($account);
+
+
+        $directory = (new Directory())
+            ->setAccount($account);
+        $manager->persist($directory);
+
         $particular = (new Particular())
             ->setAddress($this->faker->streetAddress())
             ->setCity($this->faker->city())
@@ -49,6 +57,10 @@ class ParticularUserFixtures extends BaseFixture implements DependentFixtureInte
             ->setAccountNumber($this->faker->numberBetween($min = 1000, $max = 20000))
             ->setAvailableCash($this->faker->numberBetween($min = 1000, $max = 2000));
             $manager->persist($account);
+
+            $directory = (new Directory())
+            ->setAccount($account);
+            $manager->persist($directory);
 
             $particular = (new Particular())
             ->setAddress($this->faker->streetAddress())
