@@ -23,7 +23,6 @@ class TransactionController extends AbstractController
         return $this->container->get('serializer')->deserialize($data, $entity, 'json');
     }
 
-
     /**
      * @Route("/api/transactions", name="api_transactions_particular", methods="GET")
      */

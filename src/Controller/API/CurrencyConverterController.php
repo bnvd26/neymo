@@ -3,11 +3,14 @@
 namespace App\Controller\API;
 
 use App\Repository\CurrencyRepository;
+use App\Services\CreditCardService;
 use App\Services\CurrencyService;
+use Exception;
 use Swagger\Annotations as SWG;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -36,6 +39,12 @@ class CurrencyConverterController extends AbstractController
      * @SWG\Tag(name="currency")
      *
      * @param CurrencyService $currencyService
+     * @param Request $request
+     * @param CurrencyRepository $currencyRepository
+     *
+     * @throws Exception
+     *
+     * @return JsonResponse*
      */
     public function convertToEuro(
         CurrencyService $currencyService,
@@ -49,7 +58,7 @@ class CurrencyConverterController extends AbstractController
             return new JsonResponse([
                 "status" => "error",
                 "error" => "Currency not found"
-            ]);
+            ], Response::HTTP_NOT_FOUND);
         }
         $convertedValue = $currencyService->convertToEuro(
             $currency->getExchangeRate(),
