@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 /**
  * @Route("/admin", name="admin_")
  *
@@ -44,28 +45,29 @@ class AdminController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/profile/edit", name="profile_edit", methods={"GET","POST"})
-//     */
-//    public function edit(Request $request)
-//    {
-//        $repo = $this->getDoctrine()->getManager()->getRepository(GovernanceUserInformation::class);
-//        /* @var User $user */
-//        $user = $repo->find($this->getUser()->getId());
-//        $form = $this->createForm(AdminType::class, $user);
-//        $form->get('email')->setData($user->getUser()->getEmail());
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $user->getUser()->setEmail($form->get("email")->getData());
-//            $this->getDoctrine()->getManager()->flush();
-//
-//            return $this->redirectToRoute('admin_profile_show', ['id' => $user->getGovernance()->getId()]);
-//        }
-//
-//        return $this->render('admin/profile/edit.html.twig', [
-//            'user' => $user,
-//            'form' => $form->createView(),
-//        ]);
-//    }
+    /**
+     * @Route("/profile/edit", name="profile_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request)
+    {
+        $user = $this->getUser()->getGovernanceUserInformation();
+        
+        $form = $this->createForm(AdminType::class, $user);
+       
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+           
+            $this->getUser()->setEmail($request->request->get('email'));
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('admin_profile_show');
+        }
+
+        return $this->render('admin/profile/edit.html.twig', [
+           'user' => $this->getUser(),
+           'form' => $form->createView(),
+       ]);
+    }
 }

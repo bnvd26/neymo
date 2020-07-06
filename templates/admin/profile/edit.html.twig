@@ -4,7 +4,12 @@
     <div class="container">
         <h2>Modifier mon profil</h2>
         {{ form_start(form) }}
-        {{ form_widget(form) }}
+            <label for="email">Email</label>
+            <input type="email" value="{{ user.email }}" name="email">
+            {{ form_row(form.firstName, { 'label': 'Nom' }) }}
+            {{ form_row(form.lastName, { 'label': 'Prénom' }) }}
+            {{ form_row(form.role, { 'label': 'Rôle' }) }}
+            {{ form_row(form.save)}}
         {{ form_end(form) }}
     </div>
 {% endblock %}
