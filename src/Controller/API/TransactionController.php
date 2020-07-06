@@ -3,29 +3,66 @@
 namespace App\Controller\API;
 
 use App\Entity\Transaction;
-use App\Entity\User;
 use App\Repository\AccountRepository;
-use App\Repository\CompanyRepository;
 use App\Repository\TransactionRepository;
-use App\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Controller\API\ApiController;
+use Doctrine\ORM\EntityManagerInterface;
 
-class TransactionController extends AbstractController
+class TransactionController extends ApiController
 {
-    private function serialize($data)
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
     {
-        return $this->container->get('serializer')->serialize($data, 'json');
+        $this->em = $em;
     }
 
-    private function deserialize($data, $entity)
+    /**
+     * @Route("/api/transfer-money", name="api_transfer_money", methods="POST")
+     */
+    public function transferMoney(Request $request, AccountRepository $accountRepository)
     {
-        return $this->container->get('serializer')->deserialize($data, $entity, 'json');
-    }
+        $data = json_decode($request->getContent());
 
+        $emitterId = null;
+
+        if($this->getUser()->isCompany()) {
+            $emitterId = $this->getUser()->getCompany()->getAccount()->getId();
+            if ((int) $accountRepository->find($emitterId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
+                return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
+            }
+           
+        }
+
+        if($this->getUser()->isParticular()) {
+            $emitterId = $this->getUser()->getParticular()->getAccount()->getId();
+            if ((int) $accountRepository->find($emitterId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
+                return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
+            }
+        }
+
+        $transaction = new Transaction();
+        $beneficiaryAccountId = $accountRepository->findBy(['account_number' => $data->beneficiaryAccountNumber])[0]->getId();
+        $transaction->setBeneficiary($accountRepository->find($beneficiaryAccountId));
+        $accountRepository->find($beneficiaryAccountId)->addMoneyToBeneficiary($data->transferedMoney);
+
+        $transaction->setEmiter($accountRepository->find($emitterId));
+        $accountRepository->find($emitterId)->removeMoneyToEmiter($data->transferedMoney);
+        
+        $transaction->setTransferedMoney($data->transferedMoney);
+        $transaction->setDate(new \DateTime());
+        
+        
+        $this->em->persist($transaction);
+        $this->em->flush();
+
+        return $this->responseCreated([
+            'Success' => "Argent bien envoyé",
+            ]);
+    }
 
     /**
      * @Route("/api/transactions", name="api_transactions_particular", methods="GET")
@@ -37,50 +74,6 @@ class TransactionController extends AbstractController
         } else {
             return $this->getTransactionsForCompany($transactionRepository);
         };
-    }
-
-    /**
-     * @Route("/api/transfer-money", name="api_transfer_money", methods="POST")
-     */
-    public function transferMoney(Request $request, AccountRepository $accountRepository)
-    {
-        $data = json_decode($request->getContent());
-    
-        if ((int) $accountRepository->find($data->emiterAccountId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
-            $response = new Response();
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent(json_encode([
-                'Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent",
-            ]));
-            
-            $response->headers->set('Content-Type', 'application/json');
-            
-            return $response;
-        }
-
-        $transaction = new Transaction();
-        $transaction->setBeneficiary($accountRepository->find($data->beneficiaryAccountId));
-        $transaction->setEmiter($accountRepository->find($data->emiterAccountId));
-        $accountRepository->find($data->emiterAccountId)->removeMoneyToEmiter($data->transferedMoney);
-        $accountRepository->find($data->beneficiaryAccountId)->addMoneyToBeneficiary($data->transferedMoney);
-        $transaction->setTransferedMoney($data->transferedMoney);
-        $transaction->setDate(new \DateTime());
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($transaction);
-        $entityManager->flush();
-        $response = new Response();
-
-        $response->setStatusCode(Response::HTTP_CREATED);
-
-        $response->setContent(json_encode([
-            'Success' => "Argent bien envoyé",
-            ]));
-            
-        $response->headers->set('Content-Type', 'application/json');
-        
-        return $response;
-
     }
 
     public function getTransactionsForParticular($transactionRepository)
@@ -100,8 +93,11 @@ class TransactionController extends AbstractController
             $transactionsByDate = $transactionRepository->findTransactionsByDate(date_create_from_format('Y-m-d H:i:s', $date), $this->getUser()->getParticular()->getAccount()->getId());
             $data = [];
             for ($y = 0; $y < count($transactionsByDate); $y++) {
-                $data[] = ['id' => $transactionsByDate[$y]->getId(),
-                        'transfered_money' => $transactionsByDate[$y]->getTransferedMoney()
+                $data[] = [
+                        'id' => $transactionsByDate[$y]->getId(),
+                        'transfered_money' => $transactionsByDate[$y]->getTransferedMoney(),
+                        'date' => $transactionsByDate[$y]->getDate(),
+                        'status_transaction_user' => $transactionsByDate[$y]->getBeneficiary()->getId() == $this->getUser()->getParticular()->getAccount()->getId() ? 'beneficiary' : 'emiter'
                 ];
             };
             $transactions[] = [
@@ -136,8 +132,11 @@ class TransactionController extends AbstractController
             $transactionsByDate = $transactionRepository->findTransactionsByDate(date_create_from_format('Y-m-d H:i:s', $date), $companyId);
             $data = [];
             for ($y = 0; $y < count($transactionsByDate); $y++) {
-                $data[] = ['id' => $transactionsByDate[$y]->getId(),
+                $data[] = [
+                        'id' => $transactionsByDate[$y]->getId(),
                         'transfered_money' => $transactionsByDate[$y]->getTransferedMoney(),
+                        'date' => $transactionsByDate[$y]->getDate(),
+                        'status_transaction_user' => $transactionsByDate[$y]->getBeneficiary()->getId() == $this->getUser()->getCompany()->getAccount()->getId() ? 'beneficiary' : 'emiter'
                 ];
             };
             $transactions[] = [
@@ -147,19 +146,6 @@ class TransactionController extends AbstractController
         }
 
         return $this->responseOk($transactions);
-    }
-
-    public function responseOk($data)
-    {
-        $response = new Response();
-
-        $response->setStatusCode(Response::HTTP_OK);
-
-        $response->setContent(json_encode($data));
-            
-        $response->headers->set('Content-Type', 'application/json');
-        
-        return $response;
     }
 
     public static function dateToFrench($date, $format)
