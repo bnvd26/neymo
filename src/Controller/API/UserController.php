@@ -15,16 +15,25 @@ class UserController extends ApiController
             $user = [
                 'id' => $this->getUser()->getCompany()->getId(),
                 'type' => 'company',
-                'first_name' => $this->getUser()->getCompany()->getFirstName()
+                'first_name' => $this->getUser()->getCompany()->getFirstName(),
+                'last_name' => $this->getUser()->getCompany()->getLastName(),
+                'address' => $this->getUser()->getCompany()->getAddress(),
+                'number_phone' => $this->getUser()->getCompany()->getPhonenumber(),
+                'siret' => $this->getUser()->getCompany()->getSiret(),
+                'category' => $this->getUser()->getCompany()->getCategory()->getName(),
+                'description' => $this->getUser()->getCompany()->getDescription()
+                
             ];
         }
 
         if ($this->getUser()->isParticular()) {
-            $user = $this->getUser();
             $user = [
-                'id' => $user->getId(),
+                'id' => $this->getUser()->getId(),
                 'type' => 'particular',
-                'first_name' => $user->getParticular()->getFirstName()
+                'first_name' => $this->getUser()->getParticular()->getFirstName(),
+                'last_name' => $this->getUser()->getParticular()->getLastName(),
+                'address' => $this->getUser()->getParticular()->getAddress(),
+                'number_phone' => $this->getUser()->getParticular()->getPhoneNumber()
             ];
         }
 
