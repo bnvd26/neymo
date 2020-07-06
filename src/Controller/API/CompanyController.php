@@ -43,27 +43,6 @@ class CompanyController extends ApiController
     }
 
     /**
-     * @Route("/api/company/account", name="api_company_account", methods="GET")
-     */
-    public function accountState()
-    {
-        if (!$this->getUser()->isCompany()) {
-            return $this->responseOk([
-                'Information' => "Il n y a pas de compte professionel pour cet utilisateur",
-                ]);
-        }
-
-        $company = $this->getUser()->getCompany();
-
-        $companyAccount = [
-                'account_id' => $company->getAccount()->getId(),
-                'available_cash' => $company->getAccount()->getAvailableCash(),
-        ];
-
-        return $this->responseOk($companyAccount);
-    }
-
-    /**
      * @Route("/api/companies", name="api_company_list", methods="GET")
      */
     public function getListCompanies(CompanyRepository $companyRepository)

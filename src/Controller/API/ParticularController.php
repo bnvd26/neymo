@@ -38,21 +38,4 @@ class ParticularController extends ApiController
             'Success' => "L'utilisateur a bien été modifier",
         ]);
     }
-
-    /**
-     * @Route("/api/particular/account", name="api_particular_account", methods="GET")
-     */
-    public function accountState()
-    {
-        if (!$this->getUser()->isParticular()) {
-            return $this->responseOk([
-                'Information' => "Il n y a pas de compte particulier pour cet utilisateur",
-                ]);
-        };
-
-        return $this->responseOk([
-            'account_id' => $this->getUser()->getParticular()->getAccount()->getId(),
-            'available_cash' => $this->getUser()->getParticular()->getAccount()->getAvailableCash()
-            ]);
-    }
 }
