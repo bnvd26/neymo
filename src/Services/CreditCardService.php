@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Inacho\CreditCard;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class CreditCardService
@@ -18,6 +20,34 @@ class CreditCardService
 
     }
 
+    /**
+     * @param string $cardNumber
+     * @param string $cardType
+     * @param string $cvc
+     * @param string $cardHolderName
+     * @param string $year
+     * @param string $month
+     * @return bool
+     */
+    public function checkItAll(
+        string $cardNumber,
+        string $cardType,
+        string $cvc,
+        string $cardHolderName,
+        string $year,
+        string $month
+    ) {
+        dump($this->validDate($year, $month));
+        if (false === $this->validCreditCard($cardNumber, $cardType) ||
+            false === $this->validCvc($cvc, $cardType) ||
+            null === $cardHolderName ||
+            false === $this->validDate($year, $month)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
     /**
      * @param int $cardNumber
      * @param string $cardType

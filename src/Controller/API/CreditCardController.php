@@ -73,19 +73,23 @@ class CreditCardController extends \Symfony\Bundle\FrameworkBundle\Controller\Ab
         $month = $request->get("month");
         $year = $request->get("year");
         $cardHolderName = $request->get("card-holder-name");
-        if (false === $creditCardService->validCreditCard($cardNumber, $cardType) ||
-            false === $creditCardService->validCvc($cvc, $cardType) ||
-            null === $cardHolderName ||
-            false ===  $creditCardService->validDate($year, $month)
-        ) {
+        if ($creditCardService->checkItAll(
+            $cardNumber,
+            $cardType,
+            $cvc,
+            $cardHolderName,
+            $year,
+            $month
+        )) {
             return new JsonResponse([
                 "status" => "error",
                 "error" => "Information is invalid"
             ], Response::HTTP_NOT_ACCEPTABLE);
+        } else {
+            return new JsonResponse([
+                "status" => "success",
+                "message" => "Information is valid"
+            ], Response::HTTP_OK);
         }
-        return new JsonResponse([
-            "status" => "success",
-            "message" => "Information is valid"
-        ], Response::HTTP_OK);
     }
 }
