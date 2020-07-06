@@ -33,7 +33,7 @@ class ContactController extends ApiController
     /**
      * @Route("/api/contacts", name="api_contacts", methods="GET")
      */
-    public function contacts(CompanyRepository $companyRepository)
+    public function contacts()
     {
         $contacts = [];
          
@@ -120,7 +120,7 @@ class ContactController extends ApiController
 
         $contact->setDirectory($directory[0]);
 
-        $contact->setAccount($this->accountRepository->find($dataDecoded->accountId));
+        $contact->setAccount($this->accountRepository->findBy(['account_number' => $dataDecoded->accountNumberId])[0]);
 
         $this->em->persist($contact);
         
@@ -138,7 +138,7 @@ class ContactController extends ApiController
      */
     private function contactExist($dataDecoded, $directory)
     {
-        return !empty($this->contactsRepository->findBy(['account' => $dataDecoded->accountId, 'directory' => $directory[0]->getId()]));
+        return !empty($this->contactsRepository->findBy(['account' => $this->accountRepository->findBy(['account_number' => $dataDecoded->accountNumberId])[0]->getId(), 'directory' => $directory[0]->getId()]));
     }
 
     /**
