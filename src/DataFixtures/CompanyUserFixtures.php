@@ -26,9 +26,13 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setAvailableCash($this->faker->numberBetween($min = 10, $max = 2000));
         $manager->persist($account);
 
+        $this->addReference('account-company00', $account);
+
         $directory = (new Directory())
             ->setAccount($account);
         $manager->persist($directory);
+
+        $this->addReference('directory-company00', $directory);
 
         $company = (new Company())
             ->setName($this->faker->company())
@@ -53,9 +57,13 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setAvailableCash($this->faker->numberBetween($min = 10, $max = 2000));
             $manager->persist($account);
 
+            $this->addReference('account-company-' . $num, $account);
+
             $directory = (new Directory())
             ->setAccount($account);
             $manager->persist($directory);
+
+            $this->addReference('directory-company-' . $num, $directory);
 
             $company = (new Company())
             ->setName($this->faker->company())

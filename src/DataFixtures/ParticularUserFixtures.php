@@ -26,11 +26,14 @@ class ParticularUserFixtures extends BaseFixture implements DependentFixtureInte
             ->setAccountNumber($this->faker->numberBetween($min = 1000, $max = 20000))
             ->setAvailableCash($this->faker->numberBetween($min = 1000, $max = 2000));
         $manager->persist($account);
+        $this->addReference('account00', $account);
+        
 
 
         $directory = (new Directory())
             ->setAccount($account);
         $manager->persist($directory);
+        $this->addReference('directory00', $directory);
 
         $particular = (new Particular())
             ->setAddress($this->faker->streetAddress())
@@ -56,11 +59,16 @@ class ParticularUserFixtures extends BaseFixture implements DependentFixtureInte
             $account = (new Account())
             ->setAccountNumber($this->faker->numberBetween($min = 1000, $max = 20000))
             ->setAvailableCash($this->faker->numberBetween($min = 1000, $max = 2000));
+            
             $manager->persist($account);
 
+            $this->addReference('account-' . $num, $account);
+            
             $directory = (new Directory())
             ->setAccount($account);
             $manager->persist($directory);
+
+            $this->addReference('directory-' . $num, $directory);
 
             $particular = (new Particular())
             ->setAddress($this->faker->streetAddress())
