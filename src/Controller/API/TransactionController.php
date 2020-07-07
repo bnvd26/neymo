@@ -75,12 +75,13 @@ class TransactionController extends ApiController
 
         if ($this->getUser()->isParticular()) {
             $emitterId = $this->getUser()->getParticular()->getAccount()->getId();
+            
             if ((int) $accountRepository->find($emitterId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
                 return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
             }
         }
 
-        if ((int) $accountRepository->find($data->emiterAccountId)->getAvailableCash() < (int) $data->transferedMoney ||
+        if ((int) $accountRepository->find($emitterId)->getAvailableCash() < (int) $data->transferedMoney ||
             (int) $data->transferedMoney < 0
         ) {
             $response = new Response();
@@ -268,6 +269,7 @@ class TransactionController extends ApiController
                         'id' => $transactionsByDate[$y]->getId(),
                         'transfered_money' => $transactionsByDate[$y]->getTransferedMoney(),
                         'date' => $transactionsByDate[$y]->getDate(),
+                        'beneficiary_name' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getName() : $transactionsByDate[$y]->getBeneficiary()->getParticular()->getFirstName(),
                         'status_transaction_user' => $transactionsByDate[$y]->getBeneficiary()->getId() == $this->getUser()->getParticular()->getAccount()->getId() ? 'beneficiary' : 'emiter'
                 ];
             };
@@ -300,6 +302,7 @@ class TransactionController extends ApiController
                 $data[] = [
                         'id' => $transactionsByDate[$y]->getId(),
                         'transfered_money' => $transactionsByDate[$y]->getTransferedMoney(),
+                        'beneficiary_name' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getName() : $transactionsByDate[$y]->getBeneficiary()->getParticular()->getFirstName(),
                         'date' => $transactionsByDate[$y]->getDate(),
                         'status_transaction_user' => $transactionsByDate[$y]->getBeneficiary()->getId() == $this->getUser()->getCompany()->getAccount()->getId() ? 'beneficiary' : 'emiter'
                 ];
