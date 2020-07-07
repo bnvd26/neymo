@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Account;
+use App\Entity\Directory;
 use App\Entity\Particular;
 use App\Entity\User;
 use App\Form\ParticularAdminType;
@@ -52,7 +53,9 @@ class ValidationInscriptionController extends AbstractController
         $account->setAvailableCash(0);
         $company->setAccount($account);
         $em->persist($account);
-        $em->persist($company);
+        $directory = new Directory();
+        $directory->setAccount($account);
+        $em->persist($directory);
         $em->flush();
 
         $userEmail = null;
