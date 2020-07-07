@@ -11,7 +11,7 @@ class ConvertMoneyController extends ApiController
 
     private CONST CREDIT_CARD = [
         'numbers_card' => '1111 1111 1111 1111',
-        'date' => '11/11/20',
+        'date' => '11/20',
         'cvc' => '456',
         'transfered_money' => '1000'
     ];
