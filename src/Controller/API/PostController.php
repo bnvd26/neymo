@@ -104,10 +104,11 @@ class PostController extends ApiController
     {
         return [
             'post_id' => $post->getId(),
-            'title' => $post->getTitle(),
+            'title' => $post->getCompany()->getName(),
             'content' => $post->getContent(),
             'liked' => empty($this->likeRepository->findBy(['account' => $company->getAccount()->getId(), 'post' => $post])) ? false : true,
-            'likes' => count($post->getLikes())
+            'likes' => count($post->getLikes()),
+            'date' => $post->getDate()
         ];
     }
 }
