@@ -64,7 +64,10 @@ class Account
      */
     private $favorites;
 
-
+    /*
+     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="emiter")
+     */
+    private $transactionsTo;
 
     public function __construct()
     {
@@ -289,7 +292,5 @@ class Account
         }
 
         return $this;
-    }
-
- 
+    } 
 }

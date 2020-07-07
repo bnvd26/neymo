@@ -90,6 +90,16 @@ class Company
      */
     private $posts;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $provider;
+
     public function __construct()
     {
         $this->companyUsers = new ArrayCollection();
@@ -299,6 +309,30 @@ class Company
                 $post->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getProvider(): ?bool
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(?bool $provider): self
+    {
+        $this->provider = $provider;
 
         return $this;
     }

@@ -28,7 +28,7 @@ class Transaction
     private $beneficiary;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="transactions")
+     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="transactionsTo")
      */
     private $emiter;
 
