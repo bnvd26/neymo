@@ -102,6 +102,8 @@ class RegisterController extends AbstractController
         $company->setCity($dataDecoded->city);
         $company->setAddress($dataDecoded->address);
         $company->setPhoneNumber($dataDecoded->phoneNumber);
+        $company->setDescription($dataDecoded->description);
+        $company->setProvider($dataDecoded->provider);
         $company->addUser($user);
         $company->setValidated(false);
         $company->setSiret($dataDecoded->siret);

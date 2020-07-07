@@ -95,6 +95,11 @@ class Company
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $provider;
+
     public function __construct()
     {
         $this->companyUsers = new ArrayCollection();
@@ -316,6 +321,18 @@ class Company
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getProvider(): ?bool
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(?bool $provider): self
+    {
+        $this->provider = $provider;
 
         return $this;
     }
