@@ -65,8 +65,6 @@ class ConvertMoneyController extends ApiController
             return $this->responseOk(['Success' => "Votre argent à bien été ajouté"]);
         }
 
-        // TRANSACTIONS !!!!!
-
         return $this->responseNotAllowed(['Error' => "Vous n'avez pas saisis les bonnes informations de votre carte"]);
     }
 }
