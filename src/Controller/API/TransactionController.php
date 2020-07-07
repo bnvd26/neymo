@@ -73,11 +73,12 @@ class TransactionController extends ApiController
            
         }
 
-        if($this->getUser()->isParticular()) {
+        if ($this->getUser()->isParticular()) {
             $emitterId = $this->getUser()->getParticular()->getAccount()->getId();
             if ((int) $accountRepository->find($emitterId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
                 return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
             }
+        }
 
         if ((int) $accountRepository->find($data->emiterAccountId)->getAvailableCash() < (int) $data->transferedMoney ||
             (int) $data->transferedMoney < 0
@@ -102,8 +103,6 @@ class TransactionController extends ApiController
         
         $transaction->setTransferedMoney($data->transferedMoney);
         $transaction->setDate(new \DateTime());
-
-        
         
         $this->em->persist($transaction);
         $this->em->flush();
@@ -123,18 +122,6 @@ class TransactionController extends ApiController
         } else {
             return $this->getTransactionsForCompany($transactionRepository);
         };
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($transaction);
-        $entityManager->flush();
-        $response = new Response();
-        $response->setStatusCode(Response::HTTP_CREATED);
-        $response->setContent(json_encode([
-            'Success' => "Argent bien envoyé",
-        ]));
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
     }
 
     /**
