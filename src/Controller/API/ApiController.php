@@ -50,6 +50,46 @@ class ApiController extends AbstractController
         return $response;
     }
 
+    protected function responseBadRequest($msg)
+    {
+        $response = (new Response())
+
+        ->setStatusCode(Response::HTTP_BAD_REQUEST)
+
+        ->setContent(json_encode($msg));
+
+        $response->headers->set('Content-Type', 'application/json');
+        
+        return $response;
+    }
+
+    protected function responseNotAcceptable($msg) 
+    {
+        $response = (new Response())
+
+        ->setStatusCode(Response::HTTP_NOT_ACCEPTABLE)
+
+        ->setContent(json_encode($msg));
+
+        $response->headers->set('Content-Type', 'application/json');
+        
+        return $response;
+    }
+
+    protected function responseNotFound($msg) 
+    {
+        $response = (new Response())
+
+        ->setStatusCode(Response::HTTP_NOT_FOUND)
+
+        ->setContent(json_encode($msg));
+
+        $response->headers->set('Content-Type', 'application/json');
+        
+        return $response;
+    }
+    
+
     ///////////////
     // Serialize
     //////////////
