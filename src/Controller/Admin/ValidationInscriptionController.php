@@ -11,6 +11,7 @@ use App\Form\ParticularType;
 use App\Repository\CompanyRepository;
 use App\Repository\ParticularRepository;
 use App\Repository\UserRepository;
+use Mailjet\Resources;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -64,7 +65,7 @@ class ValidationInscriptionController extends AbstractController
             $userEmail = $user->getEmail();
         }
 
-        $this->sendEmailValidation($mailer, $userEmail);
+        $this->sendEmailValidation();
 
         $this->addFlash('success', 'L\'utilisateur a bien été validé');
         return $this->redirectToRoute('admin_validation_inscription_company_index');
@@ -88,9 +89,9 @@ class ValidationInscriptionController extends AbstractController
         }
         $user = $userRepository->find($userId);
         $em->remove($user);
-        $em->remove($company);
+        
         $em->flush();
-        $this->sendEmailNoValidation($mailer, $userEmail);
+        $this->sendEmailNoValidation();
         $this->addFlash('success', 'L\'utilisateur a bien été refusé');
         return $this->redirectToRoute('admin_validation_inscription_company_index');
     }
@@ -105,26 +106,52 @@ class ValidationInscriptionController extends AbstractController
         return $this->render('admin/inscriptionValidation/company/show.html.twig', compact('company'));
     }
 
-    public function sendEmailValidation($mailer, $receiver) 
+    public function sendEmailValidation() 
     {
-        $email = (new Email())
-            ->from('hello@example.com')
-            ->to($receiver)
-            ->subject('Vous etes validez')
-            ->html('<h1>VALIDE</h1>');
-
-        $mailer->send($email);
+        $mj = new \Mailjet\Client('768d23d39e95349c9486668619be34a1','691b14facbd2376c51c15da45301839b',true,['version' => 'v3.1']);
+        $body = [
+          'Messages' => [
+            [
+              'From' => [
+                'Email' => "neymohetic@gmail.com",
+              ],
+              'To' => [
+                [
+                  'Email' => 'benjaminadida05@gmail.com',
+                ]
+              ],
+              'Subject' => "Votre inscription est en attente de validation",
+              'HTMLPart' => "<p>Vous etes validés</p>",
+              'CustomID' => "AppGettingStartedTest"
+            ]
+          ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        $response->success();
     }
 
-    public function sendEmailNoValidation($mailer, $receiver) 
+    public function sendEmailNoValidation() 
     {
-        $email = (new Email())
-            ->from('hello@example.com')
-            ->to($receiver)
-            ->subject('Vous etes pas validez')
-            ->html('<h1>NON VALIDE</h1>');
-
-        $mailer->send($email);
+        $mj = new \Mailjet\Client('768d23d39e95349c9486668619be34a1','691b14facbd2376c51c15da45301839b',true,['version' => 'v3.1']);
+        $body = [
+          'Messages' => [
+            [
+              'From' => [
+                'Email' => "neymohetic@gmail.com",
+              ],
+              'To' => [
+                [
+                  'Email' => 'benjaminadida05@gmail.com',
+                ]
+              ],
+              'Subject' => "Votre inscription est en attente de validation",
+              'HTMLPart' => "<p>Vous etes pas validés</p>",
+              'CustomID' => "AppGettingStartedTest"
+            ]
+          ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        $response->success();
     }
 
     /**
