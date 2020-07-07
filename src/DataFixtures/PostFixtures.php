@@ -18,7 +18,7 @@ class PostFixtures extends BaseFixture implements DependentFixtureInterface
             $post->setTitle($this->faker->text($maxNbChars = 50));
             $post->setContent($this->faker->text($maxNbChars = 170));
             $post->setDate($this->faker->dateTimeBetween($startDate = '-5 months', $endDate = 'now', $timezone = null));
-
+            $this->addReference('post-' . $num, $post);
             return $post;
         });
 

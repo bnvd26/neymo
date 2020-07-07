@@ -106,7 +106,9 @@ class PostController extends ApiController
             'post_id' => $post->getId(),
             'title' => $post->getCompany()->getName(),
             'content' => $post->getContent(),
-            'liked' => empty($this->likeRepository->findBy(['account' => $company->getAccount()->getId(), 'post' => $post])) ? false : true,
+            'liked' => $this->getUser()->isParticular() ? 
+            (empty($this->likeRepository->findBy(['account' => $this->getUser()->getParticular()->getAccount()->getId(), 'post' => $post])) ? false : true) : 
+            (empty($this->likeRepository->findBy(['account' => $this->getUser()->getCompany()->getAccount()->getId(), 'post' => $post])) ? false : true),
             'likes' => count($post->getLikes()),
             'date' => $post->getDate()
         ];
