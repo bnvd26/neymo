@@ -8,6 +8,7 @@ use App\Entity\Particular;
 use App\Entity\User;
 use App\Repository\GovernanceRepository;
 use App\Repository\UserRepository;
+use Mailjet\Resources;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -101,6 +102,8 @@ class RegisterController extends AbstractController
         $company->setCity($dataDecoded->city);
         $company->setAddress($dataDecoded->address);
         $company->setPhoneNumber($dataDecoded->phoneNumber);
+        $company->setDescription($dataDecoded->description);
+        $company->setProvider($dataDecoded->provider);
         $company->addUser($user);
         $company->setValidated(false);
         $company->setSiret($dataDecoded->siret);
@@ -113,25 +116,53 @@ class RegisterController extends AbstractController
         return $userRepository->findBy(['email' => $email]);
     }
 
-    public function sendReceiveInscriptionEmail($mailer, $userEmail)
+    public function sendReceiveInscriptionEmail()
     {
-        $email = (new Email())
-            ->from('hello@example.com')
-            ->to($userEmail)
-            ->subject('Votre inscription est en attente de validation')
-            ->html('<p>Bonjour, votre inscription est en attente de validation, un mail vous sera transmis concerant la validation de votre compte !</p>');
+        $mj = new \Mailjet\Client('768d23d39e95349c9486668619be34a1','691b14facbd2376c51c15da45301839b',true,['version' => 'v3.1']);
+        $body = [
+          'Messages' => [
+            [
+              'From' => [
+                'Email' => "neymohetic@gmail.com",
+              ],
+              'To' => [
+                [
+                  'Email' => 'benjaminadida05@gmail.com',
+                ]
+              ],
+              'Subject' => "Votre inscription est en attente de validation",
+              'HTMLPart' => "<p>Bonjour, votre inscription est en attente de validation, un mail vous sera transmis concerant la validation de votre compte !</p>",
+              'CustomID' => "AppGettingStartedTest"
+            ]
+          ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        $response->success();
 
-        $mailer->send($email);
     }
 
-    public function preventEmailInscriptionGovernance($mailer)
+    public function preventEmailInscriptionGovernance()
     {
-        $email = (new Email())
-            ->from('hello@example.com')
-            ->to('admin@gouvernance.com')
-            ->subject('Vous avez une nouvelle inscription en attente de validation')
-            ->html('<p>Bonjour, votre inscription est en attente de validation !</p> <a href="http://localhost/admin/validation-inscription/company">ICI</a>');
-
-        $mailer->send($email);
+        $mj = new \Mailjet\Client('768d23d39e95349c9486668619be34a1','691b14facbd2376c51c15da45301839b',true,['version' => 'v3.1']);
+        $body = [
+          'Messages' => [
+            [
+              'From' => [
+                'Email' => "neymohetic@gmail.com",
+              ],
+              'To' => [
+                [
+                  'Email' => 'benjaminadida05@gmail.com',
+                ]
+              ],
+              'Subject' => "Votre inscription est en attente de validation",
+              'HTMLPart' => "<p>Bonjour, vous avez un nouveau dossier en attente de validation !</p>",
+              'CustomID' => "AppGettingStartedTest"
+            ]
+          ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+        $response->success();
+       
     }
 }

@@ -2,109 +2,40 @@
 
 namespace App\Controller\API;
 
-use App\Entity\User;
-use App\Repository\CompanyRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class ParticularController extends AbstractController
+class ParticularController extends ApiController
 {
-    private function serialize($data)
-    {
-        return $this->container->get('serializer')->serialize($data, 'json');
-    }
+    private $em;
 
-    private function deserialize($data, $entity)
+    public function __construct(EntityManagerInterface $em)
     {
-        return $this->container->get('serializer')->deserialize($data, $entity, 'json');
+        $this->em = $em;
     }
-
 
     /**
      * @Route("/api/particular/update", name="api_particular_update", methods="PUT")
      */
-    public function update(Request $request, UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepo)
+    public function update(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepo)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $user = $this->getUser()->getId();
-
         // User information
-        $user = $userRepo->find($user);
+        $user = $userRepo->find($this->getUser()->getId());
 
         $password = $passwordEncoder->encodePassword($user, $user->getPassword());
 
         $user->setPassword($password);
 
-        $entityManager->persist($user);
+        $user->getParticular()->setFirstName('Money');
 
-        foreach ($user->getParticular() as $user) {
-            $user->setFirstName('Gérome');
-        }
+        $this->em->persist($user);
 
-        $entityManager->persist($user);
+        $this->em->flush();
 
-        $entityManager->flush();
-
-        $response = new Response();
-
-        $response->setStatusCode(Response::HTTP_CREATED);
-
-        $response->setContent(json_encode([
+        return $this->responseOk([
             'Success' => "L'utilisateur a bien été modifier",
-        ]));
-        $response->headers->set('Content-Type', 'application/json');
-        
-        return $response;
-    }
-
-    /**
-     * @Route("/api/particular/account", name="api_particular_account", methods="GET")
-     */
-    public function accountState()
-    {
-        if($this->verifyCurrentUserIsParticular())
-        {
-            $response = new Response();
-
-            $response->setStatusCode(Response::HTTP_OK);
-
-            $response->setContent(json_encode([
-            'Information' => "Il n y a pas de compte particulier pour cet utilisateur",
-            ]));
-            
-            $response->headers->set('Content-Type', 'application/json');
-        
-            return $response;
-        };
-
-        $response = new Response();
-
-        $response->setStatusCode(Response::HTTP_OK);
-
-        $response->setContent(json_encode([
-            'account_id' => $this->getUser()->getParticular()->getAccount()->getId(),
-            'available_cash' => $this->getUser()->getParticular()->getAccount()->getAvailableCash()
-            ]));
-    
-        $response->headers->set('Content-Type', 'application/json');
-            
-        return $response;
-    }
-
-
-    /**
-     * Undocumented function
-     *
-     * @param [type] $companyArray
-     * @return bool
-     */
-    public function verifyCurrentUserIsParticular()
-    {
-        return is_null($this->getUser()->getParticular());
+        ]);
     }
 }

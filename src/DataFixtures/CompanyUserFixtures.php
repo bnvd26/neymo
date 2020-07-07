@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\DataFixtures\BaseFixture;
 use App\Entity\Account;
 use App\Entity\Company;
+use App\Entity\Directory;
 use App\Entity\User;
 use App\Repository\AccountRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -19,10 +20,20 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setPassword('$2y$10$34ChwRD3d7zBRP2BlMV2tuPfYuOu3wngBBjtIE.BWk4HZY0yq9Niq')
             ->setEmail('company@neymo.com');
         $manager->persist($user);
+
         $account = (new Account())
             ->setAccountNumber($this->faker->numberBetween($min = 1000, $max = 20000))
             ->setAvailableCash($this->faker->numberBetween($min = 10, $max = 2000));
         $manager->persist($account);
+
+        $this->addReference('account-company00', $account);
+
+        $directory = (new Directory())
+            ->setAccount($account);
+        $manager->persist($directory);
+
+        $this->addReference('directory-company00', $directory);
+
         $company = (new Company())
             ->setName($this->faker->company())
             ->setAddress($this->faker->streetAddress())
@@ -33,13 +44,28 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setFirstName($this->faker->firstName())
             ->setLastName($this->faker->lastName())
             ->setAccount($account)
-            ->setCategory($this->getReference('category-' . rand(0,7)))
+            ->setProvider(true)
+            ->setDescription($this->faker->text($maxNbChars = 200))
+            ->setCategory($this->getReference('category-' . rand(0, 6)))
             ->setGovernance($this->getReference('governance-' . rand(1, 2)))
             ->setValidated($this->faker->boolean())
             ->addUser($user);
         $manager->persist($company);
 
-        $this->createMany(50, function ($num) use (&$account) {
+        $this->createMany(50, function ($num) use (&$account, &$manager) {
+            $account = (new Account())
+            ->setAccountNumber($this->faker->numberBetween($min = 1000, $max = 20000))
+            ->setAvailableCash($this->faker->numberBetween($min = 10, $max = 2000));
+            $manager->persist($account);
+
+            $this->addReference('account-company-' . $num, $account);
+
+            $directory = (new Directory())
+            ->setAccount($account);
+            $manager->persist($directory);
+
+            $this->addReference('directory-company-' . $num, $directory);
+
             $company = (new Company())
             ->setName($this->faker->company())
             ->setAddress($this->faker->streetAddress())
@@ -48,12 +74,17 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setPhoneNumber($this->faker->phoneNumber())
             ->setSiret($this->faker->siret())
             ->setFirstName($this->faker->firstName())
-            ->setCategory($this->getReference('category-' . rand(0,6)))
+            ->setCategory($this->getReference('category-' . rand(0, 6)))
             ->setLastName($this->faker->lastName())
-            ->setAccount($this->getReference('account-' . $num))
+            ->setAccount($account)
+            ->setProvider($this->faker->boolean())
+            ->setDescription($this->faker->text($maxNbChars = 200))
             ->setGovernance($this->getReference('governance-' . rand(1, 2)))
             ->setValidated($this->faker->boolean())
             ->addUser($this->getReference('user-' . $num));
+
+            $this->addReference('company-' . $num, $company);
+            
             return $company;
         });
 

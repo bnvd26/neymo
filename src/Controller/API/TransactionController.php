@@ -3,29 +3,115 @@
 namespace App\Controller\API;
 
 use App\Entity\Transaction;
-use App\Entity\User;
 use App\Repository\AccountRepository;
-use App\Repository\CompanyRepository;
 use App\Repository\TransactionRepository;
-use App\Repository\UserRepository;
+use App\Repository\CurrencyRepository;
+use App\Services\CreditCardService;
+use App\Services\CurrencyService;
+use Exception;
+use Swagger\Annotations as SWG;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use App\Controller\API\ApiController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class TransactionController extends AbstractController
+class TransactionController extends ApiController
 {
-    private function serialize($data)
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
     {
-        return $this->container->get('serializer')->serialize($data, 'json');
+        $this->em = $em;
     }
 
-    private function deserialize($data, $entity)
+    /**
+     * @Route("/api/transfer-money", name="api_transfer_money", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Transfer money from an account to an other"
+     * )
+     * @SWG\Parameter(
+     *     name="emiterAccountId",
+     *     in="query",
+     *     type="number",
+     *     description="The account id of the emiter of the transaction"
+     * )
+     * @SWG\Parameter(
+     *     name="beneficiaryAccountId",
+     *     in="query",
+     *     type="number",
+     *     description="The account id of the beneficiary of the transaction"
+     * )
+     * @SWG\Parameter(
+     *     name="transferedMoney",
+     *     in="query",
+     *     type="number",
+     *     description="The amount of the transaction"
+     * )
+     * @SWG\Tag(name="transaction")
+     *
+     * @param Request $request
+     * @param AccountRepository $accountRepository
+     *
+     * @return Response
+     */
+    public function transferMoney(Request $request, AccountRepository $accountRepository)
     {
-        return $this->container->get('serializer')->deserialize($data, $entity, 'json');
-    }
+        $data = json_decode($request->getContent());
 
+        $emitterId = null;
+
+        if($this->getUser()->isCompany()) {
+            $emitterId = $this->getUser()->getCompany()->getAccount()->getId();
+            if ((int) $accountRepository->find($emitterId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
+                return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
+            }
+           
+        }
+
+        if ($this->getUser()->isParticular()) {
+            $emitterId = $this->getUser()->getParticular()->getAccount()->getId();
+            
+            if ((int) $accountRepository->find($emitterId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
+                return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
+            }
+        }
+
+        if ((int) $accountRepository->find($emitterId)->getAvailableCash() < (int) $data->transferedMoney ||
+            (int) $data->transferedMoney < 0
+        ) {
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setContent(json_encode([
+                'Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent",
+            ]));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+
+        }
+        $transaction = new Transaction();
+        $beneficiaryAccountId = $accountRepository->findBy(['account_number' => $data->beneficiaryAccountNumber])[0]->getId();
+        $transaction->setBeneficiary($accountRepository->find($beneficiaryAccountId));
+        $accountRepository->find($beneficiaryAccountId)->addMoneyToBeneficiary($data->transferedMoney);
+
+        $transaction->setEmiter($accountRepository->find($emitterId));
+        $accountRepository->find($emitterId)->removeMoneyToEmiter($data->transferedMoney);
+        
+        $transaction->setTransferedMoney($data->transferedMoney);
+        $transaction->setDate(new \DateTime());
+        
+        $this->em->persist($transaction);
+        $this->em->flush();
+
+        return $this->responseCreated([
+            'Success' => "Argent bien envoyé",
+            ]);
+    }
 
     /**
      * @Route("/api/transactions", name="api_transactions_particular", methods="GET")
@@ -40,68 +126,152 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/api/transfer-money", name="api_transfer_money", methods="POST")
+     * @Route("api/convertToEuro", name="api_converToEuro", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the rewards of an user"
+     * )
+     * @SWG\Parameter(
+     *     name="value",
+     *     in="query",
+     *     type="number",
+     *     description="The field contains the amount of currency we want to convert"
+     * )
+     * @SWG\Parameter(
+     *     name="currency",
+     *     in="query",
+     *     type="number",
+     *     description="The field contains the currency id"
+     * )
+     * @SWG\Parameter(
+     *     name="emiterAccountId",
+     *     in="query",
+     *     type="number",
+     *     description="The emitter account of the transaction"
+     * )
+     * @SWG\Tag(name="transaction")
+     *
+     * @param CurrencyService $currencyService
+     * @param Request $request
+     * @param CurrencyRepository $currencyRepository
+     * @param AccountRepository $accountRepository
+     * @param CreditCardService $creditCardService
+     *
+     * @throws Exception
+     *
+     * @return JsonResponse
      */
-    public function transferMoney(Request $request, AccountRepository $accountRepository)
-    {
-        $data = json_decode($request->getContent());
-    
-        if ((int) $accountRepository->find($data->emiterAccountId)->getAvailableCash() < (int) $data->transferedMoney || (int) $data->transferedMoney < 0) {
-            $response = new Response();
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent(json_encode([
-                'Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent",
-            ]));
-            
-            $response->headers->set('Content-Type', 'application/json');
-            
-            return $response;
+    public function convertToEuro(
+        CurrencyService $currencyService,
+        Request $request,
+        CurrencyRepository $currencyRepository,
+        AccountRepository $accountRepository,
+        CreditCardService $creditCardService
+    ): JsonResponse {
+        $payload = json_decode($request->getContent());
+        if (null === $payload) {
+            return new JsonResponse([
+                "status" => "error",
+                "error" => "Expected Json, gat 🤷‍♂️"
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $expectedParams = [
+            "value",
+            "currency",
+            "card-number",
+            "card-type",
+            "cvc",
+            "month",
+            "year",
+            "card-holder-name",
+            "emiterAccountId"
+        ];
+        foreach ($expectedParams as $expectedParam) {
+            if (!isset($payload->$expectedParam)){
+                return new JsonResponse([
+                    "status" => "error",
+                    "error" => "Mandatory parameters not present"
+                ], Response::HTTP_BAD_REQUEST);
+            }
         }
 
+        $currency = $currencyRepository->find($payload->currency);
+
+        $convertedValue = $currencyService->convertToEuro(
+            $currency->getExchangeRate(),
+            $payload->value
+        );
+        if ($this->getUser()->isParticular()) {
+            return new JsonResponse([
+                "status" => "error",
+                "error" => "User not authorized"
+            ], Response::HTTP_NOT_ACCEPTABLE);
+        }
+        if (false === $creditCardService->checkItAll(
+            $payload->{'card-number'},
+            $payload->{'card-type'},
+            $payload->cvc,
+            $payload->{'card-holder-name'},
+            $payload->year,
+            $payload->month
+        )) {
+            return new JsonResponse([
+                "status" => "error",
+                "error" => "Information is invalid"
+            ], Response::HTTP_NOT_ACCEPTABLE);
+        }
         $transaction = new Transaction();
-        $transaction->setBeneficiary($accountRepository->find($data->beneficiaryAccountId));
-        $transaction->setEmiter($accountRepository->find($data->emiterAccountId));
-        $accountRepository->find($data->emiterAccountId)->removeMoneyToEmiter($data->transferedMoney);
-        $accountRepository->find($data->beneficiaryAccountId)->addMoneyToBeneficiary($data->transferedMoney);
-        $transaction->setTransferedMoney($data->transferedMoney);
+        $emiterAccount = $accountRepository->find($payload->emiterAccountId);
+        if (null === $emiterAccount) {
+            return new JsonResponse([
+                "status" => "error",
+                "error" => "Accounts information is invalid"
+            ], Response::HTTP_NOT_FOUND);
+        }
+        if ($payload->value > $emiterAccount->getAvailableCash()) {
+            return new JsonResponse([
+                "status" => "error",
+                "error" => "Not enough cash"
+            ], Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $transaction->setEmiter($emiterAccount);
+        $accountRepository->find($payload->emiterAccountId)->removeMoneyToEmiter($payload->value);
+        $transaction->setTransferedMoney($payload->value);
         $transaction->setDate(new \DateTime());
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($transaction);
-        $entityManager->flush();
-        $response = new Response();
-
+        $this->em->persist($transaction);
+        $this->em->flush();
+        $response = new JsonResponse();
         $response->setStatusCode(Response::HTTP_CREATED);
+        $response->setData([
+            'status' => 'success',
+            'message' => 'Votre argent a bien été transféré'
+        ]);
 
-        $response->setContent(json_encode([
-            'Success' => "Argent bien envoyé",
-            ]));
-            
-        $response->headers->set('Content-Type', 'application/json');
-        
         return $response;
 
     }
 
-    public function getTransactionsForParticular($transactionRepository)
+    public function getTransactionsForParticular(TransactionRepository $transactionRepository)
     {
         $transactionsDateFormatted = [];
-
         $transactionsFrenchDate = [];
-
         foreach ($transactionRepository->findAllTransactions($this->getUser()->getParticular()->getAccount()->getId()) as $transaction) {
             $transactionsFrenchDate[] = $this->dateToFrench(date_format($transaction->getDate(), 'Y-m-d H:i:s'), 'l j F');
             $transactionsDateFormatted[] =  date($transaction->getDate()->format('Y-m-d H:i:s'));
         }
-
         $transactions = [];
-
         foreach (array_unique($transactionsDateFormatted) as $key => $date) {
             $transactionsByDate = $transactionRepository->findTransactionsByDate(date_create_from_format('Y-m-d H:i:s', $date), $this->getUser()->getParticular()->getAccount()->getId());
             $data = [];
             for ($y = 0; $y < count($transactionsByDate); $y++) {
-                $data[] = ['id' => $transactionsByDate[$y]->getId(),
-                        'transfered_money' => $transactionsByDate[$y]->getTransferedMoney()
+                $data[] = [
+                        'id' => $transactionsByDate[$y]->getId(),
+                        'transfered_money' => $transactionsByDate[$y]->getTransferedMoney(),
+                        'date' => $transactionsByDate[$y]->getDate(),
+                        'beneficiary_name' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getName() : $transactionsByDate[$y]->getBeneficiary()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getBeneficiary()->getParticular()->getLastName(),
+                        'category' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getCategory()->getName() : null,
+                        'status_transaction_user' => $transactionsByDate[$y]->getBeneficiary()->getId() == $this->getUser()->getParticular()->getAccount()->getId() ? 'beneficiary' : 'emiter'
                 ];
             };
             $transactions[] = [
@@ -116,28 +286,27 @@ class TransactionController extends AbstractController
     public function getTransactionsForCompany($transactionRepository)
     {
         $transactionsDateFormatted = [];
-
         $transactionsFrenchDate = [];
-
         $companyId = null;
-
         foreach ($this->getUser()->getCompanies() as $company) {
             $companyId = $company->getAccount()->getId();
         }
-        
         foreach ($transactionRepository->findAllTransactions($companyId) as $transaction) {
             $transactionsFrenchDate[] = $this->dateToFrench(date_format($transaction->getDate(), 'Y-m-d H:i:s'), 'l j F');
             $transactionsDateFormatted[] =  date($transaction->getDate()->format('Y-m-d H:i:s'));
         }
-
         $transactions = [];
-
         foreach (array_unique($transactionsDateFormatted) as $key => $date) {
             $transactionsByDate = $transactionRepository->findTransactionsByDate(date_create_from_format('Y-m-d H:i:s', $date), $companyId);
             $data = [];
             for ($y = 0; $y < count($transactionsByDate); $y++) {
-                $data[] = ['id' => $transactionsByDate[$y]->getId(),
+                $data[] = [
+                        'id' => $transactionsByDate[$y]->getId(),
                         'transfered_money' => $transactionsByDate[$y]->getTransferedMoney(),
+                        'beneficiary_name' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getName() : $transactionsByDate[$y]->getBeneficiary()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getBeneficiary()->getParticular()->getLastName(),
+                        'date' => $transactionsByDate[$y]->getDate(),
+                        'category' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getCategory()->getName() : null,
+                        'status_transaction_user' => $transactionsByDate[$y]->getBeneficiary()->getId() == $this->getUser()->getCompany()->getAccount()->getId() ? 'beneficiary' : 'emiter'
                 ];
             };
             $transactions[] = [
@@ -147,19 +316,6 @@ class TransactionController extends AbstractController
         }
 
         return $this->responseOk($transactions);
-    }
-
-    public function responseOk($data)
-    {
-        $response = new Response();
-
-        $response->setStatusCode(Response::HTTP_OK);
-
-        $response->setContent(json_encode($data));
-            
-        $response->headers->set('Content-Type', 'application/json');
-        
-        return $response;
     }
 
     public static function dateToFrench($date, $format)
