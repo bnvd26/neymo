@@ -80,6 +80,9 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setGovernance($this->getReference('governance-' . rand(1, 2)))
             ->setValidated($this->faker->boolean())
             ->addUser($this->getReference('user-' . $num));
+
+            $this->addReference('company-' . $num, $company);
+            
             return $company;
         });
 
