@@ -168,19 +168,38 @@ class TransactionController extends ApiController
         AccountRepository $accountRepository,
         CreditCardService $creditCardService
     ): JsonResponse {
-        $value = (float) $request->get("value");
-        $currencyId = (int) $request->get('currency');
-        $currency = $currencyRepository->find($currencyId);
-        $cardNumber = $request->get("card-number");
-        $cardType = $request->get("card-type");
-        $cvc = $request->get("cvc");
-        $month = $request->get("month");
-        $year = $request->get("year");
-        $cardHolderName = $request->get("card-holder-name");
-        $emiterAccountId = $request->get("emiterAccountId");
+        $payload = json_decode($request->getContent());
+        if (null === $payload) {
+            return new JsonResponse([
+                "status" => "error",
+                "error" => "Expected Json, gat 🤷‍♂️"
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $expectedParams = [
+            "value",
+            "currency",
+            "card-number",
+            "card-type",
+            "cvc",
+            "month",
+            "year",
+            "card-holder-name",
+            "emiterAccountId"
+        ];
+        foreach ($expectedParams as $expectedParam) {
+            if (!isset($payload->$expectedParam)){
+                return new JsonResponse([
+                    "status" => "error",
+                    "error" => "Mandatory parameters not present"
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+        $currency = $currencyRepository->find($payload->currency);
+
         $convertedValue = $currencyService->convertToEuro(
             $currency->getExchangeRate(),
-            $value
+            $payload->value
         );
         if ($this->getUser()->isParticular()) {
             return new JsonResponse([
@@ -189,12 +208,12 @@ class TransactionController extends ApiController
             ], Response::HTTP_NOT_ACCEPTABLE);
         }
         if (false === $creditCardService->checkItAll(
-            $cardNumber,
-            $cardType,
-            $cvc,
-            $cardHolderName,
-            $year,
-            $month
+            $payload->{'card-number'},
+            $payload->{'card-type'},
+            $payload->cvc,
+            $payload->{'card-holder-name'},
+            $payload->year,
+            $payload->month
         )) {
             return new JsonResponse([
                 "status" => "error",
@@ -202,22 +221,22 @@ class TransactionController extends ApiController
             ], Response::HTTP_NOT_ACCEPTABLE);
         }
         $transaction = new Transaction();
-        $emiterAccount = $accountRepository->find($emiterAccountId);
+        $emiterAccount = $accountRepository->find($payload->emiterAccountId);
         if (null === $emiterAccount) {
             return new JsonResponse([
                 "status" => "error",
                 "error" => "Accounts information is invalid"
             ], Response::HTTP_NOT_FOUND);
         }
-        if ($value > $emiterAccount->getAvailableCash()) {
+        if ($payload->value > $emiterAccount->getAvailableCash()) {
             return new JsonResponse([
                 "status" => "error",
                 "error" => "Not enough cash"
             ], Response::HTTP_NOT_ACCEPTABLE);
         }
         $transaction->setEmiter($emiterAccount);
-        $accountRepository->find($emiterAccountId)->removeMoneyToEmiter($value);
-        $transaction->setTransferedMoney($value);
+        $accountRepository->find($payload->emiterAccountId)->removeMoneyToEmiter($payload->value);
+        $transaction->setTransferedMoney($payload->value);
         $transaction->setDate(new \DateTime());
         $this->em->persist($transaction);
         $this->em->flush();
