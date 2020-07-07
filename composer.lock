@@ -1536,6 +1536,7 @@
             "time": "2019-12-12T13:22:17+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "guzzlehttp/guzzle",
             "version": "6.5.5",
             "source": {
@@ -1696,12 +1697,41 @@
                     "src/functions_include.php"
                 ]
             },
+=======
+            "name": "inacho/php-credit-card-validator",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/inacho/php-credit-card-validator.git",
+                "reference": "e71ea730a9059ea75cc6d94e7c42993eacf44dc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/inacho/php-credit-card-validator/zipball/e71ea730a9059ea75cc6d94e7c42993eacf44dc1",
+                "reference": "e71ea730a9059ea75cc6d94e7c42993eacf44dc1",
+                "shasum": ""
+            },
+            "require": {
+                "lib-pcre": ">=7.3",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Inacho\\": "src/"
+                }
+            },
+>>>>>>> feat/member-EuroChange
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
+<<<<<<< HEAD
                     "name": "Michael Dowling",
                     "email": "mtdowling@gmail.com",
                     "homepage": "https://github.com/mtdowling"
@@ -1723,6 +1753,25 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+=======
+                    "name": "Ignacio de Tomás",
+                    "email": "nacho@inacho.es"
+                }
+            ],
+            "description": "Validates popular debit and credit cards numbers against regular expressions and Luhn algorithm. Also validates the CVC and the expiration date",
+            "keywords": [
+                "card",
+                "cards",
+                "credit",
+                "creditcard",
+                "creditcards",
+                "cvc",
+                "debit",
+                "laravel",
+                "validator"
+            ],
+            "time": "2015-07-03T19:13:29+00:00"
+>>>>>>> feat/member-EuroChange
         },
         {
             "name": "laminas/laminas-code",
@@ -9228,7 +9277,8 @@
     "platform": {
         "php": "^7.2.5",
         "ext-ctype": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"

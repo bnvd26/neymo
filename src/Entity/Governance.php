@@ -44,6 +44,11 @@ class Governance
      */
     private $particulars;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Currency::class, mappedBy="governance", cascade={"persist", "remove"})
+     */
+    private $currency;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -169,6 +174,23 @@ class Governance
             if ($particular->getGovernance() === $this) {
                 $particular->setGovernance(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getCurrency(): ?Currency
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(Currency $currency): self
+    {
+        $this->currency = $currency;
+
+        // set the owning side of the relation if necessary
+        if ($currency->getGovernance() !== $this) {
+            $currency->setGovernance($this);
         }
 
         return $this;
