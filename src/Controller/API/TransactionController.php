@@ -17,9 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @Route("/api/transactions", name="api_transactions_")
- */
 class TransactionController extends AbstractController
 {
     /**
@@ -45,7 +42,9 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/", name="particular", methods="GET")
+     * @Route("/api/transactions", name="api_transactions_particular", methods="GET")
+     * @param TransactionRepository $transactionRepository
+     * @return Response
      */
     public function allTransactions(TransactionRepository $transactionRepository)
     {
@@ -57,19 +56,50 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/transfer-money", name="transfer_money", methods="POST")
+     * @Route("/api/transfer-money", name="api_transfer_money", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Transfer money from an account to an other"
+     * )
+     * @SWG\Parameter(
+     *     name="emiterAccountId",
+     *     in="query",
+     *     type="number",
+     *     description="The account id of the emiter of the transaction"
+     * )
+     * @SWG\Parameter(
+     *     name="beneficiaryAccountId",
+     *     in="query",
+     *     type="number",
+     *     description="The account id of the beneficiary of the transaction"
+     * )
+     * @SWG\Parameter(
+     *     name="transferedMoney",
+     *     in="query",
+     *     type="number",
+     *     description="The amount of the transaction"
+     * )
+     * @SWG\Tag(name="transaction")
+     *
+     * @param Request $request
+     * @param AccountRepository $accountRepository
+     *
+     * @return Response
      */
     public function transferMoney(Request $request, AccountRepository $accountRepository)
     {
         $data = json_decode($request->getContent());
+
         if ((int) $accountRepository->find($data->emiterAccountId)->getAvailableCash() < (int) $data->transferedMoney ||
             (int) $data->transferedMoney < 0
         ) {
-            $response = new JsonResponse();
+            $response = new Response();
             $response->setStatusCode(Response::HTTP_OK);
-            $response->setData([
+            $response->setContent(json_encode([
                 'Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent",
-            ]);
+            ]));
+            $response->headers->set('Content-Type', 'application/json');
 
             return $response;
         }
@@ -83,17 +113,18 @@ class TransactionController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($transaction);
         $entityManager->flush();
-        $response = new JsonResponse();
+        $response = new Response();
         $response->setStatusCode(Response::HTTP_CREATED);
-        $response->setData([
+        $response->setContent(json_encode([
             'Success' => "Argent bien envoyé",
-            ]);
+        ]));
+        $response->headers->set('Content-Type', 'application/json');
 
         return $response;
     }
 
     /**
-     * @Route("/convertToEuro", name="converToEuro", methods="POST")
+     * @Route("api/convertToEuro", name="api_converToEuro", methods="POST")
      *
      * @SWG\Response(
      *     response=200,
@@ -123,15 +154,18 @@ class TransactionController extends AbstractController
      * @param Request $request
      * @param CurrencyRepository $currencyRepository
      * @param AccountRepository $accountRepository
+     * @param CreditCardService $creditCardService
      *
-     * @return void
+     * @throws Exception
+     *
+     * @return JsonResponse
      */
     public function convertToEuro(
         CurrencyService $currencyService,
         Request $request,
         CurrencyRepository $currencyRepository,
         AccountRepository $accountRepository,
-       CreditCardService $creditCardService
+        CreditCardService $creditCardService
     ): JsonResponse {
         $value = (float) $request->get("value");
         $currencyId = (int) $request->get('currency');
@@ -191,7 +225,7 @@ class TransactionController extends AbstractController
         $response->setData([
             'status' => 'success',
             'message' => 'Votre argent a bien été transféré'
-        ], Response::HTTP_OK);
+        ]);
 
         return $response;
     }

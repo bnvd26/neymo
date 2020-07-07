@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller\API;
-
 
 use App\Services\CreditCardService;
 use Swagger\Annotations as SWG;
