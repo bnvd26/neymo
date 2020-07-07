@@ -4,16 +4,10 @@ namespace App\Controller\API;
 
 use App\Repository\GovernanceRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use App\Controller\API\ApiController;
 
-class GovernanceController extends AbstractController
+class GovernanceController extends ApiController
 {
-    private function serialize($data)
-    {
-        return $this->container->get('serializer')->serialize($data, 'json');
-    }
-
     /**
      * @Route("/api/governances", name="api_governances", methods="GET")
      */
@@ -22,24 +16,14 @@ class GovernanceController extends AbstractController
         $governances = $governanceRepository->findAll();
 
         $governanceArray = [];
-        
+    
         foreach ($governances as $governance) {
-            
             $governanceArray[] = [
                 'id' => $governance->getId(),
                 'governance_name' => $governance->getName()
             ];
-
-            $json = $this->serialize($governanceArray);
-           
         }
 
-        $response = new Response($json);
-
-        $response->setStatusCode(Response::HTTP_CREATED);
-
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return $this->responseOk($governanceArray);
     }
 }
