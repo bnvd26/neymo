@@ -1,10 +1,6 @@
 nelmio_api_doc:
     documentation:
-<<<<<<< HEAD
-      host: https://localhost
-=======
       host: localhost
->>>>>>> feat/member-EuroChange
       schemes: [http, https]
       info:
         title: Neymo API
