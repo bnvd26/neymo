@@ -19,6 +19,11 @@ class CreditCardController extends \Symfony\Bundle\FrameworkBundle\Controller\Ab
     /**
      * @Route("/check", name="check", methods="POST")
      *
+     * @SWG\Response(
+     *     response="200",
+     *     description="The card is valid"
+     * )
+     *
      * @SWG\Parameter(
      *     name="card-number",
      *     in="query",
@@ -64,6 +69,9 @@ class CreditCardController extends \Symfony\Bundle\FrameworkBundle\Controller\Ab
      * @SWG\Tag(name="credit-card")
      *
      * @param CreditCardService $creditCardService
+     * @param Request $request
+     *
+     * @return JsonResponse*
      */
     public function checkCreditCard(CreditCardService $creditCardService, Request $request)
     {

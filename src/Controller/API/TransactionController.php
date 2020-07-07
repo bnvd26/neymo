@@ -17,6 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @Route("/api/transactions", name="api_transactions_")
+ */
 class TransactionController extends AbstractController
 {
     /**
@@ -42,7 +45,7 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/api/transactions", name="api_transactions_particular", methods="GET")
+     * @Route("/", name="particular", methods="GET")
      */
     public function allTransactions(TransactionRepository $transactionRepository)
     {
@@ -54,7 +57,7 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/api/transfer-money", name="api_transfer_money", methods="POST")
+     * @Route("/transfer-money", name="transfer_money", methods="POST")
      */
     public function transferMoney(Request $request, AccountRepository $accountRepository)
     {
@@ -90,7 +93,7 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/api/transactions/convertToEuro", name="api_transactions_converToEuro", methods="POST")
+     * @Route("/convertToEuro", name="converToEuro", methods="POST")
      *
      * @SWG\Response(
      *     response=200,
@@ -174,7 +177,7 @@ class TransactionController extends AbstractController
         if ($value > $emiterAccount->getAvailableCash()) {
             return new JsonResponse([
                 "status" => "error",
-                "error" => "Not enough cash che'h"
+                "error" => "Not enough cash"
             ], Response::HTTP_NOT_ACCEPTABLE);
         }
         $transaction->setEmiter($emiterAccount);
@@ -191,7 +194,6 @@ class TransactionController extends AbstractController
         ], Response::HTTP_OK);
 
         return $response;
-
     }
 
     public function getTransactionsForParticular(TransactionRepository $transactionRepository)

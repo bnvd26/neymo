@@ -27,6 +27,7 @@ class CreditCardService
      * @param string $cardHolderName
      * @param string $year
      * @param string $month
+     *
      * @return bool
      */
     public function checkItAll(
@@ -51,6 +52,7 @@ class CreditCardService
     /**
      * @param int $cardNumber
      * @param string $cardType
+     *
      * @return array
      */
     public function creditCard(int $cardNumber, string $cardType): array
@@ -61,6 +63,7 @@ class CreditCardService
     /**
      * @param int $cardNumber
      * @param string $cardType
+     *
      * @return bool
      */
     public function validCreditCard(int $cardNumber, string $cardType): bool
@@ -71,6 +74,7 @@ class CreditCardService
     /**
      * @param string $cvc
      * @param string $cardType
+     *
      * @return bool
      */
     public function validCvc(string $cvc, string $cardType): bool
@@ -81,6 +85,7 @@ class CreditCardService
     /**
      * @param string $year
      * @param string $month
+     *
      * @return bool
      */
     public function validDate(string $year, string $month)
