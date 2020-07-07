@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller\API;
-
 
 use App\Services\CreditCardService;
 use Swagger\Annotations as SWG;
@@ -62,8 +60,13 @@ class CreditCardController extends \Symfony\Bundle\FrameworkBundle\Controller\Ab
      * )
      *
      * @SWG\Tag(name="credit-card")
+     * 
+     * @SWG\Response(response="201", description="Je suis une réponse")
      *
      * @param CreditCardService $creditCardService
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function checkCreditCard(CreditCardService $creditCardService, Request $request)
     {
