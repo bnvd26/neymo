@@ -55,6 +55,7 @@ class CompanyController extends ApiController
             $companyArray[] = [
                 'id' => $company->getId(),
                 'company_name' => $company->getName(),
+                'account_number' => $company->getAccount()->getAccountNumber(),
                 'first_name' => $company->getFirstName(),
                 'category' => $company->getCategory()->getName(),
                 'governance' => $company->getGovernance()->getName()
