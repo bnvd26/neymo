@@ -6,6 +6,7 @@ use App\Entity\Transaction;
 use App\Repository\AccountRepository;
 use App\Repository\TransactionRepository;
 use Swagger\Annotations as SWG;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\API\ApiController;
@@ -88,26 +89,39 @@ class TransactionController extends ApiController
      * @Route("api/convertToEuro", name="api_converToEuro", methods="POST")
      *
      * @SWG\Response(
-     *     response=200,
-     *     description="Returns the rewards of an user"
+     *     response=201,
+     *     description="Amount transfered"
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Expected Json"
+     * )
+     * @SWG\Response(
+     *     response=406,
+     *     description="User not authorized"
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Accounts information is invalid"
      * )
      * @SWG\Parameter(
-     *     name="value",
-     *     in="query",
-     *     type="number",
-     *     description="The field contains the amount of currency we want to convert"
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
      * )
-     * @SWG\Parameter(
-     *     name="currency",
-     *     in="query",
-     *     type="number",
-     *     description="The field contains the currency id"
-     * )
-     * @SWG\Parameter(
-     *     name="emiterAccountId",
-     *     in="query",
-     *     type="number",
-     *     description="The emitter account of the transaction"
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Object describing the currency conversion.",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="value", type="int", example="200"),
+     *      @SWG\Property(property="currency", type="int", example="1"),
+     *      @SWG\Property(property="emiterAccountId", type="int", example="107")
+     *     )
      * )
      * @SWG\Tag(name="transaction")
      *
@@ -115,38 +129,35 @@ class TransactionController extends ApiController
      * @param Request $request
      * @param CurrencyRepository $currencyRepository
      * @param AccountRepository $accountRepository
-     * @param CreditCardService $creditCardService
      *
      * @throws Exception
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function convertToEuro(CurrencyService $currencyService, Request $request, CurrencyRepository $currencyRepository, AccountRepository $accountRepository, CreditCardService $creditCardService)
-    {
+    public function convertToEuro(
+        CurrencyService $currencyService,
+        Request $request,
+        CurrencyRepository $currencyRepository,
+        AccountRepository $accountRepository
+    ): JsonResponse {
         $payload = json_decode($request->getContent());
         if (null === $payload) {
-            return $this->responseBadRequest([
+            return new JsonResponse([
                 "status" => "error",
                 "error" => "Expected Json, gat 🤷‍♂️"
-            ]);
+            ], Response::HTTP_BAD_REQUEST);
         }
         $expectedParams = [
             "value",
             "currency",
-            "card-number",
-            "card-type",
-            "cvc",
-            "month",
-            "year",
-            "card-holder-name",
             "emiterAccountId"
         ];
         foreach ($expectedParams as $expectedParam) {
-            if (!isset($payload->$expectedParam)) {
-                return $this->responseBadRequest([
+            if (!isset($payload->$expectedParam)){
+                return new JsonResponse([
                     "status" => "error",
-                    "error" => "Expected Json, gat 🤷‍♂️"
-                ]);
+                    "error" => "Mandatory parameters not present"
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
 
@@ -157,37 +168,24 @@ class TransactionController extends ApiController
             $payload->value
         );
         if ($this->getUser()->isParticular()) {
-            return $this->responseNotAcceptable([
+            return new JsonResponse([
                 "status" => "error",
                 "error" => "User not authorized"
-            ]);
-        }
-        if (false === $creditCardService->checkItAll(
-            $payload->{'card-number'},
-            $payload->{'card-type'},
-            $payload->cvc,
-            $payload->{'card-holder-name'},
-            $payload->year,
-            $payload->month
-        )) {
-            return $this->responseNotAcceptable([
-                "status" => "error",
-                "error" => "Information is invalid"
-            ]);
+            ], Response::HTTP_NOT_ACCEPTABLE);
         }
         $transaction = new Transaction();
         $emiterAccount = $accountRepository->find($payload->emiterAccountId);
         if (null === $emiterAccount) {
-            return $this->responseNotFound([
+            return new JsonResponse([
                 "status" => "error",
                 "error" => "Accounts information is invalid"
-            ]);
+            ], Response::HTTP_NOT_FOUND);
         }
         if ($payload->value > $emiterAccount->getAvailableCash()) {
-            return $this->responseNotAcceptable([
+            return new JsonResponse([
                 "status" => "error",
                 "error" => "Not enough cash"
-            ]);
+            ], Response::HTTP_NOT_ACCEPTABLE);
         }
         $transaction->setEmiter($emiterAccount);
         $accountRepository->find($payload->emiterAccountId)->removeMoneyToEmiter($payload->value);
@@ -195,11 +193,14 @@ class TransactionController extends ApiController
         $transaction->setDate(new \DateTime());
         $this->em->persist($transaction);
         $this->em->flush();
-
-        return $this->responseCreated([
+        $response = new JsonResponse();
+        $response->setStatusCode(Response::HTTP_CREATED);
+        $response->setData([
             'status' => 'success',
             'message' => 'Votre argent a bien été transféré'
         ]);
+
+        return $response;
     }
 
     /**
