@@ -16,6 +16,10 @@ class SuperAdminController extends AbstractController
      */
     public function home(GovernanceController $governanceController, GovernanceRepository $governanceRepository )
     {
-        return $governanceController->index($governanceRepository);
+        return $this->render('superAdmin/home.html.twig', [
+            'governances' => $governanceRepository->findAll()
+        ]);
     }
+
+    
 }

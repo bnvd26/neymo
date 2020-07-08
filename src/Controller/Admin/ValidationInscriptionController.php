@@ -89,7 +89,7 @@ class ValidationInscriptionController extends AbstractController
         }
         $user = $userRepository->find($userId);
         $em->remove($user);
-        
+      
         $em->flush();
         $this->sendEmailNoValidation();
         $this->addFlash('success', 'L\'utilisateur a bien été refusé');
@@ -215,7 +215,7 @@ class ValidationInscriptionController extends AbstractController
         $userEmail = $particular->getUser()->getEmail();
 
         $em->remove($particular);
-        $em->flush();
+        
         $this->sendEmailNoValidation($mailer, $userEmail);
         $this->addFlash('success', 'L\'utilisateur a bien été refusé');
         return $this->redirectToRoute('admin_validation_inscription_particular_index');
