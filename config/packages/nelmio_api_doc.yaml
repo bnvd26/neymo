@@ -1,5 +1,14 @@
 nelmio_api_doc:
   documentation:
+    securityDefinitions:
+      Bearer:
+        type: apiKey
+        description: 'Authorization: Bearer {jwt}'
+        name: Authorization
+        in: header
+        scheme: Bearer
+    security:
+      - Bearer: []
     info:
       title: My App
       description: This is an awesome app!
