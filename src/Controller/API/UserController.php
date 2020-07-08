@@ -3,11 +3,26 @@
 namespace App\Controller\API;
 
 use Symfony\Component\Routing\Annotation\Route;
+use Swagger\Annotations as SWG;
 
 class UserController extends ApiController
 {
     /**
      * @Route("/api/me", name="api_me", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Show my details"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="me")
      */
     public function getCurrentUser()
     {

@@ -3,11 +3,26 @@
 namespace App\Controller\API;
 
 use Symfony\Component\Routing\Annotation\Route;
+use Swagger\Annotations as SWG;
 
 class AccountController extends ApiController
 {
     /**
      * @Route("/api/particular/account", name="api_particular_account", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Show account details of a particular"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="account-details")
      */
     public function accountParticularState()
     {
@@ -26,6 +41,20 @@ class AccountController extends ApiController
 
     /**
      * @Route("/api/company/account", name="api_company_account", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Show account details of a company"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     * @SWG\Tag(name="account-details")
      */
     public function accountCompanyState()
     {

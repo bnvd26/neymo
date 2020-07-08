@@ -8,6 +8,7 @@ use App\Repository\LikeRepository;
 use DateTime;
 use App\Controller\API\ApiController;
 use Doctrine\ORM\EntityManagerInterface;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +32,22 @@ class PostController extends ApiController
      * List all posts of governance
      * 
      * @Route("/api/posts", name="api_posts_index", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Posts of governance listed"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="post")
      */
+
     public function index(): response
     {
         if ($this->getUser()->isParticular()) {
@@ -51,8 +67,40 @@ class PostController extends ApiController
 
     /**
      * Create posts
-     * 
+     *
      * @Route("/api/posts/create", name="api_posts_create", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Post created"
+     * )
+     * @SWG\Response(
+     *     response=405,
+     *     description="Post not allowed"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Object describing the post.",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="title", type="string", example="Grandes nouvelles !"),
+     *      @SWG\Property(property="content", type="string", example="Ne ratez pas toutes nos nouvelles")
+     *     )
+     * )
+     * @SWG\Tag(name="post")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function create(Request $request): response
     {

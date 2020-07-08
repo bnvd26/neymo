@@ -7,10 +7,10 @@ use App\Repository\AccountRepository;
 use App\Repository\LikeRepository;
 use App\Repository\PostRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Controller\API\ApiController;
 use Doctrine\ORM\EntityManagerInterface;
+use Swagger\Annotations as SWG;
 
 class LikeController extends ApiController
 {
@@ -32,6 +32,24 @@ class LikeController extends ApiController
 
     /**
      * @Route("/api/post/{id}/like", name="api_post_like", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Post liked"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="like")
+     *
+     * @param $id
+     *
+     * @return Response
      */
     public function like($id)
     {
@@ -52,8 +70,28 @@ class LikeController extends ApiController
 
     /**
      * @Route("/api/post/{id}/dislike", name="api_post_dislike", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Post disliked"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="like")
+     *
+     * @param $id
+     * @param PostRepository $postRepository
+     * @param LikeRepository $likeRepository
+     *
+     * @return Response
      */
-    public function dislike($id, Request $request, PostRepository $postRepository, AccountRepository $accountRepository, LikeRepository $likeRepository)
+    public function dislike($id, PostRepository $postRepository, LikeRepository $likeRepository)
     {
         $post = $postRepository->find($id);
 

@@ -6,6 +6,7 @@ use App\Entity\Transaction;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConvertMoneyController extends ApiController
@@ -26,6 +27,39 @@ class ConvertMoneyController extends ApiController
 
     /**
      * @Route("/api/check-credit-card", name="api_check_credit_card", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Credit card information checked"
+     * )
+     * @SWG\Response(
+     *     response=405,
+     *     description="Credit card information invalid"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Object describing the credit card.",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="numbers_card", type="string", example="1111 1111 1111 1111"),
+     *      @SWG\Property(property="date", type="string", example="11/11/20"),
+     *      @SWG\Property(property="cvc", type="int", example="456")
+     *     )
+     * )
+     * @SWG\Tag(name="convert-currency")
+     *
+     * @param Request $request
+     *
+     * @return object|Response
      */
     public function checkCreditCard(Request $request)
     {
@@ -41,7 +75,35 @@ class ConvertMoneyController extends ApiController
 
     /**
      * @Route("/api/convert-money", name="api_convert_money", methods="PUT")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Amount of conversion added to account"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Object describing the amount.",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="transfered_money", type="int", example="1230")
+     *     )
+     * )
+     * @SWG\Tag(name="convert-currency")
+     *
+     * @param Request $request
+     *
+     * @return object|Response
      */
+
     public function convertMoney(Request $request)
     {
         $data = json_decode($request->getContent());

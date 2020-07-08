@@ -6,13 +6,9 @@ use App\Entity\Transaction;
 use App\Repository\AccountRepository;
 use App\Repository\TransactionRepository;
 use Swagger\Annotations as SWG;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\API\ApiController;
-use App\Repository\CurrencyRepository;
-use App\Services\CreditCardService;
-use App\Services\CurrencyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,25 +26,25 @@ class TransactionController extends ApiController
      *
      * @SWG\Response(
      *     response=200,
-     *     description="Transfer money from an account to an other"
+     *     description="Amount transferedr"
      * )
      * @SWG\Parameter(
-     *     name="emiterAccountId",
-     *     in="query",
-     *     type="number",
-     *     description="The account id of the emiter of the transaction"
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
      * )
      * @SWG\Parameter(
-     *     name="beneficiaryAccountId",
-     *     in="query",
-     *     type="number",
-     *     description="The account id of the beneficiary of the transaction"
-     * )
-     * @SWG\Parameter(
-     *     name="transferedMoney",
-     *     in="query",
-     *     type="number",
-     *     description="The amount of the transaction"
+     *     name="body",
+     *     in="body",
+     *     description="Object describing the transaction.",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="beneficiaryAccountNumber", type="int", example="19853"),
+     *      @SWG\Property(property="transferedMoney", type="int", example="1000")
+     *     )
      * )
      * @SWG\Tag(name="transaction")
      *
@@ -85,8 +81,8 @@ class TransactionController extends ApiController
             ]);
     }
 
-    /**
-     * @Route("api/convert-to-euro", name="api_conver-to-euro", methods="POST")
+/**
+     * @Route("api/convertToEuro", name="api_converToEuro", methods="POST")
      *
      * @SWG\Response(
      *     response=201,
@@ -98,7 +94,7 @@ class TransactionController extends ApiController
      * )
      * @SWG\Response(
      *     response=406,
-     *     description="User not authorized"
+     *     description="Card information is invalid"
      * )
      * @SWG\Response(
      *     response=404,
@@ -120,7 +116,13 @@ class TransactionController extends ApiController
      *     @SWG\Schema(
      *      @SWG\Property(property="value", type="int", example="200"),
      *      @SWG\Property(property="currency", type="int", example="1"),
-     *      @SWG\Property(property="emiterAccountId", type="int", example="107")
+     *      @SWG\Property(property="emiter-account-id", type="int", example="107"),
+     *      @SWG\Property(property="card-number", type="int", example="4929755121368228"),
+     *      @SWG\Property(property="card-type", type="string", example="visa"),
+     *      @SWG\Property(property="cvc", type="int", example="344"),
+     *      @SWG\Property(property="year", type="string", example="2023"),
+     *      @SWG\Property(property="month", type="string", example="07"),
+     *      @SWG\Property(property="card-holder-name", type="string", example="Jack Black")
      *     )
      * )
      * @SWG\Tag(name="transaction")
@@ -130,7 +132,7 @@ class TransactionController extends ApiController
      *
      * @throws Exception
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function convertToEuro(Request $request, AccountRepository $accountRepository)
     {
@@ -180,6 +182,20 @@ class TransactionController extends ApiController
 
     /**
      * @Route("/api/transactions", name="api_transactions_particular", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Transactions listed"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="transaction")
      */
     public function allTransactions(TransactionRepository $transactionRepository)
     {
