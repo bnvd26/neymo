@@ -10,8 +10,8 @@ nelmio_api_doc:
     security:
       - Bearer: []
     info:
-      title: My App
-      description: This is an awesome app!
+      title: Neymo API
+      description: NeyMo, votre gestionnaire de monnaie locale !
       version: 1.0.0
   areas: # to filter documented areas
     path_patterns:
