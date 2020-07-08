@@ -5,31 +5,8 @@ NeyMo est un gestionnaire de monnaie locale conçu pour soutenir les association
 Ce site a été réalisé à des fins pédagogiques dans le cadre du cursus Bachelor de l’école HETIC. Les contenus présentés n'ont pas fait l'objet d'une demande de droit d'utilisation. Ce site ne sera en aucun cas exploité à des fins commerciales et ne sera pas publié
  
  ## Installation
-  
-  ### Le projet est disponible sous Docker 🐳
-  
-  
-   <strong>Cloner le projet</strong> : 
-   ```bash
-    git clone https://github.com/benads/neymo.git
-   ```
-
-  <strong>Exécuter ce script dans le projet</strong> : 
-  ```bash
-  sh init.sh
- ```
- <strong><a href="http://localhost">Back-Office/API</a></strong>
  
- <strong>Pour lancer une commande Symfony dans le container</strong> :
- ```bash
- docker container exec -ti app bash
- ```
-
- <strong><a href='http://localhost:8080'>Client MySQL</a></strong>
- 
- <strong><a href="http://localhost/api/doc">Documentation de l'API</a></strong>
- 
-  ### Générer clefs pour JWT 
+   ### Générer clefs pour JWT 
 
  <strong>Créer le dossier </strong> : 
  ```bash
@@ -46,6 +23,32 @@ Ce site a été réalisé à des fins pédagogiques dans le cadre du cursus Bach
 ```
  
  Modifier la variable ```JWT_PASSPHRASE```, avec la passphrase que vous aurez défini
+ 
+  
+  ### Le projet est disponible sous Docker 🐳
+  
+  
+   <strong>Cloner le projet</strong> : 
+   ```bash
+    git clone https://github.com/benads/neymo.git
+   ```
+
+  <strong>Exécuter ce script dans le projet</strong> : 
+  ```bash
+  sh init.sh
+ ```
+ 
+ <strong>Pour lancer une commande Symfony dans le container</strong> :
+ ```bash
+ docker container exec -ti app bash
+ ```
+ 
+  <strong><a href="http://localhost">Back-Office/API</a></strong>
+ 
+ <strong><a href="http://localhost/api/doc">Documentation de l'API</a></strong>
+ 
+  <strong><a href='http://localhost:8080'>Client MySQL</a></strong>
+
  
  ### Identifiant de connexion Super-Administrateur
  
