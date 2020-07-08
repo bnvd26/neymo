@@ -33,7 +33,7 @@ class Transaction
     private $emiter;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $date;
 
