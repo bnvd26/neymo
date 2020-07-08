@@ -151,7 +151,7 @@ Nous avons listé les fonctionnalités dont nous avions besoin :
  <a href="https://neymo-api.benjaminadida.fr/api/doc">Documentation NelmioApiDoc</a>
  
  
-## MDP
+## MPD
 
 <img src="https://cdn.discordapp.com/attachments/724913624551784479/730455259545206794/Screenshot_2020-07-08_at_17.54.24.png" >
 
