@@ -57,8 +57,8 @@ class RegisterController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         $dataDecoded->type == "particular" ? $this->createParticular($request, $user, $governanceRepository) : $this->createCompany($request, $user, $governanceRepository);
-        $this->sendReceiveInscriptionEmail($mailer, $user->getEmail());
-        $this->preventEmailInscriptionGovernance($mailer);
+        $this->sendReceiveInscriptionEmail($user->getEmail());
+        $this->preventEmailInscriptionGovernance();
         $response = new Response();
         $response->setStatusCode(Response::HTTP_CREATED);
         $response->setContent(json_encode([
@@ -116,9 +116,9 @@ class RegisterController extends AbstractController
         return $userRepository->findBy(['email' => $email]);
     }
 
-    public function sendReceiveInscriptionEmail()
+    public function sendReceiveInscriptionEmail($userEmail)
     {
-        $mj = new \Mailjet\Client('768d23d39e95349c9486668619be34a1','691b14facbd2376c51c15da45301839b',true,['version' => 'v3.1']);
+        $mj = new \Mailjet\Client($_ENV['MAILJET_API_KEY'], $_ENV["MAILJET_ID"], true, ['version' => 'v3.1']);
         $body = [
           'Messages' => [
             [
@@ -127,7 +127,7 @@ class RegisterController extends AbstractController
               ],
               'To' => [
                 [
-                  'Email' => 'benjaminadida05@gmail.com',
+                  'Email' => $userEmail,
                 ]
               ],
               'Subject' => "Votre inscription est en attente de validation",
@@ -138,12 +138,11 @@ class RegisterController extends AbstractController
         ];
         $response = $mj->post(Resources::$Email, ['body' => $body]);
         $response->success();
-
     }
 
     public function preventEmailInscriptionGovernance()
     {
-        $mj = new \Mailjet\Client('768d23d39e95349c9486668619be34a1','691b14facbd2376c51c15da45301839b',true,['version' => 'v3.1']);
+        $mj = new \Mailjet\Client($_ENV['MAILJET_API_KEY'], $_ENV["MAILJET_ID"], true, ['version' => 'v3.1']);
         $body = [
           'Messages' => [
             [
@@ -152,7 +151,7 @@ class RegisterController extends AbstractController
               ],
               'To' => [
                 [
-                  'Email' => 'benjaminadida05@gmail.com',
+                  'Email' => 'neymohetic@gmail.com',
                 ]
               ],
               'Subject' => "Votre inscription est en attente de validation",
@@ -163,6 +162,5 @@ class RegisterController extends AbstractController
         ];
         $response = $mj->post(Resources::$Email, ['body' => $body]);
         $response->success();
-       
     }
 }
