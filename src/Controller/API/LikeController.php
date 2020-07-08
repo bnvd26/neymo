@@ -3,155 +3,121 @@
 namespace App\Controller\API;
 
 use App\Entity\Like;
-use App\Entity\Post;
-use App\Entity\Transaction;
-use App\Entity\User;
 use App\Repository\AccountRepository;
-use App\Repository\CompanyRepository;
 use App\Repository\LikeRepository;
 use App\Repository\PostRepository;
-use App\Repository\TransactionRepository;
-use App\Repository\UserRepository;
-use DateTime;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Controller\API\ApiController;
+use Doctrine\ORM\EntityManagerInterface;
+use Swagger\Annotations as SWG;
 
-class LikeController extends AbstractController
+class LikeController extends ApiController
 {
-    private function serialize($data)
-    {
-        return $this->container->get('serializer')->serialize($data, 'json');
-    }
+    private $em;
 
-    private function deserialize($data, $entity)
-    {
-        return $this->container->get('serializer')->deserialize($data, $entity, 'json');
-    }
+    private $postRepository;
 
+    private $accountRepository;
+
+    private $likeRepository;
+
+    public function __construct(EntityManagerInterface $em, PostRepository $postRepository, AccountRepository $accountRepository, LikeRepository $likeRepository)
+    {
+        $this->em = $em;
+        $this->accountRepository = $accountRepository;
+        $this->postRepository = $postRepository;
+        $this->likeRepository = $likeRepository;
+    }
 
     /**
      * @Route("/api/post/{id}/like", name="api_post_like", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Post liked"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="like")
+     *
+     * @param $id
+     *
+     * @return Response
      */
-    public function like($id, Request $request, PostRepository $postRepository, AccountRepository $accountRepository, LikeRepository $likeRepository)
+    public function like($id)
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $post = $this->postRepository->find($id);
 
-        $post = $postRepository->find($id);
+        $likedPost = $this->getUser()->isParticular() ? $this->likeRepository->findBy(['account' => $this->getUser()->getParticular()->getAccount()->getId(), 'post' => $post]) : $this->likeRepository->findBy(['account' => $this->getUser()->getCompany()->getAccount()->getId(), 'post' => $post]);
         
-        if ($this->getUser()->isParticular()) {
-            $likedPost = $likeRepository->findBy([
-                'account' => $this->getUser()->getParticular()->getAccount()->getId(), 
-                'post' => $post
-                ]);
-            if (empty($likedPost)) {
-                $like = new Like();
-                $like->setLiked(true);
-                $like->setAccount($accountRepository->find($this->getUser()->getParticular()->getAccount()->getId()));
-                $like->setPost($post);
-                $entityManager->persist($like);
-                $entityManager->flush();
-                $response = new Response();
-                $response->setStatusCode(Response::HTTP_CREATED);
-                $response->setContent(json_encode([
-                'Success' => "Le post a bien été like.",
-                ]));
-                $response->headers->set('Content-Type', 'application/json');
-            
-                return $response;
-            }
-            
-            $response = new Response();
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent(json_encode([
-            'Error' => "Vous avez déjà likez ce post",
-            ]));
-            $response->headers->set('Content-Type', 'application/json');
+        $userType = $this->getUser()->isParticular() ? $this->getUser()->getParticular() : $this->getUser()->getCompany();
         
-            return $response;
+        if (empty($likedPost)) {
+            return $this->createLike($userType, $post);
         }
-
-        if ($this->getUser()->isCompany()) {
-            $comp = null;
-            foreach ($this->getUser()->getCompanies() as $company) {
-                $comp = $company;
-            }
-            
-            $likedPost = $likeRepository->findBy(['account' => $company->getAccount()->getId(), 'post' => $post]);
-            if (empty($likedPost)) {
-                $like = new Like();
-                $like->setLiked(true);
-                $like->setAccount($accountRepository->find($company->getAccount()->getId()));
-                $like->setPost($post);
-                $entityManager->persist($like);
-                $entityManager->flush();
-                $response = new Response();
-                $response->setStatusCode(Response::HTTP_CREATED);
-                $response->setContent(json_encode([
-                'Success' => "Le post a bien été like.",
-                ]));
-                $response->headers->set('Content-Type', 'application/json');
-            
-                return $response;
-            }
-            $response = new Response();
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent(json_encode([
-            'Error' => "Vous avez déjà likez ce post",
-            ]));
-            $response->headers->set('Content-Type', 'application/json');
         
-            return $response;
-        }
+        return $this->responseNotAcceptable([
+            'Error' => "Vous avez déjà likez ce post",
+            ]);
     }
 
     /**
      * @Route("/api/post/{id}/dislike", name="api_post_dislike", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Post disliked"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="like")
+     *
+     * @param $id
+     * @param PostRepository $postRepository
+     * @param LikeRepository $likeRepository
+     *
+     * @return Response
      */
-    public function dislike($id, Request $request, PostRepository $postRepository, AccountRepository $accountRepository, LikeRepository $likeRepository)
+    public function dislike($id, PostRepository $postRepository, LikeRepository $likeRepository)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         $post = $postRepository->find($id);
-       
-        if($this->getUser()->isCompany())
-        {
-            foreach ($this->getUser()->getCompanies() as $company) {
-                $comp = $company;
-            }
-            
-            $likedPost = $likeRepository->findBy(['account' => $company->getAccount()->getId(), 'post' => $post]);
-        
-            $entityManager->remove($likedPost[0]);
-            $entityManager->flush();
-            $response = new Response();
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent(json_encode([
-            'Success' => "Vous avez disliker ce post"
-            ]));
-            $response->headers->set('Content-Type', 'application/json');
-        
-            return $response;
-        }        
-        
-        if($this->getUser()->isParticular())
-        {
 
-            
-            $likedPost = $likeRepository->findBy(['account' => $this->getUser()->getParticular()->getAccount()->getId(), 'post' => $post]);
-            
-            $entityManager->remove($likedPost[0]);
-            $entityManager->flush();
-            $response = new Response();
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent(json_encode([
+        $userType = $this->getUser()->isParticular() ? $this->getUser()->getParticular() : $this->getUser()->getCompany();
+
+        $likedPost = $likeRepository->findBy(['account' => $userType->getAccount()->getId(), 'post' => $post]);
+
+        $this->em->remove($likedPost[0]);
+
+        $this->em->flush();
+
+        return $this->responseOk([
             'Success' => "Vous avez disliker ce post",
-            ]));
-            $response->headers->set('Content-Type', 'application/json');
-        
-            return $response;
-        }  
+            ]);
+    }
+
+    public function createLike($userType, $post)
+    {
+        $like = new Like();
+        $like->setLiked(true);
+        $like->setAccount($this->accountRepository->find($userType->getAccount()->getId()));
+        $like->setPost($post);
+        $this->em->persist($like);
+        $this->em->flush();
+        return $this->responseCreated([
+                'Success' => "Le post a bien été like.",
+                ]);
     }
 }

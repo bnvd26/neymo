@@ -4,13 +4,13 @@ namespace App\Controller\API;
 
 use App\Entity\Contacts;
 use App\Repository\AccountRepository;
-use App\Repository\CompanyRepository;
 use App\Repository\ContactsRepository;
 use App\Repository\DirectoryRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\API\ApiController;
 use Doctrine\ORM\EntityManagerInterface;
+use Swagger\Annotations as SWG;
 
 class ContactController extends ApiController
 {
@@ -32,6 +32,20 @@ class ContactController extends ApiController
 
     /**
      * @Route("/api/contacts", name="api_contacts", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Contacts of user listed"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="contact")
      */
     public function contacts()
     {
@@ -101,6 +115,33 @@ class ContactController extends ApiController
 
     /**
      * @Route("/api/contacts/create", name="api_contacts_create", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Contact added in list of the user"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Object identifing the account.",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="accountNumberId", type="int", example="14763")
+     *     )
+     * )
+     * @SWG\Tag(name="contact")
+     *
+     * @param Request $request
+     *
+     * @return object|Response
      */
     public function create(Request $request)
     {
@@ -143,6 +184,20 @@ class ContactController extends ApiController
 
     /**
      * @Route("/api/contacts/{accountId}/delete", name="api_contacts_delete", methods="DELETE")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Contact deleted from list of the user"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="contact")
      */
     public function delete($accountId)
     {

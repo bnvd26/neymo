@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Controller\API\ApiController;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -21,6 +22,20 @@ class CompanyController extends ApiController
 
     /**
      * @Route("/api/company/update", name="api_company_update", methods="PUT")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="User has been successfully modified"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="company")
      */
     public function update(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepo): response
     {
@@ -44,6 +59,20 @@ class CompanyController extends ApiController
 
     /**
      * @Route("/api/companies", name="api_company_list", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="List companies of current governance"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="company")
      */
     public function getListCompanies(CompanyRepository $companyRepository)
     {

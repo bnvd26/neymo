@@ -4,42 +4,45 @@ namespace App\Controller\API;
 
 use App\Repository\GovernanceRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use App\Controller\API\ApiController;
+use Swagger\Annotations as SWG;
 
-class GovernanceController extends AbstractController
+class GovernanceController extends ApiController
 {
-    private function serialize($data)
-    {
-        return $this->container->get('serializer')->serialize($data, 'json');
-    }
-
     /**
      * @Route("/api/governances", name="api_governances", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Governances listed"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     * @SWG\Tag(name="governances")
+     *
+     * @param GovernanceRepository $governanceRepository
+     *
+     * @return Response
      */
     public function getAllGovernances(GovernanceRepository $governanceRepository)
     {
         $governances = $governanceRepository->findAll();
 
         $governanceArray = [];
-        
+    
         foreach ($governances as $governance) {
-            
             $governanceArray[] = [
                 'id' => $governance->getId(),
                 'governance_name' => $governance->getName()
             ];
-
-            $json = $this->serialize($governanceArray);
-           
         }
 
-        $response = new Response($json);
-
-        $response->setStatusCode(Response::HTTP_CREATED);
-
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return $this->responseOk($governanceArray);
     }
 }

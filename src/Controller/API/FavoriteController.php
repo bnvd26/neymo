@@ -11,11 +11,30 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Swagger\Annotations as SWG;
 
 class FavoriteController extends AbstractController
 {
     /**
      * @Route("/api/favorites", name="api_favorites", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Favorites of user listed"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     *     )
+     * @SWG\Tag(name="favorite")
+     *
+     * @param CompanyRepository $companyRepository
+     *
+     * @return Response
      */
     public function favorites(CompanyRepository $companyRepository)
     {
@@ -74,6 +93,37 @@ class FavoriteController extends AbstractController
 
     /**
      * @Route("/api/favorites/create", name="api_favorites_create", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Favorite added"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Object identifing the account.",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="accountId", type="int", example="170")
+     *     )
+     * )
+     * @SWG\Tag(name="favorite")
+     *
+     * @param FavoriteRepository $favoriteRepository
+     * @param CompanyRepository $companyRepository
+     * @param DirectoryRepository $directoryRepository
+     * @param AccountRepository $accountRepository
+     * @param Request $request
+     *
+     * @return Response
      */
     public function create(FavoriteRepository $favoriteRepository, CompanyRepository $companyRepository, DirectoryRepository $directoryRepository, AccountRepository $accountRepository, Request $request)
     {
@@ -126,6 +176,29 @@ class FavoriteController extends AbstractController
 
     /**
      * @Route("/api/favorites/{accountId}/delete", name="api_favorites_delete", methods="DELETE")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Favorite deleted"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     * @SWG\Tag(name="favorite")
+     *
+     * @param $accountId
+     * @param FavoriteRepository $favoriteRepository
+     * @param CompanyRepository $companyRepository
+     * @param DirectoryRepository $directoryRepository
+     * @param AccountRepository $accountRepository
+     * @param Request $request
+     *
+     * @return Response
      */
     public function delete($accountId, FavoriteRepository $favoriteRepository, CompanyRepository $companyRepository, DirectoryRepository $directoryRepository, AccountRepository $accountRepository, Request $request)
     {
