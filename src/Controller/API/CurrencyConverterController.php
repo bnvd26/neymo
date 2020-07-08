@@ -20,31 +20,36 @@ class CurrencyConverterController extends ApiController
 {
     /**
      * @Route("/to-euro", name="to_euro", methods="POST")
+     *
      * @SWG\Response(
      *     response=200,
-     *     description="Returns the rewards of an user"
+     *     description="Returns the conversion of the amount in euro"
      * )
      * @SWG\Parameter(
-     *     name="value",
-     *     in="query",
-     *     type="number",
-     *     description="The field contains the amount of currency we want to convert"
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
      * )
      * @SWG\Parameter(
-     *     name="currency",
-     *     in="query",
-     *     type="number",
-     *     description="The field contains the currency id"
+     *     name="body",
+     *     in="body",
+     *     description="The amount to convert",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="value", type="int", example="1000")
+     *     )
      * )
      * @SWG\Tag(name="currency")
      *
      * @param CurrencyService $currencyService
      * @param Request $request
-     * @param CurrencyRepository $currencyRepository
      *
      * @throws Exception
      *
-     * @return JsonResponse*
+     * @return Response*
      */
     public function convertToEuro(CurrencyService $currencyService,Request $request) 
     {
