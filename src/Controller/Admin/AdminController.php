@@ -36,7 +36,7 @@ class AdminController extends AbstractController
         {
             $a = $particular->getAccount()->getAvailableCash();
             $accountsParticular[] = $particular->getAccount();
-            $totalCash = $particular->getAccount()->getAvailableCash()
+            $totalCash = $particular->getAccount()->getAvailableCash();
         }
 
         
