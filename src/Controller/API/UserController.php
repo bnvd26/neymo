@@ -19,6 +19,7 @@ class UserController extends ApiController
                 'last_name' => $this->getUser()->getCompany()->getLastName(),
                 'address' => $this->getUser()->getCompany()->getAddress(),
                 'number_phone' => $this->getUser()->getCompany()->getPhonenumber(),
+                'name' => $this->getUser()->getCompany()->getName(),
                 'siret' => $this->getUser()->getCompany()->getSiret(),
                 'category' => $this->getUser()->getCompany()->getCategory()->getName(),
                 'description' => $this->getUser()->getCompany()->getDescription()
