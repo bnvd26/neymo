@@ -1,8 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-<p>Bonjour {{ user.firstName }},</p>
-<br>
-<p>Dashboard de la Gourvernance de {{ user.governance.name }}</p>
+
+<div class="card">
+  <div class="card-header">
+<h2>Dashboard de la Gourvernance de {{ user.governance.name }}</h2>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Bonjour {{ user.firstName }}</h5>
+    <p class="card-text">Monnaie local : {{ user.governance.moneyName }}</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+    {% for account in accountsParticular %}
+    {{ account.availableCash }}
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
 

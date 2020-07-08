@@ -6,6 +6,7 @@ use App\Entity\GovernanceUserInformation;
 use App\Form\AdminType;
 use App\Repository\CompanyRepository;
 use App\Repository\GovernanceUserInformationRepository;
+use App\Repository\ParticularRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,11 +22,26 @@ class AdminController extends AbstractController
     /**
      * @Route("/home", name="home")
      */
-    public function home()
+    public function home(ParticularRepository $particularRepository, CompanyRepository $companyRepository)
     {
         $user = $this->getGovernanceCurrentUser();
+        $particulars = $particularRepository->findAllParticularsGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
+        $companies = $companyRepository->findAllCompaniesGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
 
-        return $this->render('admin/home.html.twig', compact('user'));
+        $accountsParticular = [];
+
+        $number = null;
+
+        foreach($particulars as $particular)
+        {
+            $a = $particular->getAccount()->getAvailableCash();
+            $accountsParticular[] = $particular->getAccount();
+            $totalCash = $particular->getAccount()->getAvailableCash()
+        }
+
+        
+
+        return $this->render('admin/home.html.twig', compact('user', 'companies', 'particulars', 'accountsParticular'));
     }
 
     public function getGovernanceCurrentUser()
@@ -57,8 +73,6 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
-           
             $this->getUser()->setEmail($request->request->get('email'));
             $this->getDoctrine()->getManager()->flush();
 
