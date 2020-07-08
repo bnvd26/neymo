@@ -15,7 +15,6 @@ class ConvertMoneyController extends ApiController
         'numbers_card' => '1111 1111 1111 1111',
         'date' => '11/20',
         'cvc' => '456',
-        'transfered_money' => '1000'
     ];
 
     private $em;
@@ -94,7 +93,7 @@ class ConvertMoneyController extends ApiController
      *     description="Object describing the amount.",
      *     required=true,
      *     @SWG\Schema(
-     *      @SWG\Property(property="transfered_money", type="int", example="1230")
+     *      @SWG\Property(property="transferedMoney", type="int", example="1230")
      *     )
      * )
      * @SWG\Tag(name="convert-currency")
@@ -111,12 +110,12 @@ class ConvertMoneyController extends ApiController
         $userTypeAccount = $this->getUser()->isParticular() ? $this->getUser()->getParticular()->getAccount() : $this->getUser()->getCompany()->getAccount();
 
         if ($this->verificationCreditCard($data)) {
-            $userTypeAccount->setAvailableCash((int) $data->transfered_money + (int) $userTypeAccount->getAvailableCash());
+            $userTypeAccount->setAvailableCash((int) $data->transferedMoney + (int) $userTypeAccount->getAvailableCash());
 
             $transaction  = new Transaction();
 
             $transaction->setBeneficiary($userTypeAccount);
-            $transaction->setTransferedMoney($data->transfered_money);
+            $transaction->setTransferedMoney($data->transferedMoney);
             $transaction->setDate(new DateTime());
 
             $this->em->persist($transaction);
