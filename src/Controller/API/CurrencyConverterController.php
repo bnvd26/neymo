@@ -7,7 +7,7 @@ use App\Services\CreditCardService;
 use App\Services\CurrencyService;
 use Exception;
 use Swagger\Annotations as SWG;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\API\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/currency-converter", name="api_currency_converter_")
  */
-class CurrencyConverterController extends AbstractController
+class CurrencyConverterController extends ApiController
 {
     /**
      * @Route("/to-euro", name="to_euro", methods="POST")
@@ -46,25 +46,23 @@ class CurrencyConverterController extends AbstractController
      *
      * @return JsonResponse*
      */
-    public function convertToEuro(
-        CurrencyService $currencyService,
-        Request $request,
-        CurrencyRepository $currencyRepository
-    ): JsonResponse {
-        $value = (int) $request->get("value");
-        $currencyId = (int) $request->get('currency');
-        $currency = $currencyRepository->find($currencyId);
-        if (null === $currency) {
-            return new JsonResponse([
-                "status" => "error",
-                "error" => "Currency not found"
-            ], Response::HTTP_NOT_FOUND);
+    public function convertToEuro(CurrencyService $currencyService,Request $request) 
+    {
+        if ($this->getUser()->isParticular()) {
+            return $this->responseNotAllowed([
+                "Error" => "Vous n'etes pas autorise a effectuer ce genre de transaction"
+            ]);
         }
+
+        $exchangeRate = $this->getUser()->getCompany()->getGovernance()->getCurrency()->getExchangeRate();
+        $data = json_decode($request->getContent());
+        $value = $data->value;
+        
         $convertedValue = $currencyService->convertToEuro(
-            $currency->getExchangeRate(),
+            $exchangeRate,
             $value
         );
 
-        return new JsonResponse($convertedValue);
+        return $this->responseOk($convertedValue);
     }
 }

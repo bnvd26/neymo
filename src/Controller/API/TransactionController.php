@@ -86,7 +86,7 @@ class TransactionController extends ApiController
     }
 
     /**
-     * @Route("api/convertToEuro", name="api_converToEuro", methods="POST")
+     * @Route("api/convert-to-euro", name="api_conver-to-euro", methods="POST")
      *
      * @SWG\Response(
      *     response=201,
@@ -125,82 +125,57 @@ class TransactionController extends ApiController
      * )
      * @SWG\Tag(name="transaction")
      *
-     * @param CurrencyService $currencyService
      * @param Request $request
-     * @param CurrencyRepository $currencyRepository
      * @param AccountRepository $accountRepository
      *
      * @throws Exception
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function convertToEuro(
-        CurrencyService $currencyService,
-        Request $request,
-        CurrencyRepository $currencyRepository,
-        AccountRepository $accountRepository
-    ): JsonResponse {
+    public function convertToEuro(Request $request, AccountRepository $accountRepository)
+    {
         $payload = json_decode($request->getContent());
-        if (null === $payload) {
-            return new JsonResponse([
-                "status" => "error",
-                "error" => "Expected Json, gat 🤷‍♂️"
-            ], Response::HTTP_BAD_REQUEST);
-        }
-        $expectedParams = [
-            "value",
-            "currency",
-            "emiterAccountId"
-        ];
-        foreach ($expectedParams as $expectedParam) {
-            if (!isset($payload->$expectedParam)){
-                return new JsonResponse([
-                    "status" => "error",
-                    "error" => "Mandatory parameters not present"
-                ], Response::HTTP_BAD_REQUEST);
-            }
-        }
 
-        $currency = $currencyRepository->find($payload->currency);
+        // if (is_null($payload)) {
+        //     return $this->responseBadRequest([
+        //         "status" => "error",
+        //         "error" => "Expected Json, gat 🤷‍♂️"
+        //     ]);
+        // }
 
-        $convertedValue = $currencyService->convertToEuro(
-            $currency->getExchangeRate(),
-            $payload->value
-        );
         if ($this->getUser()->isParticular()) {
-            return new JsonResponse([
+            $this->responseNotAcceptable([
                 "status" => "error",
                 "error" => "User not authorized"
-            ], Response::HTTP_NOT_ACCEPTABLE);
+            ]);
         }
+
         $transaction = new Transaction();
-        $emiterAccount = $accountRepository->find($payload->emiterAccountId);
+        
+        $emiterAccount = $this->getUser()->getCompany()->getAccount();
         if (null === $emiterAccount) {
-            return new JsonResponse([
+            $this->responseNotFound([
                 "status" => "error",
                 "error" => "Accounts information is invalid"
-            ], Response::HTTP_NOT_FOUND);
+            ]);
         }
         if ($payload->value > $emiterAccount->getAvailableCash()) {
-            return new JsonResponse([
+            $this->responseNotAcceptable([
                 "status" => "error",
                 "error" => "Not enough cash"
-            ], Response::HTTP_NOT_ACCEPTABLE);
+            ]);
         }
         $transaction->setEmiter($emiterAccount);
-        $accountRepository->find($payload->emiterAccountId)->removeMoneyToEmiter($payload->value);
+        $accountRepository->find($emiterAccount)->removeMoneyToEmiter($payload->value);
         $transaction->setTransferedMoney($payload->value);
         $transaction->setDate(new \DateTime());
         $this->em->persist($transaction);
         $this->em->flush();
-        $response = new JsonResponse();
-        $response->setStatusCode(Response::HTTP_CREATED);
-        $response->setData([
+
+        return $this->responseCreated([
             'status' => 'success',
             'message' => 'Votre argent a bien été transféré'
         ]);
-
-        return $response;
     }
 
     /**
@@ -210,10 +185,10 @@ class TransactionController extends ApiController
     {
         $currentAccountId = $this->getUser()->isParticular() ? $this->getUser()->getParticular()->getAccount()->getId() : $this->getUser()->getCompany()->getAccount()->getId();
         
-        return $this->getTransactionsTest($transactionRepository, $currentAccountId);
+        return $this->getTransactionsUser($transactionRepository, $currentAccountId);
     }
 
-    public function getTransactionsTest($transactionRepository, $accountId)
+    public function getTransactionsUser($transactionRepository, $accountId)
     {
         $transactionsDateFormatted = [];
         $transactionsFrenchDate = [];
