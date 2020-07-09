@@ -152,6 +152,11 @@ class TransactionController extends ApiController
                 "error" => "Not enough cash"
             ]);
         }
+        
+        if ((int) $accountRepository->find($emiterAccount)->getAvailableCash() < (int) $payload->transferedMoney || (int) $payload->transferedMoney < 0) {
+            return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
+        }
+
         $transaction->setEmiter($emiterAccount);
         $transaction->setBeneficiary($emiterAccount);
         $accountRepository->find($emiterAccount)->removeMoneyToEmiter($payload->transferedMoney);
