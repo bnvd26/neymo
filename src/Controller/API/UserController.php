@@ -26,38 +26,24 @@ class UserController extends ApiController
      */
     public function getCurrentUser()
     {
-        if ($this->getUser()->isCompany()) {
-            $user = [
-                'id' => $this->getUser()->getCompany()->getId(),
-                'type' => 'company',
-                'first_name' => $this->getUser()->getCompany()->getFirstName(),
-                'last_name' => $this->getUser()->getCompany()->getLastName(),
-                'address' => $this->getUser()->getCompany()->getAddress(),
-                'number_phone' => $this->getUser()->getCompany()->getPhonenumber(),
-                'name' => $this->getUser()->getCompany()->getName(),
-                'siret' => $this->getUser()->getCompany()->getSiret(),
-                'category' => $this->getUser()->getCompany()->getCategory()->getName(),
-                'description' => $this->getUser()->getCompany()->getDescription(),
-                'postal_code' => $this->getUser()->getCompany()->getZipCode(),
-                'city' => $this->getUser()->getCompany()->getCity(),
-                'mail' => $this->getUser()->getEmail()
-                
-            ];
-        }
+        $isParticular = $this->getUser()->isParticular();
 
-        if ($this->getUser()->isParticular()) {
-            $user = [
-                'id' => $this->getUser()->getId(),
-                'type' => 'particular',
-                'first_name' => $this->getUser()->getParticular()->getFirstName(),
-                'last_name' => $this->getUser()->getParticular()->getLastName(),
-                'address' => $this->getUser()->getParticular()->getAddress(),
-                'number_phone' => $this->getUser()->getParticular()->getPhoneNumber(),
-                'postal_code' => $this->getUser()->getParticular()->getZipCode(),
-                'city' => $this->getUser()->getParticular()->getCity(),
-                'mail' => $this->getUser()->getEmail()
-            ];
-        }
+        $user = [
+            'id' => $this->getUser()->getId(),
+            'mail' => $this->getUser()->getEmail(),
+            'type' => $isParticular ? 'particular' : 'company',
+            'first_name' => $isParticular ? $this->getUser()->getParticular()->getFirstName() : $this->getUser()->getCompany()->getFirstName(),
+            'last_name' => $isParticular ? $this->getUser()->getParticular()->getLastName() : $this->getUser()->getCompany()->getLastName(),
+            'address' => $isParticular ? $this->getUser()->getParticular()->getAddress() : $this->getUser()->getCompany()->getAddress(),
+            'number_phone' => $isParticular ? $this->getUser()->getParticular()->getPhoneNumber() : $this->getUser()->getCompany()->getPhoneNumber(),
+            'postal_code' => $isParticular ? $this->getUser()->getParticular()->getZipCode() : $this->getUser()->getCompany()->getZipCode(),
+            'city' => $isParticular ? $this->getUser()->getParticular()->getCity() : $this->getUser()->getCompany()->getCity(),
+            'siret' => $isParticular ? null : $this->getUser()->getCompany()->getSiret(),
+            'name' => $isParticular ? null : $this->getUser()->getCompany()->getName(),
+            'description' => $isParticular ? null : $this->getUser()->getCompany()->getDescription(),
+            'category' => $isParticular ? null : $this->getUser()->getCompany()->getCategory()->getName(),
+            'governance' => $isParticular ? $this->getUser()->getParticular()->getGovernance()->getName() : $this->getUser()->getCompany()->getGovernance()->getName() 
+        ];
 
         return $this->responseOk($user);
     }
