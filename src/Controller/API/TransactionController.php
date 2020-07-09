@@ -81,59 +81,59 @@ class TransactionController extends ApiController
             ]);
     }
 
-    /**
-         * @Route("api/convertToEuro", name="api_converToEuro", methods="POST")
-         *
-         * @SWG\Response(
-         *     response=201,
-         *     description="Amount transfered"
-         * )
-         * @SWG\Response(
-         *     response=400,
-         *     description="Expected Json"
-         * )
-         * @SWG\Response(
-         *     response=406,
-         *     description="Card information is invalid"
-         * )
-         * @SWG\Response(
-         *     response=404,
-         *     description="Accounts information is invalid"
-         * )
-         * @SWG\Parameter(
-         *      name="Authorization",
-         *      in="header",
-         *      required=true,
-         *      type="string",
-         *      default="Bearer TOKEN",
-         *      description="Bearer token",
-         * )
-         *   @SWG\Parameter(
-         *     name="body",
-         *     in="body",
-         *     description="Object describing the currency conversion.",
-         *     required=true,
-         *     @SWG\Schema(
-         *      @SWG\Property(property="value", type="int", example="200"),
-         *      @SWG\Property(property="currency", type="int", example="1"),
-         *      @SWG\Property(property="emiter-account-id", type="int", example="107"),
-         *      @SWG\Property(property="card-number", type="int", example="4929755121368228"),
-         *      @SWG\Property(property="card-type", type="string", example="visa"),
-         *      @SWG\Property(property="cvc", type="int", example="344"),
-         *      @SWG\Property(property="year", type="string", example="2023"),
-         *      @SWG\Property(property="month", type="string", example="07"),
-         *      @SWG\Property(property="card-holder-name", type="string", example="Jack Black")
-         *     )
-         * )
-         * @SWG\Tag(name="transaction")
-         *
-         * @param Request $request
-         * @param AccountRepository $accountRepository
-         *
-         * @throws Exception
-         *
-         * @return JsonResponse
-         */
+/**
+     * @Route("api/convertToEuro", name="api_converToEuro", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Amount transfered"
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Expected Json"
+     * )
+     * @SWG\Response(
+     *     response=406,
+     *     description="Card information is invalid"
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Accounts information is invalid"
+     * )
+     * @SWG\Parameter(
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      type="string",
+     *      default="Bearer TOKEN",
+     *      description="Bearer token",
+     * )
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Object describing the currency conversion.",
+     *     required=true,
+     *     @SWG\Schema(
+     *      @SWG\Property(property="value", type="int", example="200"),
+     *      @SWG\Property(property="currency", type="int", example="1"),
+     *      @SWG\Property(property="emiter-account-id", type="int", example="107"),
+     *      @SWG\Property(property="card-number", type="int", example="4929755121368228"),
+     *      @SWG\Property(property="card-type", type="string", example="visa"),
+     *      @SWG\Property(property="cvc", type="int", example="344"),
+     *      @SWG\Property(property="year", type="string", example="2023"),
+     *      @SWG\Property(property="month", type="string", example="07"),
+     *      @SWG\Property(property="card-holder-name", type="string", example="Jack Black")
+     *     )
+     * )
+     * @SWG\Tag(name="transaction")
+     *
+     * @param Request $request
+     * @param AccountRepository $accountRepository
+     *
+     * @throws Exception
+     *
+     * @return JsonResponse
+     */
     public function convertToEuro(Request $request, AccountRepository $accountRepository)
     {
         $payload = json_decode($request->getContent());
@@ -168,7 +168,6 @@ class TransactionController extends ApiController
             ]);
         }
         $transaction->setEmiter($emiterAccount);
-        $transaction->setBeneficiary($emiterAccount);
         $accountRepository->find($emiterAccount)->removeMoneyToEmiter($payload->value);
         $transaction->setTransferedMoney($payload->value);
         $transaction->setDate(new \DateTime());
