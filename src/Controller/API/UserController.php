@@ -39,7 +39,7 @@ class UserController extends ApiController
                 'category' => $this->getUser()->getCompany()->getCategory()->getName(),
                 'description' => $this->getUser()->getCompany()->getDescription(),
                 'postal_code' => $this->getUser()->getCompany()->getZipCode(),
-                'city' => $this->getUser()->getComapny()->getCity(),
+                'city' => $this->getUser()->getCompany()->getCity(),
                 
             ];
         }
