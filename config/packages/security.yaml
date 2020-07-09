@@ -23,6 +23,9 @@ security:
     governances:
       pattern: ^/api/governances
       security: false
+    categories: 
+      pattern: ^/api/categories
+      security: false
     login:
       pattern: ^/api/login
       stateless: true
