@@ -32,7 +32,7 @@ class CategoryController extends ApiController
         foreach ($categories as $category) {
             $categoryArray[] = [
                 'id' => $category->getId(),
-                'governance_name' => $category->getName()
+                'category' => $category->getName()
             ];
         }
 
