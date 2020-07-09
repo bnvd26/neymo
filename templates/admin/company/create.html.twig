@@ -12,13 +12,25 @@
 {{ form_row(form.zipCode, { 'label': 'Code postal' }) }}
 {{ form_row(form.phoneNumber, { 'label': 'Téléphone' }) }}
 {{ form_row(form.siret, { 'label': 'Siret' }) }}
+{{ form_row(form.provider, { 'label': 'Fournisseur' }) }}
+{{ form_row(form.description, { 'label': 'Description' }) }}
 
 <h4>Information personelle sur l'utilisateur</h4>
-    {{ form_row(form.email, { 'label': 'Email' }) }}
+     <label for="email">Email </label>
+    <input type="email" name="email" required>
     <label for="password">Mot de passe </label>
     <input type="password" name="password" required>
     {{ form_row(form.lastName, { 'label': 'Nom' }) }}
     {{ form_row(form.firstName, { 'label': 'Prénom' }) }}
+
+    <label for="category">Catégorie</label>
+
+<select name="category" id="category">
+{% for category in categories %}
+    <option value="{{category.id}}">{{ category.name }}</option>
+{% endfor %}
+    
+</select>
 {{ form_row(form.save, { 'label': 'Créer l\'utilisateur' }) }}
 {{ form_end(form) }}
 </div>

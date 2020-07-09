@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Company;
 use App\Entity\User;
 use App\Form\CompanyType;
+use App\Repository\CategoryRepository;
 use App\Repository\CompanyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +41,11 @@ class CompanyController extends AbstractController
     /**
      * @Route("/create", name="create")
      */
-    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder, CategoryRepository $categoryRepository)
     {
         $entityManager = $this->getDoctrine()->getManager();
+
+        $categories = $categoryRepository->findAll();
 
         $company = new Company();
 
@@ -50,10 +53,14 @@ class CompanyController extends AbstractController
 
         $form->handleRequest($request);
 
+        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $company = $form->getData();
             $company->setValidated(true);
+            $company->setValidated(true);
             $company->setGovernance($this->getGovernanceCurrentUser()->getGovernance());
+            $company->setCategory($categoryRepository->find($request->request->get('category')));
             $user = new User();
             $user->setEmail($request->request->get('email'));
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
@@ -71,6 +78,7 @@ class CompanyController extends AbstractController
 
         return $this->render('admin/company/create.html.twig', [
             'form' => $form->createView(),
+            'categories' => $categories
         ]);
     }
 
