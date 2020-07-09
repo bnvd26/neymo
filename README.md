@@ -53,29 +53,43 @@ Ce site a été réalisé à des fins pédagogiques dans le cadre du cursus Bach
   <strong><a href='http://localhost:8080'>Client MySQL</a></strong>
 
  
- ### Identifiant de connexion Super-Administrateur
- 
- Email : ``super-admin@neymo.com``
-  <br>
- Password : ``123456`` 
- 
- ### Identifiant de connexion Administrateur
- 
- Email : ``admin@neymo.com``
-  <br>
- Password : ``123456`` 
- 
- ### Identifiant de connexion Commercant
- 
- Email : ``company@neymo.com``
-  <br>
-  Password : ``123456`` 
+  ### API Doc
   
- ### Identifiant de connexion Particulier
+  Collection Postman : https://www.getpostman.com/collections/4b49a8cced39c4202581
+
+  Récupérer le token utilisateur sur Postman avec une requête ``login``
  
- Email : ``particular@neymo.com``
- <br>
- Password : ``123456`` 
+* <strong>Identifiant de connexion Super-Administrateur</strong>
+   ```bash
+   {
+   	"username": "superadmin@neymo.com",
+   	"password": "123456"
+   }
+  ```
+ 
+* <strong>Identifiant de connexion Administrateur</strong>
+   ```bash
+   {
+   	"username": "admin@neymo.com",
+   	"password": "123456"
+   }
+  ```
+
+* <strong>Identifiant de connexion Commercant</strong>
+   ```bash
+   {
+   	"username": "company@neymo.com",
+   	"password": "123456"
+   }
+  ```
+  
+* <strong>Identifiant de connexion Particulier</strong>
+   ```bash
+   {
+   	"username": "particular@neymo.com",
+   	"password": "123456"
+   }
+  ``` 
 
  ### Authentification à l'API via ApiDoc :
  

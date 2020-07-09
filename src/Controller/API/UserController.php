@@ -37,7 +37,9 @@ class UserController extends ApiController
                 'name' => $this->getUser()->getCompany()->getName(),
                 'siret' => $this->getUser()->getCompany()->getSiret(),
                 'category' => $this->getUser()->getCompany()->getCategory()->getName(),
-                'description' => $this->getUser()->getCompany()->getDescription()
+                'description' => $this->getUser()->getCompany()->getDescription(),
+                'postal_code' => $this->getUser()->getCompany()->getZipCode(),
+                'city' => $this->getUser()->getCompany()->getCity(),
                 
             ];
         }
@@ -49,7 +51,9 @@ class UserController extends ApiController
                 'first_name' => $this->getUser()->getParticular()->getFirstName(),
                 'last_name' => $this->getUser()->getParticular()->getLastName(),
                 'address' => $this->getUser()->getParticular()->getAddress(),
-                'number_phone' => $this->getUser()->getParticular()->getPhoneNumber()
+                'number_phone' => $this->getUser()->getParticular()->getPhoneNumber(),
+                'postal_code' => $this->getUser()->getParticular()->getZipCode(),
+                'city' => $this->getUser()->getParticular()->getCity(),
             ];
         }
 
