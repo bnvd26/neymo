@@ -40,6 +40,7 @@ class UserController extends ApiController
                 'description' => $this->getUser()->getCompany()->getDescription(),
                 'postal_code' => $this->getUser()->getCompany()->getZipCode(),
                 'city' => $this->getUser()->getCompany()->getCity(),
+                'mail' => $this->getUser()->getEmail()
                 
             ];
         }
@@ -54,6 +55,7 @@ class UserController extends ApiController
                 'number_phone' => $this->getUser()->getParticular()->getPhoneNumber(),
                 'postal_code' => $this->getUser()->getParticular()->getZipCode(),
                 'city' => $this->getUser()->getParticular()->getCity(),
+                'mail' => $this->getUser()->getEmail()
             ];
         }
 
