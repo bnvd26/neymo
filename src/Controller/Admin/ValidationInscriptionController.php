@@ -4,22 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Entity\Account;
 use App\Entity\Directory;
-use App\Entity\Particular;
-use App\Entity\User;
-use App\Form\ParticularAdminType;
-use App\Form\ParticularType;
 use App\Repository\CompanyRepository;
 use App\Repository\ParticularRepository;
 use App\Repository\UserRepository;
 use Mailjet\Resources;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/admin/validation-inscription", name="admin_validation_inscription_")
@@ -43,7 +35,7 @@ class ValidationInscriptionController extends AbstractController
     /**
      * @Route("/company/{id}/validate", name="company_validate")
      */
-    public function companyValidate ($id, CompanyRepository $companyRepository, MailerInterface $mailer) 
+    public function companyValidate($id, CompanyRepository $companyRepository, MailerInterface $mailer)
     {
         $em = $this->getDoctrine()->getManager();
         $company = $companyRepository->find($id);
@@ -59,13 +51,7 @@ class ValidationInscriptionController extends AbstractController
         $em->persist($directory);
         $em->flush();
 
-        $userEmail = null;
-
-        foreach($company->getUser() as $user) {
-            $userEmail = $user->getEmail();
-        }
-
-        $userEmail = $this->getUser()->getEmail();
+        $userEmail = $company->getUser()[0]->getEmail();
 
         $this->sendEmailValidation($userEmail);
 
@@ -79,15 +65,14 @@ class ValidationInscriptionController extends AbstractController
      * @param [type] $id
      * @return void
      */
-    public function companyNoValidate($id, CompanyRepository $companyRepository, UserRepository $userRepository, MailerInterface $mailer) {
+    public function companyNoValidate($id, CompanyRepository $companyRepository, UserRepository $userRepository, MailerInterface $mailer)
+    {
         $em = $this->getDoctrine()->getManager();
         $company = $companyRepository->find($id);
         $userId = null;
-        $userEmail = null;
-        
-        foreach($company->getUser() as $user) {
+      
+        foreach ($company->getUser() as $user) {
             $userId = $user->getId();
-            
         }
 
         $this->sendEmailNoValidation($user->getEmail());
@@ -103,16 +88,16 @@ class ValidationInscriptionController extends AbstractController
     /**
      * @Route("/company/{id}/show", name="company_show")
      */
-    public function show ($id, CompanyRepository $companyRepository) 
+    public function show($id, CompanyRepository $companyRepository)
     {
         $company = $companyRepository->find($id);
 
         return $this->render('admin/inscriptionValidation/company/show.html.twig', compact('company'));
     }
 
-    public function sendEmailValidation($userEmail) 
+    public function sendEmailValidation($userEmail)
     {
-        $mj = new \Mailjet\Client($_ENV['MAILJET_API_KEY'],$_ENV["MAILJET_ID"],true,['version' => 'v3.1']);
+        $mj = new \Mailjet\Client($_ENV['MAILJET_API_KEY'], $_ENV["MAILJET_ID"], true, ['version' => 'v3.1']);
         $body = [
           'Messages' => [
             [
@@ -124,8 +109,8 @@ class ValidationInscriptionController extends AbstractController
                   'Email' => $userEmail,
                 ]
               ],
-              'Subject' => "Validéi",
-              'HTMLPart' => "<p>Vous etes validés</p>",
+              'Subject' => "[NEYMO] - Information",
+              'HTMLPart' => "<p>Bonjour, votre compte a été validé par la gouvernance, vous pouvez dès a présent vous connectez à l'application NEYMO</p>",
               'CustomID' => "AppGettingStartedTest"
             ]
           ]
@@ -134,9 +119,9 @@ class ValidationInscriptionController extends AbstractController
         $response->success();
     }
 
-    public function sendEmailNoValidation($userEmail) 
+    public function sendEmailNoValidation($userEmail)
     {
-        $mj = new \Mailjet\Client($_ENV['MAILJET_API_KEY'],$_ENV["MAILJET_ID"],true,['version' => 'v3.1']);
+        $mj = new \Mailjet\Client($_ENV['MAILJET_API_KEY'], $_ENV["MAILJET_ID"], true, ['version' => 'v3.1']);
         $body = [
           'Messages' => [
             [
@@ -148,8 +133,8 @@ class ValidationInscriptionController extends AbstractController
                   'Email' => $userEmail,
                 ]
               ],
-              'Subject' => "Votre inscription est en attente de validation",
-              'HTMLPart' => "<p>Vous etes pas validés</p>",
+              'Subject' => "[NEYMO] - Information",
+              'HTMLPart' => "<p>Bonjour, votre compte a été refusé par la gouvernance</p>",
               'CustomID' => "AppGettingStartedTest"
             ]
           ]
@@ -173,7 +158,7 @@ class ValidationInscriptionController extends AbstractController
     /**
      * @Route("/particular/{id}/show", name="particular_show")
      */
-    public function showParticular ($id, ParticularRepository $particularRepository) 
+    public function showParticular($id, ParticularRepository $particularRepository)
     {
         $particular = $particularRepository->find($id);
 
@@ -183,7 +168,7 @@ class ValidationInscriptionController extends AbstractController
     /**
      * @Route("/particular/{id}/validate", name="particular_validate")
      */
-    public function particularValidate ($id, ParticularRepository $particularRepository, MailerInterface $mailer) 
+    public function particularValidate($id, ParticularRepository $particularRepository, MailerInterface $mailer)
     {
         $em = $this->getDoctrine()->getManager();
         $particular = $particularRepository->find($id);
@@ -197,7 +182,7 @@ class ValidationInscriptionController extends AbstractController
         $em->persist($account);
         $em->persist($particular);
         $em->flush();
-
+        
         $userEmail = $particular->getUser()->getEmail();
 
         $this->sendEmailValidation($userEmail);
@@ -212,7 +197,8 @@ class ValidationInscriptionController extends AbstractController
      * @param [type] $id
      * @return void
      */
-    public function particularNoValidate($id, ParticularRepository $particularRepository, UserRepository $userRepository, MailerInterface $mailer) {
+    public function particularNoValidate($id, ParticularRepository $particularRepository, UserRepository $userRepository, MailerInterface $mailer)
+    {
         $em = $this->getDoctrine()->getManager();
         $particular = $particularRepository->find($id);
         $userId = $particular->getUser()->getId();
@@ -224,5 +210,4 @@ class ValidationInscriptionController extends AbstractController
         $this->addFlash('success', 'L\'utilisateur a bien été refusé');
         return $this->redirectToRoute('admin_validation_inscription_particular_index');
     }
-
 }

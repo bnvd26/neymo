@@ -132,7 +132,7 @@ class RegisterController extends AbstractController
                   'Email' => $userEmail,
                 ]
               ],
-              'Subject' => "Votre inscription est en attente de validation",
+              'Subject' => "[NEYMO] - Information",
               'HTMLPart' => "<p>Bonjour, votre inscription est en attente de validation, un mail vous sera transmis concerant la validation de votre compte !</p>",
               'CustomID' => "AppGettingStartedTest"
             ]
@@ -156,7 +156,7 @@ class RegisterController extends AbstractController
                   'Email' => 'neymohetic@gmail.com',
                 ]
               ],
-              'Subject' => "Votre inscription est en attente de validation",
+              'Subject' => "[NEYMO] - Information",
               'HTMLPart' => "<p>Bonjour, vous avez un nouveau dossier en attente de validation !</p>",
               'CustomID' => "AppGettingStartedTest"
             ]
