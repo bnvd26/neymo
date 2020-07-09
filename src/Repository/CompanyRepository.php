@@ -48,6 +48,16 @@ class CompanyRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findAllCompaniesGovernance($governanceId)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.governance = :val')
+            ->setParameter('val', $governanceId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     
 
     /*
