@@ -27,9 +27,7 @@ class CompanyController extends AbstractController
     {
         $currentGovernance = $this->getGovernanceCurrentUser()->getGovernance();
 
-        // $companyRepository->findCompanyValidatedByGovernance(1, $currentGovernance);
-        
-        $companies = $currentGovernance->getCompanies();
+        $companies = $companyRepository->findCompanyValidatedByGovernance($currentGovernance);
 
         return $this->render('admin/company/index.html.twig', compact('companies'));
     }
@@ -81,16 +79,16 @@ class CompanyController extends AbstractController
      */
     public function edit(Request $request, Company $company): Response
     {
-/*        $users = $company->getUser();
-        if ([] === $users) {
-            // @todo erreur, user is not found
-        }
-        $user = current($users);
-        if (!$user instanceof User) {
-            // @todo erreur, user is not a user
-        }*/
+        /*        $users = $company->getUser();
+                if ([] === $users) {
+                    // @todo erreur, user is not found
+                }
+                $user = current($users);
+                if (!$user instanceof User) {
+                    // @todo erreur, user is not a user
+                }*/
         $form = $this->createForm(CompanyType::class, $company);
-       // $form->get('email')->setData($user->getEmail());
+        // $form->get('email')->setData($user->getEmail());
         $form->get('email')->setData($company->getUser()[0]->getEmail());
         $form->handleRequest($request);
 

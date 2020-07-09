@@ -34,6 +34,21 @@ class ParticularRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+    * @return Particular[] Returns an array of Particular objects
+    */
+    public function findAllParticularsValidatedGovernance($governanceId)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.governance = :val')
+            ->andWhere('c.validated = :validated')
+            ->setParameter('validated', true)
+            ->setParameter('val', $governanceId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Particular

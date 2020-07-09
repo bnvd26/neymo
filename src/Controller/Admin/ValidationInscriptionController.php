@@ -124,7 +124,7 @@ class ValidationInscriptionController extends AbstractController
                   'Email' => $userEmail,
                 ]
               ],
-              'Subject' => "Votre inscription est en attente de validation",
+              'Subject' => "Validéi",
               'HTMLPart' => "<p>Vous etes validés</p>",
               'CustomID' => "AppGettingStartedTest"
             ]
