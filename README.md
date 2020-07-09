@@ -1,35 +1,15 @@
 # Neymo - Back-end
 
+
+<strong>Prod : </strong> https://neymo-api.benjaminadida.fr/
+
 NeyMo est un gestionnaire de monnaie locale conçu pour soutenir les associations, les collectivitées et toutes les personnes qui ont à cœur la revalorisation de leurs territoires dans une démarche de développement durable et sociale.
  
 Ce site a été réalisé à des fins pédagogiques dans le cadre du cursus Bachelor de l’école HETIC. Les contenus présentés n'ont pas fait l'objet d'une demande de droit d'utilisation. Ce site ne sera en aucun cas exploité à des fins commerciales et ne sera pas publié
  
  ## Installation
-  
-  ### Le projet est disponible sous Docker 🐳
-  
-  
-   <strong>Cloner le projet</strong> : 
-   ```bash
-    git clone https://github.com/benads/neymo.git
-   ```
-
-  <strong>Exécuter ce script dans le projet</strong> : 
-  ```bash
-  sh init.sh
- ```
- <strong><a href="http://localhost">Back-Office/API</a></strong>
  
- <strong>Pour lancer une commande Symfony dans le container</strong> :
- ```bash
- docker container exec -ti app bash
- ```
-
- <strong><a href='http://localhost:8080'>Client MySQL</a></strong>
- 
- <strong><a href="http://localhost/api/doc">Documentation de l'API</a></strong>
- 
-  ### Générer clefs pour JWT 
+   ### Générer clefs pour JWT 
 
  <strong>Créer le dossier </strong> : 
  ```bash
@@ -47,29 +27,55 @@ Ce site a été réalisé à des fins pédagogiques dans le cadre du cursus Bach
  
  Modifier la variable ```JWT_PASSPHRASE```, avec la passphrase que vous aurez défini
  
+  
+  ### Le projet est disponible sous Docker 🐳
+  
+  
+   <strong>Cloner le projet</strong> : 
+   ```bash
+    git clone https://github.com/benads/neymo.git
+   ```
+
+  <strong>Exécuter ce script dans le projet</strong> : 
+  ```bash
+  sh init.sh
+ ```
+ 
+ <strong>Pour lancer une commande Symfony dans le container</strong> :
+ ```bash
+ docker container exec -ti app bash
+ ```
+ 
+  <strong><a href="http://localhost">Back-Office/API</a></strong>
+ 
+ <strong><a href="http://localhost/api/doc">Documentation de l'API</a></strong>
+ 
+  <strong><a href='http://localhost:8080'>Client MySQL</a></strong>
+
+ 
  ### Identifiant de connexion Super-Administrateur
  
- <strong>Email</strong> : ``super-admin@neymo.com``
+ Email : ``super-admin@neymo.com``
   <br>
- <strong>Password</strong> : ``123456`` 
+ Password : ``123456`` 
  
  ### Identifiant de connexion Administrateur
  
- <strong>Email</strong> : ``admin@neymo.com``
+ Email : ``admin@neymo.com``
   <br>
- <strong>Password</strong> : ``123456``
+ Password : ``123456`` 
  
  ### Identifiant de connexion Commercant
  
- <strong>Email</strong> : ``company@neymo.com``
+ Email : ``company@neymo.com``
   <br>
- <strong>Password</strong> : ``123456``
- 
+  Password : ``123456`` 
+  
  ### Identifiant de connexion Particulier
  
- <strong>Email</strong> : ``particular@neymo.com``
+ Email : ``particular@neymo.com``
  <br>
- <strong>Password</strong> : ``123456``
+ Password : ``123456`` 
 
  ### Authentification à l'API via ApiDoc :
  
@@ -102,23 +108,22 @@ Tout notre back a été fait en Symfony 5.1.
 ## Composants utilisés
 
 <strong>Doctrine</strong> : ORM
-
+  <br>
 <strong>jwt-authentication-bundle</strong> : Authentification API avec JWT
-
+  <br>
 <strong>api-doc-bundle</strong> : Gérer la doc de l'API 
-
+  <br>
 <strong>cors-bundle</strong> : CORS policy
-
+  <br>
 <strong>Mailer</strong> : Envoi d'email
-
+  <br>
 <strong>mailjet-apiv3-php</strong> : Permet l'envoi d'email
-
+  <br>
 <strong>Faker</strong> : Création des faux jeux de données
-
+  <br>
 <strong>php-credit-card-validator</strong> : Vérification la validité des informations d'une carte bancaire
-
+  <br>
 <strong>Security</strong> : Gérer le login et les rôles
-
 
 
 ## Argumentaire détaillé
@@ -148,7 +153,7 @@ Nous avons listé les fonctionnalités dont nous avions besoin :
  <a href="https://neymo-api.benjaminadida.fr/api/doc">Documentation NelmioApiDoc</a>
  
  
-## MDP
+## MPD
 
 <img src="https://cdn.discordapp.com/attachments/724913624551784479/730455259545206794/Screenshot_2020-07-08_at_17.54.24.png" >
 
