@@ -25,23 +25,54 @@ class AdminController extends AbstractController
     public function home(ParticularRepository $particularRepository, CompanyRepository $companyRepository)
     {
         $user = $this->getGovernanceCurrentUser();
-        $particulars = $particularRepository->findAllParticularsGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
-        $companies = $companyRepository->findAllCompaniesGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
-
+        
+        $particulars = $particularRepository->findAllParticularsValidatedGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
+        
+        $companies = $companyRepository->findCompanyValidatedByGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
+        
         $accountsParticular = [];
 
         $number = null;
 
-        foreach($particulars as $particular)
-        {
+        $totalCashParticular = [];
+
+        foreach ($particulars as $particular) {
             $a = $particular->getAccount()->getAvailableCash();
             $accountsParticular[] = $particular->getAccount();
-            $totalCash = $particular->getAccount()->getAvailableCash();
+            $totalCashParticular[] = (int) $particular->getAccount()->getAvailableCash();
         }
 
-        
+        $totalMoneyParticular = array_sum($totalCashParticular);
 
-        return $this->render('admin/home.html.twig', compact('user', 'companies', 'particulars', 'accountsParticular'));
+        $totalCashCompany = [];
+
+        $transaction = [];
+
+        foreach ($companies as $company) {
+            $a = $company->getAccount()->getAvailableCash();
+            $accountsCompany[] = $company->getAccount();
+            $totalCashCompany[] = (int) $company->getAccount()->getAvailableCash();
+        }
+
+        $totalMoneyCompany = array_sum($totalCashCompany);
+
+        $companiesNotValidated = $companyRepository->findCompanyNotValidatedByGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
+
+        $particularsNotValidated = $particularRepository->findParticularNotValidatedByGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
+
+        return $this->render('admin/home.html.twig', compact('user', 'companies', 'particulars', 'accountsParticular', 'totalMoneyCompany', 'totalMoneyParticular', 'companiesNotValidated', 'particularsNotValidated'));
+    }
+
+    public function nav(ParticularRepository $particularRepository, CompanyRepository $companyRepository)
+    {
+        $companiesNotValidated = $companyRepository->findCompanyNotValidatedByGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
+
+        $particularsNotValidated = $particularRepository->findParticularNotValidatedByGovernance($this->getGovernanceCurrentUser()->getGovernance()->getId());
+
+        $totalNotValidated = count($particularsNotValidated) + count($companiesNotValidated);
+
+        
+        return $this->render('admin/elements/navbar.html.twig');
     }
 
     public function getGovernanceCurrentUser()

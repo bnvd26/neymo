@@ -6,6 +6,7 @@ use App\Entity\Particular;
 use App\Entity\User;
 use App\Form\ParticularAdminType;
 use App\Form\ParticularType;
+use App\Repository\ParticularRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,9 +24,11 @@ class ParticularController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index()
+    public function index(ParticularRepository $particularRepository)
     {
-        $particulars = $this->getGovernanceCurrentUser()->getGovernance()->getParticulars();
+        $governance = $this->getGovernanceCurrentUser()->getGovernance();
+
+        $particulars = $particularRepository->findAllParticularsValidatedGovernance($governance);
 
         return $this->render('admin/particular/index.html.twig', compact('particulars'));
     }
