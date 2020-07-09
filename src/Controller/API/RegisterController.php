@@ -6,6 +6,7 @@ use App\Entity\Account;
 use App\Entity\Company;
 use App\Entity\Particular;
 use App\Entity\User;
+use App\Repository\CategoryRepository;
 use App\Repository\GovernanceRepository;
 use App\Repository\UserRepository;
 use Mailjet\Resources;
@@ -33,7 +34,7 @@ class RegisterController extends AbstractController
     /**
      * @Route("/api/register", name="api_register", methods="POST")
      */
-    public function register(MailerInterface $mailer, Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, GovernanceRepository $governanceRepository)
+    public function register(MailerInterface $mailer, Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, GovernanceRepository $governanceRepository, CategoryRepository $categoryRepository)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -56,7 +57,7 @@ class RegisterController extends AbstractController
         $dataDecoded = json_decode($request->getContent());
         $entityManager->persist($user);
         $entityManager->flush();
-        $dataDecoded->type == "particular" ? $this->createParticular($request, $user, $governanceRepository) : $this->createCompany($request, $user, $governanceRepository);
+        $dataDecoded->type == "particular" ? $this->createParticular($request, $user, $governanceRepository) : $this->createCompany($request, $user, $governanceRepository, $categoryRepository);
         $this->sendReceiveInscriptionEmail($user->getEmail());
         $this->preventEmailInscriptionGovernance();
         $response = new Response();
@@ -89,7 +90,7 @@ class RegisterController extends AbstractController
         $entityManager->flush();
     }
 
-    public function createCompany(Request $request, $user, $governanceRepository)
+    public function createCompany(Request $request, $user, $governanceRepository, $categoryRepository)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $dataDecoded = json_decode($request->getContent());
@@ -107,6 +108,7 @@ class RegisterController extends AbstractController
         $company->addUser($user);
         $company->setValidated(false);
         $company->setSiret($dataDecoded->siret);
+        $company->setCategory($categoryRepository->find(($dataDecoded->categoryId)));
         $entityManager->persist($company);
         $entityManager->flush();
     }
