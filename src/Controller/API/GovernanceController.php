@@ -16,14 +16,6 @@ class GovernanceController extends ApiController
      *     response=200,
      *     description="Governances listed"
      * )
-     * @SWG\Parameter(
-     *      name="Authorization",
-     *      in="header",
-     *      required=true,
-     *      type="string",
-     *      default="Bearer TOKEN",
-     *      description="Bearer token",
-     * )
      * @SWG\Tag(name="governances")
      *
      * @param GovernanceRepository $governanceRepository
