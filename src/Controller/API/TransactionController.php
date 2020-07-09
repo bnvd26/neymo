@@ -81,7 +81,7 @@ class TransactionController extends ApiController
             ]);
     }
 
-/**
+    /**
      * @Route("api/convertToEuro", name="api_converToEuro", methods="POST")
      *
      * @SWG\Response(
@@ -114,15 +114,7 @@ class TransactionController extends ApiController
      *     description="Object describing the currency conversion.",
      *     required=true,
      *     @SWG\Schema(
-     *      @SWG\Property(property="value", type="int", example="200"),
-     *      @SWG\Property(property="currency", type="int", example="1"),
-     *      @SWG\Property(property="emiter-account-id", type="int", example="107"),
-     *      @SWG\Property(property="card-number", type="int", example="4929755121368228"),
-     *      @SWG\Property(property="card-type", type="string", example="visa"),
-     *      @SWG\Property(property="cvc", type="int", example="344"),
-     *      @SWG\Property(property="year", type="string", example="2023"),
-     *      @SWG\Property(property="month", type="string", example="07"),
-     *      @SWG\Property(property="card-holder-name", type="string", example="Jack Black")
+     *      @SWG\Property(property="transferedMoney", type="int", example="200"),
      *     )
      * )
      * @SWG\Tag(name="transaction")
@@ -137,13 +129,6 @@ class TransactionController extends ApiController
     public function convertToEuro(Request $request, AccountRepository $accountRepository)
     {
         $payload = json_decode($request->getContent());
-
-        // if (is_null($payload)) {
-        //     return $this->responseBadRequest([
-        //         "status" => "error",
-        //         "error" => "Expected Json, gat 🤷‍♂️"
-        //     ]);
-        // }
 
         if ($this->getUser()->isParticular()) {
             $this->responseNotAcceptable([
@@ -161,15 +146,15 @@ class TransactionController extends ApiController
                 "error" => "Accounts information is invalid"
             ]);
         }
-        if ($payload->value > $emiterAccount->getAvailableCash()) {
+        if ($payload->transferedMoney > $emiterAccount->getAvailableCash()) {
             $this->responseNotAcceptable([
                 "status" => "error",
                 "error" => "Not enough cash"
             ]);
         }
         $transaction->setEmiter($emiterAccount);
-        $accountRepository->find($emiterAccount)->removeMoneyToEmiter($payload->value);
-        $transaction->setTransferedMoney($payload->value);
+        $accountRepository->find($emiterAccount)->removeMoneyToEmiter($payload->transferedMoney);
+        $transaction->setTransferedMoney($payload->transferedMoney);
         $transaction->setDate(new \DateTime());
         $this->em->persist($transaction);
         $this->em->flush();
