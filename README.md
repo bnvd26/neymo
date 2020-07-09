@@ -144,9 +144,9 @@ Nous avons listé les fonctionnalités dont nous avions besoin :
  * Modifier ses propres informations
  * Lister, créer et supprimer les autres administrateurs de la gouvernance
  * Gérer les différents types d'adhérents (commercant/particulier)
- * Valider ou refuser les demandes d'inscription en attente (envoie d'email de confirmation)
+ * Valider ou refuser les demandes d'inscription en attente (envoi d'email de confirmation)
  * [WIP] Voir les détails de la gouvernance
- * [WIP] Accéder à un dashboard pour visualiser les statistiques de la monnaie locale
+ * [WIP] Accèder à un dashboard pour visualiser les statistiques de la monnaie locale
 
 ### API Adhérent
  Cette interface permet de spécifier les différentes fonctionnalités auxquelles ont accès les adhérents.

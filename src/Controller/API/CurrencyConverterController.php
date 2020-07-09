@@ -39,7 +39,7 @@ class CurrencyConverterController extends ApiController
      *     description="The amount to convert",
      *     required=true,
      *     @SWG\Schema(
-     *      @SWG\Property(property="value", type="int", example="1000")
+     *      @SWG\Property(property="transferedMoney", type="int", example="1000")
      *     )
      * )
      * @SWG\Tag(name="currency")
@@ -61,7 +61,7 @@ class CurrencyConverterController extends ApiController
 
         $exchangeRate = $this->getUser()->getCompany()->getGovernance()->getCurrency()->getExchangeRate();
         $data = json_decode($request->getContent());
-        $value = $data->value;
+        $value = $data->transferedMoney;
         
         $convertedValue = $currencyService->convertToEuro(
             $exchangeRate,

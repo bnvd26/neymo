@@ -1,8 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-<p>Bonjour {{ user.firstName }},</p>
-<br>
-<p>Dashboard de la Gourvernance de {{ user.governance.name }}</p>
+  <div class="container">
+<div class="card">
+  <div class="card-header">
+
+<h2>Dashboard de la Gourvernance de {{ user.governance.name }}</h2>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Bonjour {{ user.firstName }}</h5>
+    <p class="card-text">Monnaie local : {{ user.governance.moneyName }}</p>
+    <div class="alert alert-warning">
+    <strong>En attente de validation (professionel): </strong> {{ companiesNotValidated|length }}
+    <br>
+    <strong>En attente de validation (particulier): </strong>{{ particularsNotValidated|length }}
+  <br>
+  </div>
+    <br>
+    Nombre d'adhérents particulier : {{ particulars|length }}
+    <br>
+    Nombre d'adhérents Professionnel : {{ companies|length }}
+    <br>
+    Nombre d'adhérents Total : {{ companies|length + particulars|length }}
+    <br>
+    Somme total de monnaie utilisé par les professionnels : {{totalMoneyCompany}}
+    <br>
+    Somme total de monnaie utilisé par les particuliers : {{totalMoneyParticular}}
+    <br>
+    Somme total qui circule dans la gouvernance : {{totalMoneyParticular + totalMoneyCompany}}
+    </div>
+  </div>
+</div>
 {% endblock %}
 
