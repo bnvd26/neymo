@@ -7,10 +7,8 @@
                 {{ message }}
             </div>
 {% endfor %}
-
-<h2>Particulier de la gouvernance</h2>
-<a href="{{ path('admin_particular_create') }}" class="btn btn-success">Créer un Particulier</a>
-<table class="table table-striped">
+<h2>Particuliers de la gouvernance</h2>
+<table class="table table-striped neymo-table">
   <thead>
     <tr>
       <th scope="col">Id</th>
@@ -22,7 +20,7 @@
   <tbody>
    {% for particular in particulars %}
         <tr>
-        <td>{{ particular.id }}</td>
+        <td class="td-id">{{ particular.id }}</td>
         <td>{{ particular.firstName }}</td>
         <td>{{ particular.lastName }}</td>
         <td>
@@ -33,5 +31,6 @@
     {% endfor %}
   </tbody>
 </table>
+<a href="{{ path('admin_particular_create') }}" class="btn btn-success btn-neymo btn-create">Créer un Particulier</a>
 </div>
 {% endblock %}

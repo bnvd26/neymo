@@ -8,7 +8,7 @@
 }
 
 body {
-  background: #fff;
+  background-color: #fff;
 }
 
 .card-signin {
@@ -133,6 +133,85 @@ body {
 }
 
 /*  END LOGIN FORM  */
+
+/* BACK-OFFICE ADMIN */
+h2 {
+  padding: 40px 0px;
+}
+input {
+  height: 50px;
+  width: 400px;
+  padding: 0px 20px;
+  border-radius: 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(158, 186, 177, 0.71);
+  margin: 10px 0px;
+}
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  padding-bottom: 0.2rem;
+  color: rgb(113, 128, 150);
+  margin: 5px 0px;
+}
+.btn-neymo {
+  border-radius: 15px;
+  padding: 15px 20px;
+  transition-duration: 0.2s;
+  &:hover {
+    margin-top: 4px;
+  }
+}
+
+.btn-create {
+  background-color: #189b73;
+  -webkit-box-shadow: 0px 5px 0px 0px rgba(139,205,185,1);
+  -moz-box-shadow: 0px 5px 0px 0px rgba(139,205,185,1);
+  box-shadow: 0px 5px 0px 0px rgba(139,205,185,1);
+  &:hover {
+    -webkit-box-shadow: 0px 1px 0px 0px rgba(139,205,185,1);
+    -moz-box-shadow: 0px 1px 0px 0px rgba(139,205,185,1);
+    box-shadow: 0px 1px 0px 0px rgba(139,205,185,1);
+    background-color: rgba(24,155,116,1);
+  }
+}
+
+.btn-delete {
+  background-color: #D16228;
+  -webkit-box-shadow: 0px 5px 0px 0px rgba(227,171,143,1);
+  -moz-box-shadow: 0px 5px 0px 0px rgba(227,171,143,1);
+  box-shadow: 0px 5px 0px 0px rgba(227,171,143,1);
+  &:hover {
+    -webkit-box-shadow: 0px 1px 0px 0px rgba(227,171,143,1);
+    -moz-box-shadow: 0px 1px 0px 0px rgba(227,171,143,1);
+    box-shadow: 0px 1px 0px 0px rgba(227,171,143,1);
+    background-color: #D16228;
+  }
+}
+
+.td-id {
+  font-weight: bold;
+}
+.nav-bar {
+  background-color: #8BCDB9;
+  color: #fff;
+}
+.neymo-table {
+  border: 1px solid #dee2e6;
+}
+
+.logout {
+  color: #D16228;
+  &:hover {
+    color: #e3ab8f;
+  }
+}
+
+/* END BACK-OFFICE ADMIN */
 
 /*  NAVBAR  */
 .sidebar-container {
