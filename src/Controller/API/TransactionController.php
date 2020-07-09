@@ -152,7 +152,7 @@ class TransactionController extends ApiController
                 "error" => "Not enough cash"
             ]);
         }
-        
+
         if ((int) $accountRepository->find($emiterAccount)->getAvailableCash() < (int) $payload->transferedMoney || (int) $payload->transferedMoney < 0) {
             return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
         }
@@ -216,7 +216,8 @@ class TransactionController extends ApiController
                         'beneficiary_name' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getName() : $transactionsByDate[$y]->getBeneficiary()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getBeneficiary()->getParticular()->getLastName(),
                         'date' => $transactionsByDate[$y]->getDate(),
                         'category' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getCategory()->getName() : null,
-                        'status_transaction_user' => $this->getStatusTransactionUser($transactionsByDate, $y)
+                        'status_transaction_user' => $this->getStatusTransactionUser($transactionsByDate, $y),
+                        'conversion' => (is_null($transactionsByDate[$y]->getEmiter()->getParticular()) ? $transactionsByDate[$y]->getEmiter()->getCompany()->getName() : $transactionsByDate[$y]->getEmiter()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getEmiter()->getParticular()->getLastName()) == (is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getCategory()->getName() : null) ? true : false
                 ];
             };
             $transactions[] = [
