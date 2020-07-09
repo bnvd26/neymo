@@ -221,6 +221,7 @@ class TransactionController extends ApiController
                 $data[] = [
                         'id' => $transactionsByDate[$y]->getId(),
                         'transfered_money' => $transactionsByDate[$y]->getTransferedMoney(),
+                        'emiter_name' => is_null($transactionsByDate[$y]->getEmiter()->getParticular()) ? $transactionsByDate[$y]->getEmiter()->getCompany()->getName() : $transactionsByDate[$y]->getEmiter()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getEmiter()->getParticular()->getLastName(),
                         'beneficiary_name' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getName() : $transactionsByDate[$y]->getBeneficiary()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getBeneficiary()->getParticular()->getLastName(),
                         'date' => $transactionsByDate[$y]->getDate(),
                         'category' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getCategory()->getName() : null,
