@@ -153,6 +153,7 @@ class TransactionController extends ApiController
             ]);
         }
         $transaction->setEmiter($emiterAccount);
+        $transaction->setBeneficiary($emiterAccount);
         $accountRepository->find($emiterAccount)->removeMoneyToEmiter($payload->transferedMoney);
         $transaction->setTransferedMoney($payload->transferedMoney);
         $transaction->setDate(new \DateTime());
