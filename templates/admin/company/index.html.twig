@@ -16,8 +16,11 @@
   <thead>
     <tr>
       <th scope="col">Id</th>
-      <th scope="col">Nom de la société</th>
+      <th scope="col" style="width: 100%;">Nom de la société</th>
       <th class="col"></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -26,11 +29,13 @@
         <td class="td-id">{{ company.id }}</td>
         <td>{{ company.name }}</td>
     <td>
-        <div class="d-flex flex-row justify-content-end">
             <a href="{{ path('admin_company_show', {'id' : company.id}) }}" class="details">Détails</a><br>
-            <a href="{{ path('admin_company_edit', {'id' : company.id}) }}" class=""><img src="{{ asset('/build/edit.svg') }}" alt=""></a><br>
-            {{ include('admin/company/_delete_form.html.twig') }}
-        </div>
+     </td>
+     <td>
+     <a href="{{ path('admin_company_edit', {'id' : company.id}) }}" class=""><img src="{{ asset('/build/edit.svg') }}" alt=""></a><br>
+     </td>
+     <td>
+     {# {{ include('admin/company/_delete_form.html.twig') }} #}
      </td>
    </tr>
     {% endfor %}

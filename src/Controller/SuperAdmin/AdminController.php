@@ -75,11 +75,12 @@ class AdminController extends AbstractController
         /* @var GovernanceUserInformation $user */
         $user = $repo->find($id);
         $form = $this->createForm(AdminType::class, $user);
-        $form->get('email')->setData($user->getUser()->getEmail());
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->getUser()->setEmail($form->get("email")->getData());
+            
+            
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('superadmin_governance_show', ['id' => $user->getGovernance()->getId()]);

@@ -10,24 +10,21 @@
   <div class="card-body">
     <h5 class="card-title">Bonjour {{ user.firstName }}</h5>
     <p class="card-text">Monnaie local : {{ user.governance.moneyName }}</p>
-    <div class="alert alert-warning">
-    <strong>En attente de validation (professionel): </strong> {{ companiesNotValidated|length }}
+  En attente de validation (professionel):  <strong>{{ companiesNotValidated|length }}</strong>
     <br>
-    <strong>En attente de validation (particulier): </strong>{{ particularsNotValidated|length }}
-  <br>
-  </div>
+    En attente de validation (particulier): <strong>{{ particularsNotValidated|length }}</strong>
     <br>
-    Nombre d'adhérents particulier : {{ particulars|length }}
+    Nombre d'adhérents particulier : <strong>{{ particulars|length }}</strong>
     <br>
-    Nombre d'adhérents Professionnel : {{ companies|length }}
+    Nombre d'adhérents Professionnel : <strong>{{ companies|length }}</strong>
     <br>
-    Nombre d'adhérents Total : {{ companies|length + particulars|length }}
+    Nombre d'adhérents Total : <strong>{{ companies|length + particulars|length }}</strong>
     <br>
-    Somme total de monnaie utilisé par les professionnels : {{totalMoneyCompany}}
+    Somme total de monnaie utilisé par les professionnels : <strong>{{totalMoneyCompany}}</strong>
     <br>
-    Somme total de monnaie utilisé par les particuliers : {{totalMoneyParticular}}
+    Somme total de monnaie utilisé par les particuliers : <strong>{{totalMoneyParticular}}</strong>
     <br>
-    Somme total qui circule dans la gouvernance : {{totalMoneyParticular + totalMoneyCompany}}
+    Somme total qui circule dans la gouvernance : <strong>{{totalMoneyParticular + totalMoneyCompany}}</strong>
     </div>
   </div>
 </div>
