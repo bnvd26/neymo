@@ -2,17 +2,16 @@
 
 {% block content %}
 <div class="container">
-<h2>Créer un administrateur pour la gouvernance</h2>
+<h2>Ajouter un Administrateur pour la gouvernance</h2>
 {{ form_start(form) }}
-<label for="firstName">Prénom </label>
+    <label for="firstName">Prénom</label>
     <input type="firstName" name="firstName" required>
-     <label for="lastName">Nom </label>
+    <label for="lastName">Nom</label>
     <input type="text" name="lastName" required>
-    <label for="role">Role dans la gouvernance </label>
-    <input type="text" name="role"  required>
-
+    <label for="role">Rôle dans la gouvernance</label>
+    <input type="text" name="role" required>
     {{ form_widget(form) }}
-    <button type="submit" class="btn btn-success">Créer un utilisateur</button>
+    <button type="submit" class="btn btn-success btn-neymo btn-create">Ajouter l'Administrateur</button>
 {{ form_end(form) }}
 </div>
 {% endblock %}

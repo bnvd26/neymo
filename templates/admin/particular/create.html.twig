@@ -2,21 +2,18 @@
 
 {% block content %}
 <div class="container">
-<h2>Créer un utilisateur particulier</h2>
+<h2>Ajouter un adhérent Particulier</h2>
 {{ form_start(form) }}
-<h4>Information de la société</h4>
+{{ form_row(form.lastName, { 'label': 'Nom' }) }}
+{{ form_row(form.firstName, { 'label': 'Prénom' }) }}
+{{ form_row(form.birthdate, { 'label': 'Date de naissance' }) }}
+<label for="email">Email</label>
+<input type="email" name="email" required >
+{{ form_row(form.phoneNumber, { 'label': 'Téléphone' }) }}
 {{ form_row(form.address, { 'label': 'Adresse' }) }}
 {{ form_row(form.city, { 'label': 'Ville' }) }}
 {{ form_row(form.zipCode, { 'label': 'Code postal' }) }}
-{{ form_row(form.phoneNumber, { 'label': 'Téléphone' }) }}
-
-<h4>Information personelle sur l'utilisateur</h4>
- <label for="email">Email</label>
-    <input type="email" name="email" required >
-    {{ form_row(form.lastName, { 'label': 'Nom' }) }}
-    {{ form_row(form.firstName, { 'label': 'Prénom' }) }}
-    {{ form_row(form.birthdate, { 'label': 'Date de naissance' }) }}
-{{ form_row(form.save, { 'label': 'Créer un particulier'}) }}
+{{ form_row(form.save, { 'label': 'Ajouter un Particulier'}) }}
 {{ form_end(form) }}
 </div>
 {% endblock %}

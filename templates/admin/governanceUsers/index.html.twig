@@ -7,22 +7,25 @@
                 {{ message }}
             </div>
 {% endfor %}
+<div class="d-flex flex-row justify-content-between align-items-center">
+    <h2>Administrateurs de la gouvernance</h2>
+    <a href="{{ path('admin_users_create') }}" class="btn-neymo btn-create">Ajouter un Administrateur</a>
+</div>
 
-<h2>Utilisateurs de la gouvernance</h2>
-<a href="{{ path('admin_users_create') }}" class="btn btn-success">Créer un utilisateur</a>
-<table class="table table-striped">
+    <table class="table table-striped neymo-table">
   <thead>
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Prénom</th>
       <th scope="col">Nom</th>
       <th scope="col">Rôle</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
    {% for userAdmin in governanceUserInformation %}
         <tr>
-        <td>{{ userAdmin.id }}</td>
+        <td class="td-id">{{ userAdmin.id }}</td>
         <td>{{ userAdmin.firstName }}</td>
         <td>{{ userAdmin.lastName }}</td>
         <td>{{ userAdmin.role }}</td>
@@ -31,5 +34,6 @@
     {% endfor %}
   </tbody>
 </table>
+
 </div>
 {% endblock %}

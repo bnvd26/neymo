@@ -45,7 +45,7 @@ class AdminController extends AbstractController
         $form = $this->createFormBuilder($user)
             ->add('email', TextType::class)
             ->add('password', PasswordType::class)
-            ->add('save', SubmitType::class, ['label' => 'Créer un administrateur', 'attr' => ['class' => 'btn btn-success']])
+            ->add('save', SubmitType::class, ['label' => 'Ajouter un Administrateur', 'attr' => ['class' => 'btn-neymo btn-create']])
 
             ->getForm();
 
@@ -75,11 +75,12 @@ class AdminController extends AbstractController
         /* @var GovernanceUserInformation $user */
         $user = $repo->find($id);
         $form = $this->createForm(AdminType::class, $user);
-        $form->get('email')->setData($user->getUser()->getEmail());
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->getUser()->setEmail($form->get("email")->getData());
+            
+            
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('superadmin_governance_show', ['id' => $user->getGovernance()->getId()]);

@@ -8,11 +8,25 @@
             </div>
 {% endfor %}
 
-<h2>Liste des inscriptions à valider</h2>
-
-  {{ particular.id }}
-  {{ particular.firstName }} 
-  <a href="{{ path('admin_validation_inscription_particular_validate', {'id' : particular.id }) }}" class="btn btn-success">Valider</a>
-  <a href="{{ path('admin_validation_inscription_particular_no_validate', {'id' : particular.id }) }}" class="btn btn-danger">Refuser</a>
+<h2>Inscription à valider</h2>
+    <div>
+        <label for="">Nom du commerce</label>
+        <p>{{ particular.lastName }}</p>
+        <label for="">Prénom</label>
+        <p>{{ particular.firstName }}</p>
+        <label for="">Téléphone</label>
+        <p>{{ particular.phoneNumber }}</p>
+        <label for="">Adresse</label>
+        <p>{{ particular.address }}</p>
+        <label for="">Ville</label>
+        <p>{{ particular.city }}</p>
+        <label for="">Code postal</label>
+        <p>{{ particular.zipCode }}</p>
+        <label for="">Email</label>
+        <p>{{ particular.user.email }}</p>
+    </div>
+  <br>
+  <a href="{{ path('admin_validation_inscription_particular_validate', {'id' : particular.id }) }}" class="btn-neymo btn-create">Valider</a>
+  <a href="{{ path('admin_validation_inscription_particular_no_validate', {'id' : particular.id }) }}" class="btn-neymo btn-delete">Refuser</a>
 </div>
 {% endblock %}

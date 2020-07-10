@@ -2,9 +2,11 @@
 
 {% block content %}
     <div class="container">
+    <div class="jumbotron" style="display:flex;align-items:center;flex-direction:column">
         <h2>Modifier un Administrateur</h2>
         {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_end(form) }}
+        </div>
     </div>
 {% endblock %}

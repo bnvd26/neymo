@@ -3,14 +3,14 @@
 {% block title %}Modification de la gouvernance{% endblock %}
 
 {% block content %}
-     <div class="content-container text-center">
+     <div class="content-container text">
         <div class="container-fluid" style="padding-right:60px;padding-left:60px">
             <div class="jumbotron">
-                <a href="{{ path('superadmin_governance_show', {'id': governance.id}) }}">Revenir à la gouvernance</a>
+                <a href="{{ path('superadmin_governance_show', {'id': governance.id}) }}">Revenir à la Gouvernance</a>
 
-    <h1>Modifier la gouvernance {{ governance.name }}</h1>
+    <h1>Modifier la Gouvernance {{ governance.name }}</h1>
 
-    {{ include('superAdmin/governance/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    {{ include('superAdmin/governance/_form.html.twig', {'button_label': 'Modifier'}) }}
 
         </div>
     </div>

@@ -7,12 +7,29 @@
                 {{ message }}
             </div>
 {% endfor %}
-
-<h2>Liste des inscriptions à valider</h2>
-
-  {{ company.id }}
-  {{ company.name }} 
-  <a href="{{ path('admin_validation_inscription_company_validate', {'id' : company.id }) }}" class="btn btn-success">Valider</a>
-  <a href="{{ path('admin_validation_inscription_company_no_validate', {'id' : company.id }) }}" class="btn btn-danger">Refuser</a>
+    <h2>Liste des inscriptions à valider</h2>
+    <div>
+        <h3>Informations de la société</h3>
+        <label>Nom du commerce</label>
+        <p>{{company.name}}</p>
+        <label>Adresse</label>
+        <p>{{company.address}}, {{company.city}}, {{company.zipCode}}</p>
+        <label>Téléphone</label>
+        <p>{{company.phoneNumber}}</p>
+        <label>Numéro Siret</label>
+        <p>{{company.siret}}</p>
+        <br>
+        <h3>Informations personelles du responsable</h3>
+        <label>Nom</label>
+        <p>{{company.lastName}}</p>
+        <label>Prénom</label>
+        <p>{{company.firstName}}</p>
+        <label>Mail</label>
+        <p>{{email}}</p>
+    </div>
+    <br>
+    <a href="{{ path('admin_validation_inscription_company_validate', {'id' : company.id }) }}" class="btn-neymo btn-create">Valider</a>
+    <a href="{{ path('admin_validation_inscription_company_no_validate', {'id' : company.id }) }}" class="btn-neymo btn-delete">Refuser</a>
+</div>
 </div>
 {% endblock %}

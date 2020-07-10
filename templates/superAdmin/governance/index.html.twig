@@ -1,24 +1,26 @@
-<h1>Liste des gouvernances</h1>
-    <a href="{{ path('superadmin_governance_create') }}" class="btn btn-success">Créer une gouvernance</a>
-    <table class="table">
+<div class="d-flex flex-row justify-content-between align-items-center">
+    <h2>Liste des gouvernances</h2>
+    <a href="{{ path('superadmin_governance_create') }}" class="btn-create btn-neymo">Créer une gouvernance</a>
+</div>
+    <table class="table table-striped neymo-table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nom de la gouvernance</th>
                 <th>Nom de la monnaie</th>
-                <th>Informations</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for governance in governances %}
                 <tr>
-                    <td>{{ governance.id }}</td>
+                    <td class="td-id">{{ governance.id }}</td>
                     <td>{{ governance.name }}</td>
                     <td>{{ governance.moneyName }}</td>
                     <td>
-                    <a href="{{ path('superadmin_governance_show', {'id': governance.id}) }}">
-                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détail"></i>
-                    </a>   
+                        <a href="{{ path('superadmin_governance_show', {'id': governance.id}) }}">
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Détails"></i>
+                        </a>
                     </td>
                 </tr>
             {% else %}

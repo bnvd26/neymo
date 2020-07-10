@@ -2,8 +2,7 @@
 
 {% block content %}
 <div class="container">
-<h2>Créer un commerçant pour la gouvernance</h2>
-
+<h2>Ajouter un Commerçant</h2>
 {{ form_start(form) }}
 <h4>Information de la société</h4>
 {{ form_row(form.name, { 'label': 'Nom de la société' }) }}
@@ -31,6 +30,9 @@
 {% endfor %}
     
 </select>
+
+
+
 {{ form_row(form.save, { 'label': 'Créer l\'utilisateur' }) }}
 {{ form_end(form) }}
 </div>
