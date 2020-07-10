@@ -18,7 +18,7 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
         $user = (new User())
             ->setRoles(["ROLE_USER"])
             ->setPassword('$2y$10$34ChwRD3d7zBRP2BlMV2tuPfYuOu3wngBBjtIE.BWk4HZY0yq9Niq')
-            ->setEmail('company@neymo.com');
+            ->setEmail('garage.doe@neymo.com');
         $manager->persist($user);
 
         $account = (new Account())
@@ -35,7 +35,7 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
         $this->addReference('directory-company00', $directory);
 
         $company = (new Company())
-            ->setName('Batiment Pedro')
+            ->setName('Garage Doe')
             ->setAddress($this->faker->streetAddress())
             ->setCity($this->faker->city())
             ->setZipCode($this->faker->postcode())
@@ -51,6 +51,7 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setValidated(1)
             ->addUser($user);
         $manager->persist($company);
+
 
         $this->createMany(50, function ($num) use (&$account, &$manager) {
             $account = (new Account())
