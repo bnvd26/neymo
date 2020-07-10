@@ -6,50 +6,61 @@
 <div class="content-container">
         <div class="container-fluid">
             <div class="jumbotron">
-            <a href="{{ path('superadmin_home') }}">Gouvernances</a>
-    <h1>Information sur la gouvernance de {{ governance.name }}</h1>
-    <a href="{{ path('superadmin_governance_edit', {'id': governance.id}) }}" class="btn btn-warning">Modifier les informations</a>
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ governance.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ governance.name }}</td>
-            </tr>
-            <tr>
-                <th>Money_name</th>
-                <td>{{ governance.moneyName }}</td>
-            </tr>
-        </tbody>
-    </table>
-        <h2>Utilisateurs associés à cette gouvernance</h2>
-                <a href="{{ path('superadmin_admin_create', {'id': governance.id}) }}" class="btn btn-success">Créer un utilisateur pour cette gouvernance</a>
-        <table class="table">
+                <a href="{{ path('superadmin_home') }}">Retour sur les Gouvernances</a><div>
+                <h2>Information sur la gouvernance de {{ governance.name }}</h2>
+                <table class="table table-striped neymo-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom de la gouvernance</th>
+                        <th>Nom de la monnaie</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="td-id">{{ governance.id }}</td>
+                            <td>{{ governance.name }}</td>
+                            <td>{{ governance.moneyName }}</td>
+                            <td>
+                                <a href="{{ path('superadmin_governance_edit', {'id' : governance.id}) }}" class="">
+                                    <img src="{{ asset('/build/edit.svg') }}" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <h2>Administrateurs associés à cette gouvernance</h2>
+                    <a href="{{ path('superadmin_admin_create', {'id': governance.id}) }}" class="btn-neymo btn-create">Ajouter un Administrateur</a>
+                </div>
+        <table class="table table-striped neymo-table">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Email</th>
                     <th scope="col">Prénom</th>
                     <th scope="col">Nom</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">Rôle</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
         {% for user in govUsersInformation %}
         {% set admin = user %}
                 <tr>
-                    <td>{{ user.user.id }}</td>
+                    <td class="td-id">{{ user.user.id }}</td>
                     <td>{{ user.user.email }}</td>
                     <td>{{ user.firstName }}</td>
                     <td>{{ user.lastName }}</td>
                     <td>{{ user.role }}</td>
                     <td>
-                        <a href="{{ path('superadmin_admin_edit', { 'id' : user.id }) }}" class="btn btn-warning">Modifier</a>
-                        {{ include('superAdmin/admin/_delete_form.html.twig') }}
+                        <div class="d-flex flex-row justify-content-end">
+                            <a href="{{ path('superadmin_admin_edit', {'id' : user.id}) }}" class="">
+                                <img src="{{ asset('/build/edit.svg') }}" alt="">
+                            </a>
+                            {{ include('superAdmin/admin/_delete_form.html.twig') }}
+                        </div>
                     </td>
             {% endfor %}
                 </tr>

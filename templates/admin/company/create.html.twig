@@ -2,8 +2,7 @@
 
 {% block content %}
 <div class="container">
-<h2>Créer un commerçant pour la gouvernance</h2>
-
+<h2>Ajouter un Commerçant</h2>
 {{ form_start(form) }}
 <h4>Information de la société</h4>
 {{ form_row(form.name, { 'label': 'Nom de la société' }) }}
@@ -13,12 +12,12 @@
 {{ form_row(form.phoneNumber, { 'label': 'Téléphone' }) }}
 {{ form_row(form.siret, { 'label': 'Siret' }) }}
 
-<h4>Information personelle sur l'utilisateur</h4>
-    {{ form_row(form.email, { 'label': 'Email' }) }}
-    <label for="password">Mot de passe </label>
-    <input type="password" name="password" required>
-    {{ form_row(form.lastName, { 'label': 'Nom' }) }}
-    {{ form_row(form.firstName, { 'label': 'Prénom' }) }}
+<h4>Informations personnelles du responsable</h4>
+{{ form_row(form.email, { 'label': 'Email' }) }}
+<label for="password">Mot de passe </label>
+<input type="password" name="password" required>
+{{ form_row(form.lastName, { 'label': 'Nom' }) }}
+{{ form_row(form.firstName, { 'label': 'Prénom' }) }}
 {{ form_row(form.save, { 'label': 'Créer l\'utilisateur' }) }}
 {{ form_end(form) }}
 </div>

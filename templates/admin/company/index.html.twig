@@ -3,35 +3,38 @@
 {% block content %}
 <div class="container">
 {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
 {% endfor %}
 
-<h2>Commerçants de la gouvernance</h2>
+<div class="d-flex flex-row justify-content-between align-items-center">
+    <h2>Commerçants de la gouvernance</h2>
+    <a href="{{ path('admin_company_create') }}" class="btn-neymo btn-create">Ajouter un Commerçant</a>
+</div>
 <table class="table table-striped neymo-table">
   <thead>
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Nom de la société</th>
-      <th>Actions</th>
+      <th class="col"></th>
     </tr>
   </thead>
   <tbody>
    {% for company in companies %}
-        <tr>
-           
+   <tr>
         <td class="td-id">{{ company.id }}</td>
         <td>{{ company.name }}</td>
-     <td>
-        <a href="{{ path('admin_company_show', {'id' : company.id}) }}" class="btn btn-primary">Détails</a><br>
-        <a href="{{ path('admin_company_edit', {'id' : company.id}) }}" class="btn btn-warning">Modifier</a><br>
-         {{ include('admin/company/_delete_form.html.twig') }}
+    <td>
+        <div class="d-flex flex-row justify-content-end">
+            <a href="{{ path('admin_company_show', {'id' : company.id}) }}" class="details">Détails</a><br>
+            <a href="{{ path('admin_company_edit', {'id' : company.id}) }}" class=""><img src="{{ asset('/build/edit.svg') }}" alt=""></a><br>
+            {{ include('admin/company/_delete_form.html.twig') }}
+        </div>
      </td>
-        </tr>
+   </tr>
     {% endfor %}
   </tbody>
 </table>
-<a href="{{ path('admin_company_create') }}" class="btn btn-success btn-neymo btn-create">Créer un Commerçant</a>
 </div>
 {% endblock %}

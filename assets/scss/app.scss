@@ -138,6 +138,9 @@ body {
 h2 {
   padding: 40px 0px;
 }
+p {
+  padding-left: 10px;
+}
 input {
   height: 50px;
   width: 400px;
@@ -158,15 +161,46 @@ label {
   color: rgb(113, 128, 150);
   margin: 5px 0px;
 }
+img {
+  margin-left: 40px;
+}
+button {
+  border: none;
+  background: none;
+  &:active {
+    border:none
+  }
+  &:focus {
+    border:none
+  }
+  &:hover {
+    border:none
+  }
+}
+
+.logo {
+  max-height: 55px;
+  width: auto;
+}
 .btn-neymo {
   border-radius: 15px;
   padding: 15px 20px;
   transition-duration: 0.2s;
+  min-width: 200px;
+  max-width: 270px;
+  max-height: 56px;
+  font-size: 16px;
+  color: #fff !important;
   &:hover {
     margin-top: 4px;
+    text-decoration: none;
+    color: #fff;
+  }
+  &:active {
+    margin-top: 4px;
+    box-shadow: none;
   }
 }
-
 .btn-create {
   background-color: #189b73;
   -webkit-box-shadow: 0px 5px 0px 0px rgba(139,205,185,1);
@@ -205,13 +239,26 @@ label {
 }
 
 .logout {
-  color: #D16228;
+  color: #D16228 !important;
   &:hover {
     color: #e3ab8f;
   }
 }
+.details {
+  text-decoration: underline;
+  color: #189B73;
+  &:hover {
+    color: #47AD8E;
+  }
+}
 
 /* END BACK-OFFICE ADMIN */
+
+/* BACK-OFFICE SUPERADMIN */
+.jumbotron {
+  background-color: #fff !important;
+}
+/* END BACK-OFFICE SUPERADMIN */
 
 /*  NAVBAR  */
 .sidebar-container {
@@ -221,18 +268,28 @@ label {
   left: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #1a1a1a;
-  color: #fff;
 }
 
 .content-container {
   padding-top: 20px;
+  border-right: solid 5px #dee2e6;
 }
 
 .sidebar-logo {
   padding: 10px 15px 10px 30px;
   font-size: 20px;
-  background-color: #2574A9;
+  background: #fff !important;
+}
+
+img.super-logo {
+  margin-left: 0 !important;
+}
+
+a {
+  color: #189B73 !important;
+  &:hover {
+    color: #fff !important;
+  }
 }
 
 .sidebar-navigation {
@@ -253,7 +310,6 @@ label {
 .sidebar-navigation li a {
   padding: 10px 15px 10px 30px;
   display: block;
-  color: #fff;
 }
 
 .sidebar-navigation li .fa {
@@ -268,12 +324,25 @@ label {
 }
 
 .sidebar-navigation li::before {
-  background: linear-gradient(100deg, #ff6ec4, #7873f5);
+  background-color: #47AD8E;
   position: absolute;
   content: '';
   height: 100%;
   left: 0;
   top: 0;
+  -webkit-transition: width 0.2s ease-in;
+  transition: width 0.2s ease-in;
+  width: 3px;
+  z-index: -1;
+}
+.sidebar-navigation li.super-admin-logout::before {
+  background: #D16228;
+  position: absolute;
+  content: '';
+  height: 100%;
+  left: 0;
+  top: 0;
+  color: #fff !important;
   -webkit-transition: width 0.2s ease-in;
   transition: width 0.2s ease-in;
   width: 3px;
@@ -287,7 +356,8 @@ label {
 .sidebar-navigation .header {
   font-size: 12px;
   text-transform: uppercase;
-  background-color: #151515;
+  color: #fff;
+  background-color: #189B73;
   padding: 10px 15px 10px 30px;
 }
 

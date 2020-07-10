@@ -20,7 +20,7 @@ class ParticularAdminType extends AbstractType
             ->add('firstName', TextType::class)
             ->add('lastName', TextType::class)
             ->add('birthdate', DateType::class)
-            ->add('save', SubmitType::class)
+            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn-neymo btn-create']])
 
         ;
     }

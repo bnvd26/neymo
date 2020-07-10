@@ -3,19 +3,17 @@
 {% block navbar %}
 
     <div class="sidebar-container">
-        <div class="sidebar-logo" style="background:linear-gradient(100deg, #ff6ec4, #7873f5)">
-            Neymo
+        <div class="sidebar-logo d-flex justify-content-center" style="background:linear-gradient(100deg, #ff6ec4, #7873f5)">
+            <img src="{{ asset('/build/Logo-footer.svg') }}" class="super-logo" alt="Neymo">
         </div>
-        <ul class="sidebar-navigation">
-            <li class="header">Navigation</li>
+        <ul class="sidebar-navigation d-flex justify-content-between flex-column">
+            <li class="header">Super-Admin</li>
             <li>
-                <a href="{{ path('superadmin_governance_index') }}">
-                <i class="fa fa-home" aria-hidden="true"> </i>Governances</a>
+                <a href="{{ path('superadmin_governance_index') }}">Gouvernances</a>
             </li>     
 
-            <li>
-                <a href="{{ path('admin_logout') }}">
-                <i class="fas fa-power-off"> </i>Se déconnecter</a>
+            <li class="super-admin-logout ">
+                <a href="{{ path('admin_logout') }}" class="logout">Se déconnecter</a>
             </li>
         </ul>
     </div>
