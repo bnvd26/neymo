@@ -6,27 +6,63 @@
   <div class="card-header">
 
 <h2>Dashboard de la Gourvernance de {{ user.governance.name }}</h2>
+ 
   </div>
   <div class="card-body">
     <h5 class="card-title">Bonjour {{ user.firstName }},</h5>
     <p class="card-text">Monnaie locale : {{ user.governance.moneyName }}</p>
-  En attente de validation (Commerçants):  <strong>{{ companiesNotValidated|length }}</strong>
-    <br>
-    En attente de validation (Particuliers): <strong>{{ particularsNotValidated|length }}</strong>
-    <br>
-    Nombre d'adhérents Particuliers : <strong>{{ particulars|length }}</strong>
-    <br>
-    Nombre d'adhérents Commerçants : <strong>{{ companies|length }}</strong>
-    <br>
-    Nombre d'adhérents Total : <strong>{{ companies|length + particulars|length }}</strong>
-    <br>
-    Somme totale de monnaie utilisée par les Commerçants : <strong>{{totalMoneyCompany}}</strong>
-    <br>
-    Somme totale de monnaie utilisée par les Particuliers : <strong>{{totalMoneyParticular}}</strong>
-    <br>
-    Somme totale qui circule dans la Gouvernance : <strong>{{totalMoneyParticular + totalMoneyCompany}}</strong>
+  </div>
+  <div style="display:flex;flex-wrap:wrap">
+    <div class="card" style="width: 16rem;margin:10px;">
+    <div class="card-body">
+      <h3 class="card-subtitle mb-2 text-muted" style="color:#d16228 !important"> <strong>{{ companiesNotValidated|length }}</strong></h3>
+      <p class="card-text" style="color:#189b73 !important;">En attente de validation (Commerçants)</p>
+    </div>
+    </div>
+    <div class="card" style="width: 16rem;margin:10px;">
+    <div class="card-body">
+      <h3 class="card-subtitle mb-2 text-muted" style="color:#d16228 !important"> <strong>{{ particularsNotValidated|length }}</strong></h3>
+      <p class="card-text" style="color:#189b73 !important;">En attente de validation (Particuliers)</p>
+      </div>
+    </div>
+    <div class="card" style="width: 16rem;margin:10px;">
+    <div class="card-body">
+      <h3 class="card-subtitle mb-2 text-muted" style="color:#d16228 !important"> <strong>{{ particulars|length }}</strong></h3>
+      <p class="card-text" style="color:#189b73 !important;"> Nombre d'adhérents Particuliers</p>
+    </div>
+    </div>
+    <div class="card" style="width: 16rem;margin:10px;">
+    <div class="card-body">
+      <h3 class="card-subtitle mb-2 text-muted" style="color:#d16228 !important"> <strong>{{ companies|length }}</strong></h3>
+      <p class="card-text" style="color:#189b73 !important;"> Nombre d'adhérents Commerçants</p>
+    </div>
+    </div>
+    <div class="card" style="width: 16rem;margin:10px;">
+    <div class="card-body">
+      <h3 class="card-subtitle mb-2 text-muted" style="color:#d16228 !important"> <strong>{{ companies|length + particulars|length}}</strong></h3>
+      <p class="card-text" style="color:#189b73 !important;"> Nombre d'adhérents Total</p>
+    </div>
+    </div>
+    <div class="card" style="width: 16rem;margin:10px;">
+    <div class="card-body">
+      <h3 class="card-subtitle mb-2 text-muted" style="color:#d16228 !important"> <strong>{{totalMoneyCompany}}</strong></h3>
+      <p class="card-text" style="color:#189b73 !important;"> Somme totale de monnaie utilisée par les Commerçants</p>
+    </div>
+    </div>
+    <div class="card" style="width: 16rem;margin:10px;">
+    <div class="card-body">
+      <h3 class="card-subtitle mb-2 text-muted" style="color:#d16228 !important"> <strong>{{totalMoneyParticular}}</strong></h3>
+      <p class="card-text" style="color:#189b73 !important;"> Somme totale de monnaie utilisée par les Particuliers</p>
+    </div>
+    </div>
+    <div class="card" style="width: 16rem;margin:10px;">
+    <div class="card-body">
+      <h3 class="card-subtitle mb-2 text-muted" style="color:#d16228 !important"> <strong>{{totalMoneyParticular + totalMoneyCompany}}</strong></h3>
+      <p class="card-text" style="color:#189b73 !important;"> Somme totale qui circule dans la Gouvernance</p>
+    </div>
     </div>
   </div>
+  
 </div>
 {% endblock %}
 
