@@ -89,7 +89,9 @@ class CompanyController extends ApiController
                 'category' => $company->getCategory()->getName(),
                 'governance' => $company->getGovernance()->getName(),
                 'provider' => $company->getProvider(),
-                'address' => $company->getAddress()
+                'address' => $company->getAddress(),
+                'zip_code' => $company->getZipCode(),
+                'city' => $company->getCity()
             ];
         }
 
