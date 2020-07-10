@@ -35,7 +35,7 @@ class CompanyType extends AbstractType
                 ],
             ])
 
-            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-neymo btn-create']])
+            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn-neymo btn-create']])
 
         ;
     }
