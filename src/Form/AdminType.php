@@ -18,7 +18,7 @@ class AdminType extends AbstractType
             ->add('firstName', TextType::class)
             ->add('lastName', TextType::class)
             ->add('role', TextType::class)
-            ->add('save', SubmitType::class)
+            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-neymo btn-create']])
         ;
     }
 
