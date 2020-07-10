@@ -75,16 +75,10 @@ class TransactionController extends ApiController
         $transaction->setTransferedMoney($data->transferedMoney);
 
         date_default_timezone_set('Europe/Paris');
-        
+
         $transaction->setDate(new \DateTime());
 
-        $date = new DateTime();
-
-        $datetime = new DateTime($date->date, new DateTimeZone('Europe/Paris'));
-
-
-        $transaction->setCreatedAt($datetime->setTimezone(new DateTimeZone('Europe/Paris')));
-        
+        $transaction->setCreatedAt(new DateTime());
         
         $this->em->persist($transaction);
         $this->em->flush();
