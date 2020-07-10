@@ -35,7 +35,7 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
         $this->addReference('directory-company00', $directory);
 
         $company = (new Company())
-            ->setName($this->faker->company())
+            ->setName('Batiment Pedro')
             ->setAddress($this->faker->streetAddress())
             ->setCity($this->faker->city())
             ->setZipCode($this->faker->postcode())
@@ -48,7 +48,7 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setDescription($this->faker->text($maxNbChars = 200))
             ->setCategory($this->getReference('category-' . rand(0, 6)))
             ->setGovernance($this->getReference('governance-1'))
-            ->setValidated($this->faker->boolean())
+            ->setValidated(1)
             ->addUser($user);
         $manager->persist($company);
 
