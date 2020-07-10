@@ -268,18 +268,28 @@ button {
   left: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #1a1a1a;
-  color: #fff;
 }
 
 .content-container {
   padding-top: 20px;
+  border-right: solid 5px #dee2e6;
 }
 
 .sidebar-logo {
   padding: 10px 15px 10px 30px;
   font-size: 20px;
-  background-color: #2574A9;
+  background: #fff !important;
+}
+
+img.super-logo {
+  margin-left: 0 !important;
+}
+
+a {
+  color: #189B73 !important;
+  &:hover {
+    color: #fff !important;
+  }
 }
 
 .sidebar-navigation {
@@ -300,7 +310,6 @@ button {
 .sidebar-navigation li a {
   padding: 10px 15px 10px 30px;
   display: block;
-  color: #fff;
 }
 
 .sidebar-navigation li .fa {
@@ -315,12 +324,25 @@ button {
 }
 
 .sidebar-navigation li::before {
-  background: linear-gradient(100deg, #ff6ec4, #7873f5);
+  background-color: #47AD8E;
   position: absolute;
   content: '';
   height: 100%;
   left: 0;
   top: 0;
+  -webkit-transition: width 0.2s ease-in;
+  transition: width 0.2s ease-in;
+  width: 3px;
+  z-index: -1;
+}
+.sidebar-navigation li.super-admin-logout::before {
+  background: #D16228;
+  position: absolute;
+  content: '';
+  height: 100%;
+  left: 0;
+  top: 0;
+  color: #fff !important;
   -webkit-transition: width 0.2s ease-in;
   transition: width 0.2s ease-in;
   width: 3px;
@@ -334,7 +356,8 @@ button {
 .sidebar-navigation .header {
   font-size: 12px;
   text-transform: uppercase;
-  background-color: #151515;
+  color: #fff;
+  background-color: #189B73;
   padding: 10px 15px 10px 30px;
 }
 
