@@ -18,7 +18,7 @@ class GovernanceUserInformationFixtures extends BaseFixture implements Dependent
             ->setLastName($this->faker->lastName())
             ->setRole('Manager')
             ->setUser($this->getReference('admin-11'))
-            ->setGovernance($this->getReference('governance-' . rand(1, 2)));
+            ->setGovernance($this->getReference('governance-1'));
             return $govUserInfo;
         });
         $this->createMany(10, function ($num) {

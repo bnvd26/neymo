@@ -47,7 +47,7 @@ class CompanyUserFixtures extends BaseFixture implements DependentFixtureInterfa
             ->setProvider(true)
             ->setDescription($this->faker->text($maxNbChars = 200))
             ->setCategory($this->getReference('category-' . rand(0, 6)))
-            ->setGovernance($this->getReference('governance-' . rand(1, 2)))
+            ->setGovernance($this->getReference('governance-1'))
             ->setValidated($this->faker->boolean())
             ->addUser($user);
         $manager->persist($company);
