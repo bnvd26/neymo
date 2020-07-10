@@ -227,7 +227,7 @@ class TransactionController extends ApiController
             };
             $transactions[] = [
                 'date' => $transactionsFrenchDate[$key],
-                'transaction' => $data
+                'transaction' => array_reverse($data)
             ];
         }
 
