@@ -113,12 +113,14 @@ class ConvertMoneyController extends ApiController
             $userTypeAccount->setAvailableCash((int) $data->transferedMoney + (int) $userTypeAccount->getAvailableCash());
 
             $transaction  = new Transaction();
-
+            
             $transaction->setBeneficiary($userTypeAccount);
             $transaction->setTransferedMoney($data->transferedMoney);
             $transaction->setDate(new DateTime());
             $transaction->setEmiter($userTypeAccount);
+            date_default_timezone_set('Europe/Paris');
             $transaction->setCreatedAt(new \DateTime());
+            
             $this->em->persist($transaction);
             $this->em->persist($userTypeAccount);
 

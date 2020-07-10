@@ -9,6 +9,8 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\API\ApiController;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -71,9 +73,18 @@ class TransactionController extends ApiController
         $accountRepository->find($emitterId)->removeMoneyToEmiter($data->transferedMoney);
         
         $transaction->setTransferedMoney($data->transferedMoney);
+
+        date_default_timezone_set('Europe/Paris');
+        
         $transaction->setDate(new \DateTime());
 
-        $transaction->setCreatedAt(new \DateTime());
+        $date = new DateTime();
+
+        $datetime = new DateTime($date->date, new DateTimeZone('Europe/Paris'));
+
+
+        $transaction->setCreatedAt($datetime->setTimezone(new DateTimeZone('Europe/Paris')));
+        
         
         $this->em->persist($transaction);
         $this->em->flush();
@@ -158,6 +169,7 @@ class TransactionController extends ApiController
         if ((int) $accountRepository->find($emiterAccount)->getAvailableCash() < (int) $payload->transferedMoney || (int) $payload->transferedMoney < 0) {
             return $this->responseOk(['Error' => "Vous n'avez pas les fonds necéssaires pour transférer de l'argent"]);
         }
+        date_default_timezone_set('Europe/Paris');
 
         $transaction->setEmiter($emiterAccount);
         $transaction->setBeneficiary($emiterAccount);
@@ -165,7 +177,8 @@ class TransactionController extends ApiController
         $transaction->setTransferedMoney($payload->transferedMoney);
         $transaction->setType('convert');
         $transaction->setDate(new \DateTime());
-        $transaction->setCreatedAt(new \DateTime());
+        
+        $transaction->setCreatedAt(new DateTime());
         $this->em->persist($transaction);
         $this->em->flush();
 
