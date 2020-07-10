@@ -45,7 +45,7 @@ class AdminController extends AbstractController
         $form = $this->createFormBuilder($user)
             ->add('email', TextType::class)
             ->add('password', PasswordType::class)
-            ->add('save', SubmitType::class, ['label' => 'Créer un administrateur', 'attr' => ['class' => 'btn btn-success']])
+            ->add('save', SubmitType::class, ['label' => 'Ajouter un Administrateur', 'attr' => ['class' => 'btn-neymo btn-create']])
 
             ->getForm();
 

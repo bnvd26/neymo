@@ -187,7 +187,7 @@ button {
   padding: 15px 20px;
   transition-duration: 0.2s;
   min-width: 200px;
-  max-width: 250px;
+  max-width: 270px;
   max-height: 56px;
   font-size: 16px;
   color: #fff !important;
@@ -253,6 +253,12 @@ button {
 }
 
 /* END BACK-OFFICE ADMIN */
+
+/* BACK-OFFICE SUPERADMIN */
+.jumbotron {
+  background-color: #fff !important;
+}
+/* END BACK-OFFICE SUPERADMIN */
 
 /*  NAVBAR  */
 .sidebar-container {
