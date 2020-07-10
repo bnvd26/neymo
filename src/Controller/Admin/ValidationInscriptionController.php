@@ -107,7 +107,11 @@ class ValidationInscriptionController extends AbstractController
     {
         $company = $companyRepository->find($id);
 
-        return $this->render('admin/inscriptionValidation/company/show.html.twig', compact('company'));
+        foreach($company->getUser() as $user) {
+          $email = $user->getEmail();
+        }
+
+        return $this->render('admin/inscriptionValidation/company/show.html.twig', compact('company', 'email'));
     }
 
     public function sendEmailValidation($userEmail) 

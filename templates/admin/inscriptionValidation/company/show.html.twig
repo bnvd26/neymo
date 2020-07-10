@@ -24,6 +24,8 @@
         <p>{{company.lastName}}</p>
         <label>Prénom</label>
         <p>{{company.firstName}}</p>
+        <label>Mail</label>
+        <p>{{email}}</p>
     </div>
     <br>
     <a href="{{ path('admin_validation_inscription_company_validate', {'id' : company.id }) }}" class="btn-neymo btn-create">Valider</a>
