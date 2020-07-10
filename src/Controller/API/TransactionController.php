@@ -72,6 +72,8 @@ class TransactionController extends ApiController
         
         $transaction->setTransferedMoney($data->transferedMoney);
         $transaction->setDate(new \DateTime());
+
+        $transaction->setCreatedAt(new \DateTime());
         
         $this->em->persist($transaction);
         $this->em->flush();
@@ -161,7 +163,9 @@ class TransactionController extends ApiController
         $transaction->setBeneficiary($emiterAccount);
         $accountRepository->find($emiterAccount)->removeMoneyToEmiter($payload->transferedMoney);
         $transaction->setTransferedMoney($payload->transferedMoney);
+        $transaction->setType('convert');
         $transaction->setDate(new \DateTime());
+        $transaction->setCreatedAt(new \DateTime());
         $this->em->persist($transaction);
         $this->em->flush();
 
@@ -215,9 +219,10 @@ class TransactionController extends ApiController
                         'emiter_name' => is_null($transactionsByDate[$y]->getEmiter()->getParticular()) ? $transactionsByDate[$y]->getEmiter()->getCompany()->getName() : $transactionsByDate[$y]->getEmiter()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getEmiter()->getParticular()->getLastName(),
                         'beneficiary_name' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getName() : $transactionsByDate[$y]->getBeneficiary()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getBeneficiary()->getParticular()->getLastName(),
                         'date' => $transactionsByDate[$y]->getDate(),
+                        'createdAt' => $transactionsByDate[$y]->getCreatedAt(),
                         'category' => is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getCategory()->getName() : null,
                         'status_transaction_user' => $this->getStatusTransactionUser($transactionsByDate, $y),
-                        'conversion' => (is_null($transactionsByDate[$y]->getEmiter()->getParticular()) ? $transactionsByDate[$y]->getEmiter()->getCompany()->getName() : $transactionsByDate[$y]->getEmiter()->getParticular()->getFirstName() . " " . $transactionsByDate[$y]->getEmiter()->getParticular()->getLastName()) == (is_null($transactionsByDate[$y]->getBeneficiary()->getParticular()) ? $transactionsByDate[$y]->getBeneficiary()->getCompany()->getCategory()->getName() : null) ? true : false
+                        'type' => $transactionsByDate[$y]->getType() === 'convert' ? 'convert' : null
                 ];
             };
             $transactions[] = [
