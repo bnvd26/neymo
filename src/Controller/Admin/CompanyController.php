@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Account;
 use App\Entity\Company;
 use App\Entity\User;
 use App\Form\CompanyType;
@@ -69,6 +70,10 @@ class CompanyController extends AbstractController
             $entityManager->persist($user);
             $company->addUser($user);
             $user->addCompany($company);
+            $account = new Account();
+            $account->setAccountNumber(rand(1, 100000));
+            $account->setAvailableCash(0);
+            $company->setAccount($account);
             $entityManager->persist($company);
             $entityManager->flush();
             $this->addFlash('success', 'Le commerçant a bien été créé');
