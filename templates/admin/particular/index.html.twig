@@ -7,30 +7,35 @@
                 {{ message }}
             </div>
 {% endfor %}
-<h2>Particuliers de la gouvernance</h2>
+    <div class="d-flex flex-row justify-content-between align-items-center">
+        <h2>Particuliers de la gouvernance</h2>
+        <a href="{{ path('admin_particular_create') }}" class="btn-neymo btn-create">Ajouter un Particulier</a>
+    </div>
 <table class="table table-striped neymo-table">
   <thead>
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Nom</th>
       <th scope="col">Prénom</th>
-      <th scope="col">Action</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
    {% for particular in particulars %}
         <tr>
-        <td class="td-id">{{ particular.id }}</td>
-        <td>{{ particular.firstName }}</td>
-        <td>{{ particular.lastName }}</td>
-        <td>
-            <a href="{{ path('admin_particular_edit', {'id' : particular.id}) }}" class="btn btn-warning">Modifier</a><br>
-            {{ include('admin/particular/_delete_form.html.twig') }}
-        </td>
+            <td class="td-id">{{ particular.id }}</td>
+            <td>{{ particular.firstName }}</td>
+            <td>{{ particular.lastName }}</td>
+            <td>
+                <div class="d-flex flex-row justify-content-end">
+                    <a href="{{ path('admin_particular_edit', {'id' : particular.id}) }}" class=""><img src="{{ asset('/build/edit.svg') }}" alt=""></a><br>
+                    {{ include('admin/particular/_delete_form.html.twig') }}
+                </div>
+            </td>
+            <td>
         </tr>
     {% endfor %}
   </tbody>
 </table>
-<a href="{{ path('admin_particular_create') }}" class="btn btn-success btn-neymo btn-create">Créer un Particulier</a>
 </div>
 {% endblock %}

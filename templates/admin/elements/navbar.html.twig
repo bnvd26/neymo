@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light nav-bar">
-    <a class="navbar-brand" href="{{ path('admin_home') }}"><img src="{{ asset('/build/logo.png') }}" alt="Neymo"></a>
+    <a class="navbar-brand" href="{{ path('admin_home') }}"><img class="logo" src="{{ asset('/build/logo.png') }}" alt="Neymo"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -20,7 +20,7 @@
                 <a class="nav-link" href="{{ path('admin_particular_index') }}">Particuliers</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Demandes <span class="badge badge-secondary"></span></a>
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Demandes<span class="badge badge-secondary"></span></a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ path('admin_validation_inscription_particular_index') }}">Particuliers</a>
                     <a class="dropdown-item" href="{{ path('admin_validation_inscription_company_index') }}">Commerçants</a>
@@ -28,7 +28,7 @@
             </li>
         </ul>
         <div class="my-2 my-lg-0">
-            <a class="nav-link logout" href="{{ path('admin_logout') }}">Déconnexion</a>
+            <a class="nav-link logout btn-neymo" href="{{ path('admin_logout') }}">Déconnexion</a>
         </div>
     </div>
 </nav>

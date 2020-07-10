@@ -29,7 +29,7 @@ class ParticularType extends AbstractType
                     'months' => range(date('m'), 12),
                     'days' => range(date('d'), 31),
             ])
-            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
+            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-neymo btn-create']])
         ;
     }
 
