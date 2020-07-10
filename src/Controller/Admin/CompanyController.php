@@ -97,12 +97,13 @@ class CompanyController extends AbstractController
                 }*/
         $form = $this->createForm(CompanyType::class, $company);
         // $form->get('email')->setData($user->getEmail());
-        $form->get('email')->setData($company->getUser()[0]->getEmail());
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // $form->get('email')->setData($company->getUser()[0]->getEmail());
             //$user->setEmail($form->get("email")->getData());
-            $company->getUser()[0]->setEmail($form->get("email")->getData());
+            // $company->getUser()[0]->setEmail($form->get("email")->getData());
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le commerçant a bien été modifié');
 

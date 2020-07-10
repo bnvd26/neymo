@@ -185,6 +185,9 @@ class ValidationInscriptionController extends AbstractController
         $particular->setAccount($account);
         $em->persist($account);
         $em->persist($particular);
+        $directory = new Directory();
+        $directory->setAccount($account);
+        $em->persist($directory);
         $em->flush();
         
         $userEmail = $particular->getUser()->getEmail();
