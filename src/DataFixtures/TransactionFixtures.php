@@ -21,6 +21,7 @@ class TransactionFixtures extends BaseFixture implements DependentFixtureInterfa
             $transaction->setDate($this->faker->dateTimeBetween($startDate = '-5 months', $endDate = 'now', $timezone = null));
             $transaction->setCreatedAt($this->faker->dateTimeBetween($startDate = '-5 months', $endDate = 'now', $timezone = null));
             $transaction->setTransferedMoney($this->faker->numberBetween($min = 1, $max = 200));
+            $transaction->setType(null);
            
             return $transaction;
         });
@@ -32,6 +33,7 @@ class TransactionFixtures extends BaseFixture implements DependentFixtureInterfa
             $transaction->setDate($this->faker->dateTimeBetween($startDate = '-5 months', $endDate = 'now', $timezone = null));
             $transaction->setCreatedAt($this->faker->dateTimeBetween($startDate = '-5 months', $endDate = 'now', $timezone = null));
             $transaction->setTransferedMoney($this->faker->numberBetween($min = 1, $max = 200));
+            $transaction->setType(null);
            
             return $transaction;
         });
